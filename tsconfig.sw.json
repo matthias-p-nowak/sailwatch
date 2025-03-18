@@ -1,7 +1,0 @@
-{
-    "extends": "./tsconfig.base.json",
-    "include": ["src/sw/**/*.ts"],
-    "compilerOptions": {
-        "outFile": "webapp/sw.js"
-    } 
-}

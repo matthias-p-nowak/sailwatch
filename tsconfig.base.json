@@ -1,8 +1,0 @@
-{
-    "compilerOptions": {
-        "target": "ES5",
-        "module": "None",
-        "lib": ["ES2015", "DOM"],
-        "strict": true,
-    }
-}
