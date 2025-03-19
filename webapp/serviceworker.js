@@ -1,5 +1,4 @@
-
-
+// Note: This is the service worker file that will be registered in the browser
 console.log('Hello World from service worker');
 
 async function swInit() {
