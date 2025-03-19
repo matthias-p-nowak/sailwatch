@@ -35,7 +35,7 @@ jobs:
           sparse-checkout: webapp
           fetch-depth: 1
       - name: write hash to file
-        run: echo "gitversion='$(git rev-parse --short HEAD)';" > webapp/commit-hash.txt
+        run: echo "const gitversion='$(git rev-parse --short HEAD)';" > webapp/commit-hash.txt
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact

@@ -1,0 +1,16 @@
+html {
+  font-size: 4mm;
+  background-color: #f0f0f0;
+}
+
+button.hidden {
+  display: none;
+}
+
+footer {
+  margin-top: 2rem;
+  text-align: center;
+  font-size: smaller;
+}
+
+/*# sourceMappingURL=app.css.map */
