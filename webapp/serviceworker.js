@@ -1,5 +1,5 @@
 // Note: This is the service worker file that will be registered in the browser
-console.log('Hello World from service worker');
+console.log('Hello World from service worker 1');
 
 async function swInit() {
     const dt= new Date();

@@ -5,13 +5,7 @@ async function main() {
     console.log('Service worker registered with scope:', registration.scope);
     await navigator.serviceWorker.ready;
     if(registration.active){
-        console.log('Service worker is active');
-        registration.showNotification("Vibration Sample", {
-            body: "Buzz! Buzz!",
-            icon: "sailwatch-192.png",
-            vibrate: [200, 100, 200, 100, 200, 100, 200],
-            tag: "vibration-sample",
-          });
+        console.log('Service worker is active');    
     }else{
         console.log('Service worker not active');
     }
@@ -42,4 +36,5 @@ window.addEventListener("beforeinstallprompt", (event) => {
     });
     
 });
+
 document.getElementById('commit-hash').innerHTML=gitversion;
