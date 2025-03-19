@@ -13,4 +13,10 @@ footer {
   font-size: smaller;
 }
 
+@media all and (display-mode: standalone) {
+  body {
+    background-color: yellow;
+  }
+}
+
 /*# sourceMappingURL=app.css.map */

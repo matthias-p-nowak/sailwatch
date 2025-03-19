@@ -11,3 +11,8 @@ footer{
     text-align: center;
     font-size: smaller;
 }
+@media all and (display-mode: standalone) {
+    body {
+      background-color: yellow;
+    }
+  }

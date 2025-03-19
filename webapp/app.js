@@ -1,9 +1,17 @@
 async function main() {
     let registration=await navigator.serviceWorker.register('serviceworker.js');
+    result=await Notification.requestPermission();
+    console.log('Notification permission:', result);
     console.log('Service worker registered with scope:', registration.scope);
     await navigator.serviceWorker.ready;
     if(registration.active){
         console.log('Service worker is active');
+        registration.showNotification("Vibration Sample", {
+            body: "Buzz! Buzz!",
+            icon: "sailwatch-192.png",
+            vibrate: [200, 100, 200, 100, 200, 100, 200],
+            tag: "vibration-sample",
+          });
     }else{
         console.log('Service worker not active');
     }
@@ -12,6 +20,13 @@ async function main() {
 console.log('Hello World from app');
 main().catch(console.error);
 
+const isPwaInstalled = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+
+if (isPwaInstalled) {
+  console.log('PWA is installed');
+} else {
+  console.log('PWA is not installed');
+}
 
 window.addEventListener("beforeinstallprompt", (event) => {
     console.log('Before install prompt');
