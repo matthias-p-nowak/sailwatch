@@ -19,7 +19,7 @@ permissions:
 # However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
   group: "pages"
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   # Single deploy job since we're just deploying
@@ -31,6 +31,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          sparse-checkout: webapp
+          fetch-depth: 1
+      - name: write hash to file
+        run: echo "gitversion='$(git rev-parse --short HEAD)';" > webapp/commit-hash.txt
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
