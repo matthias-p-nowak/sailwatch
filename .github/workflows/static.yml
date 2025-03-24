@@ -40,8 +40,9 @@ jobs:
         run: |
           pwd
           ls -al
-          # npm install esbuild sass
+          npm install esbuild sass
           type esbuild sass npm
+          date
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
