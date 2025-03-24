@@ -32,7 +32,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          sparse-checkout: webapp
+          # sparse-checkout: webapp
           fetch-depth: 1
       - name: write hash to file
         run: echo "const gitversion='$(git rev-parse --short HEAD)';" > webapp/commit-hash.txt
