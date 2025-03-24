@@ -37,7 +37,7 @@ jobs:
       - name: write hash to file
         run: echo "const gitversion='$(git rev-parse --short HEAD)';" > webapp/commit-hash.txt
       - name: scripting and more
-        script: |
+        run: |
           pwd
           ls -al
           esbuild -v
