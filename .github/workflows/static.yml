@@ -36,6 +36,12 @@ jobs:
           fetch-depth: 1
       - name: write hash to file
         run: echo "const gitversion='$(git rev-parse --short HEAD)';" > webapp/commit-hash.txt
+      - name: scripting and more
+        script: |
+          pwd
+          ls -al
+          esbuild -v
+          sass -v
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
