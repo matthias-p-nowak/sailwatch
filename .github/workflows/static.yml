@@ -40,9 +40,11 @@ jobs:
         run: |
           pwd
           ls -al
-          npm install esbuild sass
-          type esbuild sass npm
+          npm install esbuild sass typescript
+          npx sass scss/main.scss webapp/app.css
+          npx esbuild --bundle src/app.ts --outdir=webapp --minify 
           date
+          ls -l webapp
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
