@@ -41,16 +41,16 @@ jobs:
           pwd
           ls -al
           npm install esbuild sass typescript
-          npx sass scss/main.scss webapp/app.css
-          npx esbuild --bundle src/app.ts --outdir=webapp --minify 
+          npx sass scss/main.scss app/css/app.css
+          npx esbuild --bundle src/app.ts --outdir=app/js --minify 
           date
-          ls -l webapp
+          ls -l app
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'webapp'
+          path: 'app'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
