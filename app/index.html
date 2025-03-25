@@ -3,9 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="manifest.json">
     <title>Sailing watch</title>
+    <link rel="shortcut icon" type="image/x-icon" href="sailwatch.ico" />   
+    <script src="js/app.js" defer></script> 
+    <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
-    Sailwatch
+    <div id="left">    
+        <div>
+            <div class="lefttop">                 
+                <h2>Start</h2>  
+                <img src="img/start.png"  alt="start" >
+            </div>
+            <div class="lefttop">
+                <h2>Note</h2>
+                <img src="img/note.png" alt="Note" >
+            </div>
+            <div class="leftbottom">
+                <h2>Finish</h2>
+                <img src="img/finish.png" alt="finish">
+            </div>
+        </div>
+</div>
+<div class="content">
+    <header>                
+        <details onclick="closeDetails(event);">
+            <summary>
+                <img src="img/sailwatch-64.png" alt="Sailwatch">
+                <span>
+                    Sailing Watch
+                </span>
+            </summary>
+            <div class="stackcenter">
+                <img src="img/sailwatch-512.png" alt="big sailwatch icon" srcset="">
+                <span>Sailing watch<br>Start &amp; Finish</span>
+            </div>
+            <div>
+                <button type="button">Install as an app</button>
+            </div>
+            </details>
+    </header>
+    <main>                
+        <article>
+            <h2>Start</h2>
+            <div id="start-1">
+                <div class="row">
+                    <span>Start</span>
+                    <span class="starttime">00:00:00</span>  
+                    <span>F</span> 
+                </div>
+                <div class="row">
+                    <span>in</span>
+                    <span>3:00</span>
+                    <span>min</span>
+                </div>
+                <div class="row">
+                    <span>flag</span>
+                    <span>0:59</span>
+                    <span>P up</span>
+                </div>
+            </div>
+            <div>
+                <span class="imgrow">
+                    <img src="img/flag_ap.png" alt="AP" >
+                    <img src="img/flag_x.png" alt="X" >
+                    <img src="img/flag_recall.png" alt="Recall" >
+                </span>
+            </div>
+        </article>
+        <article>
+            <h2>Note</h2>
+            <div>
+                <textarea name="note" id="note-1" ></textarea>
+            </div>
+        </article>
+        <article>
+            <h2>Finish</h2>
+            <div class="results">
+                <div class="row">
+                    <span>2025-01-01 15:33:55</span>
+                    <span><input class="sn" type="number" name="sailnumber" placeholder="sail"></span>
+                    <span>
+                        <select name="class" >
+                            <option value=""></option>
+                            <option value="F">F</option>
+                            <option value="Y">Y</option>
+                        </select>
+                    </span>
+                </div>
+                <div class="row">
+                    <span>1:25:27</span>
+                    <span><input class="sn" type="number" name="sailnumber" placeholder="sail"></span>
+                    <span>
+                        <select name="class" >
+                            <option value=""></option>
+                            <option value="F">F</option>
+                            <option value="Y" selected>Y</option>
+                        </select>                            
+                    </span>
+                </div>
+                <div class="row">
+                    <span>1:25:29</span>
+                    <span><input class="sn" type="number" name="sailnumber" placeholder="sail"></span>
+                    <span>                                
+                        <select name="class" >
+                            <option value=""></option>
+                            <option value="F">F</option>
+                            <option value="Y" selected>Y</option>
+                        </select>
+                    </span>
+            </div>
+        </article>
+    </main>
+    <footer>
+        <h2>Footer</h2>
+        Footer
+    </footer>           
+</div>
 </body>
 </html>

@@ -1,26 +1,50 @@
 {
-    // See https://go.microsoft.com/fwlink/?LinkId=733558
-    // for the documentation about the tasks.json format
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "compiling css",
-            "type": "shell",
-            "command": "sass",
-            "args": [
-                "-w",
-                "scss/main.scss",
-                "webapp/app.css"
-            ],
-            "problemMatcher": [],
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            }
-        }
-    ]
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "compile css",
+      "type": "shell",
+      "command": "sass",
+      "args": ["-w", "scss/main.scss", "app/css/app.css"],
+      "problemMatcher": [],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "isBackground": true
+    },
+    {
+      "label": "compile js",
+      "type": "shell",
+      "command": "esbuild",
+      "args": [
+        "--bundle",
+        "src/app.ts",
+        "src/worker.ts",
+        "src/service.ts",
+        "--outdir=app/js",
+        // "--minify",
+        "--sourcemap",
+        "--watch"
+      ],
+      "problemMatcher": ["$tsc-watch"],
+      "isBackground": true
+    },
+    {
+      "label": "all tasks",
+      "dependsOn": ["compile css", "compile js"],
+      "dependsOrder": "parallel",
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    }
+  ]
 }
