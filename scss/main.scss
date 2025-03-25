@@ -140,6 +140,9 @@ main {
         background-color: #fff;  
         textarea{
             min-width: 100%;
+            min-height: 3rem;
+            font-weight: lighter;
+            font-size: smaller;
             height: auto;
             overflow: hidden;
         }  
