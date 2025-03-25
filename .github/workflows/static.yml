@@ -32,10 +32,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          sparse-checkout: webapp
+          # sparse-checkout: webapp
           fetch-depth: 1
       - name: write hash to file
         run: echo "const gitversion='$(git rev-parse --short HEAD)';" > webapp/commit-hash.txt
+      - name: scripting and more
+        run: |
+          pwd
+          ls -al
+          npm install esbuild sass typescript
+          npx sass scss/main.scss webapp/app.css
+          npx esbuild --bundle src/app.ts --outdir=webapp --minify 
+          date
+          ls -l webapp
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
