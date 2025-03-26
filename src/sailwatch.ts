@@ -9,6 +9,10 @@ export class SailWatch{
     newFinish(this: GlobalEventHandlers, ev: MouseEvent){
         console.log('adding new finish');
     }
-
+    hello(this: GlobalEventHandlers, ev: MouseEvent){
+        console.log('what hello?');
+        ev.stopPropagation();
+        console.log('second hello');
+    }
 }
 

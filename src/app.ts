@@ -1,16 +1,19 @@
 import {SailWatch} from './sailwatch' ;
 import './window.d.ts';
-console.log('hello from app.ts');
+import './starting-app.ts';
+
+// updating the version in html
+let gitVersion='currentGitVersion';
+document.getElementById('sailwatchVersion').innerText=gitVersion;
 
 document.querySelectorAll('details').forEach((det) => {
     det.onclick = (event: MouseEvent) => {
         let target= event!.target as HTMLObjectElement;
         let det=target.closest('details');
+        console.log('closing details by action');
         det!.removeAttribute('open');
-    }
-}
+    }});
 
-);
 
 window.resizeTextArea = function(){
     document.querySelectorAll('textarea').forEach(function(textarea){
@@ -20,6 +23,8 @@ window.resizeTextArea = function(){
         }
     });
 };
+
+
 let sw=new SailWatch();
 window.sw=sw;
 window.resizeTextArea();

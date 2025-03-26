@@ -26,8 +26,7 @@
       "args": [
         "--bundle",
         "src/app.ts",
-        "src/worker.ts",
-        "src/service.ts",
+        "src/sw.ts",
         "--outdir=app/js",
         // "--minify",
         "--sourcemap",
