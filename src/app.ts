@@ -3,7 +3,7 @@ import './window.d.ts';
 import './starting-app.ts';
 
 // updating the version in html
-let gitVersion='currentGitVersion';
+window.gitVersion='currentGitVersion';
 document.getElementById('sailwatchVersion').innerText=gitVersion;
 
 document.querySelectorAll('details').forEach((det) => {
