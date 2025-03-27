@@ -45,6 +45,13 @@ div.content {
     margin-top: 5rem;
     width: fit-content;
   }
+  footer{
+    background-color: white;
+    color: magenta;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    font-size: small;
+  }
 }
 div#left {
   // border: thin solid blue;
@@ -189,3 +196,4 @@ div.center{
   margin-left: auto;
   margin-right: auto;
 }
+

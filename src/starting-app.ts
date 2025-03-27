@@ -92,3 +92,19 @@ window.addEventListener('beforeinstallprompt', (event: any)=>{
         isapp.innerText = result.outcome;
     };
 });
+
+async function getWakeLock() {
+  const ka=document.getElementById('keepAwake');
+  ka.onclick=getWakeLock;
+  let wakeLock: WakeLockSentinel;
+  wakeLock=await navigator.wakeLock.request('screen');
+  const wl=document.getElementById('wakeLock');  
+  wl.removeAttribute('hidden');
+  wl.onclick = ()=> {
+    wakeLock.release();
+    wl.setAttribute('hidden','true');
+    ka.innerText='keep awake';
+  }
+  ka.innerText='kept awake';
+}
+getWakeLock().catch(console.error);
