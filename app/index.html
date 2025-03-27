@@ -41,16 +41,20 @@
             </div>
             <div class="center">
                 <div class="row">
-                    <span class="right">Clockwork</span><span id="serviceStatus">not active</span>
+                    <span class="right">Notifications</span>
+                    <span id="notificationStatus" onclick="ask4Notifications(event);">not known</span>
                 </div>
                 <div class="row">
-                    <span class="right">Version</span><span id="sailwatchVersion">no version determined</span>
+                    <span class="right">Clockwork</span>
+                    <span id="serviceStatus" onclick="refreshSwStatus(event);">not active</span>
                 </div>
                 <div class="row">
-                    <span class="right">App</span><span>
-                        <button type="button" onclick="installApp(event);">Install as an app</button>
-                    </span>
+                    <span class="right">Version</span>
+                    <span id="sailwatchVersion" onclick="updateServiceWorker(event);">no version determined</span>
                 </div>
+                <div class="row" id="appStatusRow">
+                    <span class="right">App</span>
+                    <span onclick="installApp(event);">Install as an app</span> </div>
             </div>
             </details>
     </header>
