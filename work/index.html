@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        window.resizeTextArea = function(event){
+            console.log('resizing');
+            let ta=event.target;
+            ta.style.height = 'auto';
+            ta.style.height = ta.scrollHeight + 'px';
+        }
+    </script>
+</head>
+<body>
+    hello
+    <h2>Fleets</h2>
+    <textarea name="" id="fleet" oninput="resizeTextArea(event);" >
+
+    </textarea>
+</body>
+</html>

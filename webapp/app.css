@@ -1,22 +1,228 @@
-html {
-  font-size: 4mm;
-  background-color: #f0f0f0;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
-button.hidden {
+* {
+  margin: 0;
+  padding: 0;
+  font: inherit;
+}
+
+h5 {
+  font-size: 1.1rem;
+}
+
+h4 {
+  font-size: 1.2rem;
+}
+
+h3 {
+  font-size: 1.3rem;
+}
+
+h2 {
+  font-size: 1.4rem;
+}
+
+h1 {
+  font-size: 1.5rem;
+}
+
+html {
+  font-size: clamp(5mm, 2vh, 7mm);
+  background-color: azure;
+  padding: 3px;
+  font-family: ui-rounded, "Hiragino Maru Gothic ProN", Quicksand, Comfortaa, Manjari, "Arial Rounded MT", "Arial Rounded MT Bold", Calibri, source-sans-pro, sans-serif;
+  font-weight: normal;
+  min-height: 100svh;
+  background-color: whitesmoke;
+}
+
+body {
+  margin: 3px;
+  padding: 3px;
+}
+
+div.content {
+  display: grid;
+  grid-template-columns: 1fr [bigger-start] 1fr [middle-start] clamp(5rem, 80svw, 30rem) [middle-end] 1fr [bigger-end] 1fr;
+}
+div.content:hover {
+  background-color: white;
+  z-index: 5;
+}
+div.content:hover * {
+  z-index: 5;
+}
+div.content > * {
+  grid-column: middle;
+  padding: 10px;
+}
+div.content img {
+  max-width: 100%;
+}
+div.content > header,
+div.content footer {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5rem;
+  width: fit-content;
+}
+div.content footer {
+  background-color: white;
+  color: magenta;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  font-size: small;
+}
+
+div#left {
+  top: 0;
+  left: 0;
+  position: fixed;
+  border-radius: 1rem;
+  height: calc(100svh - 10px);
+  height: calc(100dvh - 10px);
+  width: 3rem;
+  margin: 5px;
+  z-index: 1;
+}
+div#left:hover {
+  z-index: 5;
+}
+div#left > div {
+  height: 100%;
+  position: relative;
+  top: 0;
+  left: 0;
+}
+div#left > div div {
+  border: thin solid blue;
+  border-radius: 1rem;
+  background-color: #f0f0f0;
+}
+div#left > div img {
+  max-height: 3rem;
+}
+div#left > div div.lefttop {
+  display: block;
+  margin: 0.1rem;
+  padding: 0.5rem;
+  width: fit-content;
+  height: fit-content;
+}
+div#left > div div.leftbottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  padding: 0.5rem;
+}
+
+header details summary {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+header details summary::marker {
+  content: "";
+}
+header details[open] {
+  border: thin solid darkblue;
+  border-radius: 0.5rem;
+  background-color: white;
+  padding: 1rem;
+}
+header details[open] > summary {
   display: none;
 }
 
-footer {
-  margin-top: 2rem;
-  text-align: center;
-  font-size: smaller;
+div.stackcenter {
+  display: grid;
+  place-items: center;
+}
+div.stackcenter * {
+  grid-row: 1/2;
+  grid-column: 1/2;
+}
+div.stackcenter span {
+  color: black;
+  font-weight: 600;
+  font-size: 2.5rem;
+  text-shadow: 1px 1px 0px #fff, 2px 2px 0px rgba(56, 54, 23, 0.3);
 }
 
-@media all and (display-mode: standalone) {
-  body {
-    background-color: rgb(247, 247, 241);
-  }
+main {
+  display: block;
+  align-items: center;
+  gap: 1rem;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5rem;
+  width: fit-content;
+}
+main article {
+  margin-top: 1rem;
+  padding: 0.5rem;
+  border: thin solid yellowgreen;
+  border-radius: 1rem;
+  background-color: #fff;
+}
+main article textarea {
+  min-width: 100%;
+  min-height: 3rem;
+  font-weight: lighter;
+  font-size: smaller;
+  height: auto;
+  overflow: hidden;
+}
+
+span.imgrow {
+  display: flex;
+}
+span.imgrow img {
+  max-width: 3rem;
+  margin: 0.3rem;
+}
+
+div :has(> div.row) {
+  display: table;
+}
+div :has(> div.row) div.row {
+  display: table-row;
+}
+div :has(> div.row) div.row > * {
+  display: table-cell;
+  border: thin solid #ddd;
+  padding: 0.2rem;
+}
+div :has(> div.row) div.row .right {
+  text-align: right;
+}
+
+.example .results input {
+  size: 6;
+  width: 6rem;
+  border: none;
+}
+.example .results select {
+  border: none;
+  appearance: none;
+  padding: 0.2rem;
+  background-color: aquamarine;
+}
+
+div.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+dialog {
+  margin: auto;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: thin solid gray;
 }
 
 /*# sourceMappingURL=app.css.map */

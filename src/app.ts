@@ -14,20 +14,12 @@ document.querySelectorAll('details').forEach((det) => {
         det!.removeAttribute('open');
     }});
 
-
-window.resizeTextArea = function(){
-    document.querySelectorAll('textarea').forEach(function(textarea){
-        textarea.oninput = function(){
-            textarea.style.height = 'auto';
-            textarea.style.height = textarea.scrollHeight + 'px';
-        }
-    });
+window.resizeTextArea = function (event: InputEvent) {
+    console.log("resizing");
+    let ta = event.target as HTMLElement;
+    ta.style.height = "auto";
+    ta.style.height = ta.scrollHeight + "px";
 };
-
 
 let sw=new SailWatch();
 window.sw=sw;
-window.resizeTextArea();
-document.getElementById('newStart')!.onclick=sw.newStart;
-document.getElementById('newNote')!.onclick=sw.newNote;
-document.getElementById('newFinish')!.onclick=sw.newFinish;

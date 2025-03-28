@@ -19,33 +19,32 @@ body {
 
 div.content {
   display: grid;
-  grid-template-columns: 1fr [bigger-start] 1fr [middle-start] clamp(
-      5rem,
-      80svw,
-      30rem
-    ) [middle-end] 1fr [bigger-end] 1fr;
-    &:hover {
-        background-color: white;
-        z-index: 5;
-        *{
-            z-index: 5;
-        }
+  grid-template-columns:
+    1fr [bigger-start] 1fr [middle-start] clamp(5rem, 80svw, 30rem)
+    [middle-end] 1fr [bigger-end] 1fr;
+  &:hover {
+    background-color: white;
+    z-index: 5;
+    * {
+      z-index: 5;
     }
+  }
   > * {
     grid-column: middle;
     // border: thin solid red;
     padding: 10px;
   }
-  img{
+  img {
     max-width: 100%;
   }
-  > header, footer {
+  > header,
+  footer {
     margin-left: auto;
     margin-right: auto;
     margin-top: 5rem;
     width: fit-content;
   }
-  footer{
+  footer {
     background-color: white;
     color: magenta;
     border-radius: 0.5rem;
@@ -73,13 +72,13 @@ div#left {
     top: 0;
     left: 0;
     div {
-       border: thin solid blue;
-       border-radius: 1rem;
-       background-color: #F0F0F0
-   }
-   img {
-    max-height: 3rem;
-   }
+      border: thin solid blue;
+      border-radius: 1rem;
+      background-color: #f0f0f0;
+    }
+    img {
+      max-height: 3rem;
+    }
     div.lefttop {
       display: block;
       margin: 0.1rem;
@@ -97,103 +96,120 @@ div#left {
 }
 
 header details {
-    summary {
-        &::marker {
-            content: "";
-        }
+  summary {
+    &::marker {
+      content: "";
+    }
     display: flex;
     align-items: center;
-    gap: 1rem;  
+    gap: 1rem;
   }
   &[open] {
     border: thin solid darkblue;
     border-radius: 0.5rem;
     background-color: white;
     padding: 1rem;
-      > summary {
-        display: none;
-      }
+    > summary {
+      display: none;
+    }
   }
 }
 
-div.stackcenter{
-    display: grid;
-    place-items: center;
-    * {
-        grid-row: 1/2;
-        grid-column: 1/2;        
-    }
-    span{
-        color: black;
-        font-weight: 600;
-        font-size: 2.5rem;
-        text-shadow: 1px 1px 0px #fff, 2px 2px 0px rgba(56, 54, 23, 0.3);
-    }
+div.stackcenter {
+  display: grid;
+  place-items: center;
+  * {
+    grid-row: 1/2;
+    grid-column: 1/2;
+  }
+  span {
+    color: black;
+    font-weight: 600;
+    font-size: 2.5rem;
+    text-shadow: 1px 1px 0px #fff, 2px 2px 0px rgba(56, 54, 23, 0.3);
+  }
 }
 
 main {
-    display: block;
-    align-items: center;
-    gap: 1rem;  
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 5rem;
-    width: fit-content;
-    article{
-        margin-top: 1rem;
-        padding: 0.5rem;
-        border: thin solid yellowgreen;
-        border-radius: 1rem;    
-        background-color: #fff;  
-        textarea{
-            min-width: 100%;
-            min-height: 3rem;
-            font-weight: lighter;
-            font-size: smaller;
-            height: auto;
-            overflow: hidden;
-        }  
+  display: block;
+  align-items: center;
+  gap: 1rem;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5rem;
+  width: fit-content;
+  article {
+    margin-top: 1rem;
+    padding: 0.5rem;
+    border: thin solid yellowgreen;
+    border-radius: 1rem;
+    background-color: #fff;
+    textarea {
+      min-width: 100%;
+      min-height: 3rem;
+      font-weight: lighter;
+      font-size: smaller;
+      height: auto;
+      overflow: hidden;
     }
+  }
 }
 
 span.imgrow {
-    display: flex;
-    // border: thin solid red;
-    img {
-        max-width: 3rem;
-        margin: 0.3rem;
-    }
+  display: flex;
+  // border: thin solid red;
+  img {
+    max-width: 3rem;
+    margin: 0.3rem;
+  }
 }
 
-div :has( > div.row){
-    // background-color: aquamarine;
-    display: table;
-    div.row {
-        display: table-row;
-        span {
-            display: table-cell;
-            border: thin solid #ddd;
-            padding: 0.2rem;
-            input {
-                size: 6;
-                width: 6rem;
-                border: none;
-            }
-            select {
-                border: none;
-                appearance: none;
-                padding: 0.2rem;
-                background-color: aquamarine;
-            }
-        }
-        .right {
-          text-align: right;
-        }
+div :has(> div.row) {
+  // background-color: aquamarine;
+  display: table;
+  div.row {
+    display: table-row;
+    > * {
+      display: table-cell;
+      border: thin solid #ddd;
+      padding: 0.2rem;
     }
+    .right {
+      text-align: right;
+    }
+  }
 }
 
-div.center{
+.example .results {
+  input {
+    size: 6;
+    width: 6rem;
+    border: none;
+  }
+  select {
+    border: none;
+    appearance: none;
+    padding: 0.2rem;
+    background-color: aquamarine;
+  }
+}
+
+div.center {
   margin-left: auto;
   margin-right: auto;
 }
 
+dialog {
+  margin: auto;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: thin solid gray;
+}
+div:has(button.right){
+  text-align: right;
+  button{
+    padding: 0.2rem;
+    border-radius: 0.2rem;
+    border: thin solid rgb(203, 203, 203);
+  }
+}
