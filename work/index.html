@@ -4,20 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script>
-        window.resizeTextArea = function(event){
-            console.log('resizing');
-            let ta=event.target;
-            ta.style.height = 'auto';
-            ta.style.height = ta.scrollHeight + 'px';
-        }
-    </script>
+    <script src="component.js" type="module"></script>
 </head>
 <body>
-    hello
-    <h2>Fleets</h2>
-    <textarea name="" id="fleet" oninput="resizeTextArea(event);" >
+    <h1>testing</h1>
+    <main id="main">
 
-    </textarea>
+    </main>
+    
+<template id="template_Start">
+    <div>
+        <h2>Start</h2>
+        This is a start component.
+        <span class="js_notice"></span>
+        <button type="button" class="js_pressme">Press me</button>
+    </div>
+</template>
 </body>
 </html>

@@ -8,4 +8,4 @@ version:
     sed -i -e "s/currentGitVersion/$(git rev-parse --short HEAD)/" app/js/app.js app/js/sw.js
 
 css:
-    sass scss/main.scss webapp/app.css
+    sass scss/main.scss app/css/app.css
