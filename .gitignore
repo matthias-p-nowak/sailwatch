@@ -4,3 +4,6 @@ node_modules/
 app/css/
 app/js/
 
+work/*js
+work/*js.map
+
