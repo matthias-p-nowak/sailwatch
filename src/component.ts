@@ -67,31 +67,3 @@ export class WebComponent {
         });
     }
 }
-
-/** @class Start is an example how to use WebComponent */
-export class Start extends WebComponent {
-    rootDiv: HTMLDivElement;
-    notice: HTMLSpanElement;
-    pressme: HTMLButtonElement;
-    pressme_onclick(event){
-        console.log('got a click', event,this);
-        this.pressme.innerText='okok';
-    }
-}
-
-/**
- * just testing the stuff
- * 
- */
-console.log('making x');
-let x = Start.fromTemplate();
-if (x) {
-    console.log('got ', x);
-    x.rootDiv.id='yellow';
-    document.getElementById('main')?.append(x.root);
-    x.notice.innerText='new notice';
-    console.log(`x.element is ${x.rootDiv.id}`);
-}
-
-let y=Start.fromElement(document.getElementById('yellow')!);
-y!.notice.innerText='submarine';

@@ -9,3 +9,8 @@ version:
 
 css:
     sass scss/main.scss app/css/app.css
+
+work-js:
+    #!/bin/env bash
+    cd work
+    esbuild --watch *.ts --outdir=. --sourcemap

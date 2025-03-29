@@ -44,6 +44,11 @@
         "kind": "build",
         "isDefault": true
       }
+    },
+    {
+      "label": "firefox",
+      "type": "firefox",
     }
+  
   ]
 }
