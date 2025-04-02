@@ -1,0 +1,3 @@
+app/*.css*
+app/*.js*
+sailwatch.code-workspace

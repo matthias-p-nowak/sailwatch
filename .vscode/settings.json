@@ -1,0 +1,7 @@
+{
+    "liveServer.settings.port": 5500,
+    "terminal.integrated.automationProfile.windows": {
+        "path": "C:\\Windows\\System32\\cmd.exe"
+    },
+    "editor.formatOnSave": true
+}

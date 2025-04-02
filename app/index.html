@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="main.css">
+    <script src="main.js" defer></script>
+    <link rel="shortcut icon" type="image/x-icon" href="sailwatch.ico" />
+    <title>Sail race watch</title>
+</head>
+<body>
+<header>
+    <div class="errors">
+        <h2>Messages and errors</h2>
+        <ul class="js_errors">
+            <li>here are the messages</li>
+        </ul>
+    </div>
+</header>
+<main class="js_main">
+
+</main>
+<footer>
+    <div class="js_registerFinish">
+        <img src="img/finish.png" alt="register a finish" >
+    </div>
+    <div class="bottomRight">
+        <div class="js_takeNote">
+            <img src="img/note.png" alt="take a note">
+        </div>
+        <div class="js_newStart">
+            <img src="img/start.png" alt="register new start">
+        </div>
+    </div>
+</footer>
+<template id="template_Note">
+    <article >
+        <div class="js_time">no time recorded</div>
+        <textarea class="js_text" placeholder="take a note"></textarea>
+    </article>
+</template>
+</body>
+</html>

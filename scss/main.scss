@@ -1,0 +1,77 @@
+@use "reset.scss";
+
+html {
+  font-size: 5mm;
+}
+header {
+  .errors {
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    color: darkred;
+    display: none;
+    border: thin solid red ;
+    border-radius: 1rem;
+    padding: 1rem;
+    &:has(li) {
+      display: block;
+    }
+  }
+//   .errors:has(li){
+//     display: block;
+//   }
+}
+footer {
+  .js_registerFinish {
+    position: fixed;
+    width: fit-content;
+    bottom: 0rem;
+    left: 0rem;
+    padding: 0.3rem;
+    img {
+      height: 3rem;
+    }
+  }
+  .bottomRight {
+    width: fit-content;
+    margin-left: auto;
+    margin-top: 10rem;
+    div {
+      display: inline;
+      img {
+        height: 3rem;
+      }
+    }
+  }
+}
+main {    
+  display: grid;
+  grid-template-columns:
+    1fr [bigger-start] 1fr [middle-start] clamp(5rem, 80svw, 30rem)
+    [middle-end] 1fr [bigger-end] 1fr;
+    > article {
+      grid-column: middle;
+      margin: 0.2rem;
+      &:has( .saving)::before {
+        content: "saving";
+        display: block;
+        position: absolute;
+        border: 1px solid #e0e0e0;
+        border-radius: 0.3rem;
+        background: #fff;
+        padding: .5rem;
+        z-index: 10;
+        translate: 0% -1rem;
+        background-color: rgba($color: #fadddd, $alpha: 0.7);
+      }
+      
+      textarea.js_text {
+        width: 50%;
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        border: thin dotted lightgray;
+      }
+    } 
+    
+  
+}
