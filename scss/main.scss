@@ -11,8 +11,8 @@ header {
     color: darkred;
     display: none;
     border: thin solid red ;
-    border-radius: 1rem;
-    padding: 1rem;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
     &:has(li) {
       display: block;
     }
@@ -22,6 +22,7 @@ header {
 //   }
 }
 footer {
+  display: none;
   .js_registerFinish {
     position: fixed;
     width: fit-content;
@@ -66,7 +67,7 @@ main {
       }
       
       textarea.js_text {
-        width: 50%;
+        width: 100%;
         padding: 0.5rem;
         border-radius: 0.5rem;
         border: thin dotted lightgray;

@@ -1,6 +1,8 @@
+import { SailWatch } from "./sailwatch";
 
 
-// declare global {
-//   interface Window {
-//   }
-// }
+declare global {
+  interface Window {
+    sw: SailWatch;
+  }
+}
