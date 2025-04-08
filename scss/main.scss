@@ -10,16 +10,16 @@ header {
     margin-right: auto;
     color: darkred;
     display: none;
-    border: thin solid red ;
+    border: thin solid red;
     border-radius: 0.5rem;
     padding: 1.5rem;
     &:has(li) {
       display: block;
     }
   }
-//   .errors:has(li){
-//     display: block;
-//   }
+  //   .errors:has(li){
+  //     display: block;
+  //   }
 }
 footer {
   display: none;
@@ -49,34 +49,34 @@ footer {
     }
   }
 }
-main {    
+main {
   display: grid;
   grid-template-columns:
     1fr [bigger-start] 1fr [middle-start] clamp(5rem, 80svw, 30rem)
     [middle-end] 1fr [bigger-end] 1fr;
-    > article {
-      grid-column: middle;
-      margin: 0.2rem;
-      &:has( .saving)::before {
-        content: "saving";
-        display: block;
-        position: absolute;
-        border: 1px solid #e0e0e0;
-        border-radius: 0.3rem;
-        background: #fff;
-        padding: .5rem;
-        z-index: 10;
-        translate: 0% -1rem;
-        background-color: rgba($color: #fadddd, $alpha: 0.7);
-      }
-      
-      textarea.js_text {
-        width: 100%;
-        padding: 0.5rem;
-        border-radius: 0.5rem;
-        border: thin dotted lightgray;
-      }
-    } 
+  > article {
+    grid-column: middle;
+    margin: 0.2rem;
+    &:has(.saving)::before {
+      content: "saving";
+      display: block;
+      position: absolute;
+      border: 1px solid #e0e0e0;
+      border-radius: 0.3rem;
+      background: #fff;
+      padding: 0.5rem;
+      z-index: 10;
+      translate: 0% -1rem;
+      background-color: rgba($color: #fadddd, $alpha: 0.7);
+    }
+
+    textarea.js_text {
+      width: 100%;
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      border: thin dotted lightgray;
+    }
+  }
 }
 .js_previously {
   width: fit-content;
@@ -88,7 +88,7 @@ main {
   box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);
 }
 
-#confNewStart{
+#confNewStart {
   margin: auto;
   width: fit-content;
   height: fit-content;
@@ -97,6 +97,7 @@ main {
   box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);
   border: thin solid orange;
   .buttons {
+    margin-top: 0.5rem;
     display: flex;
     flex-direction: row;
     gap: 0.5rem;
@@ -104,6 +105,23 @@ main {
       padding: 0.2rem;
       border-radius: 0.2rem;
       border: thin solid orange;
+    }
+  }
+  .js_times {
+    margin-top: 0.5rem;
+    span {
+      border: thin solid orange;
+      border-radius: 0.2rem;
+      padding: 0.2rem;
+      margin: 0.3rem;
+      &.selected {
+        background-color: orange;
+      }
+    }
+    input {
+      padding: 0.2rem;
+      border-radius: 0.2rem;
+      border: thin solid green;
     }
   }
 }

@@ -15,6 +15,7 @@ export class SailWatch extends WebComponent {
   static sw: SailWatch = undefined;
   timeLine = new TimeLine();
   displayed: Map<HTMLElement, WebComponent> = new Map();
+  latestStart: Date;
 
   errors_onclick(ev: MouseEvent) {
     let target = ev.target as HTMLElement;
@@ -74,6 +75,24 @@ export class SailWatch extends WebComponent {
     await this.timeLine.refresh(new Date());
   }
 
+  onstorage(ev: StorageEvent){
+    console.log(`got a storage event ${ev.url}(${ev.key})= ${ev.newValue}`);    
+    if(ev.key == null) {
+      console.log('key is null');
+      return;
+  }
+  let functionName='on_'+ev.key;
+  if( typeof globalThis[functionName] == 'function') {
+      console.log(`invoking ${functionName}(${ev.newValue})`);
+      globalThis[functionName](ev.newValue);
+  }
+  }
+
+  onLatestStart(value: string){
+    console.log(`got latest start ${value}`);
+    this.latestStart=new Date(value);
+  } 
+
   static async Start(gitVersion: string) {
     this.sw = SailWatch.fromElement(document.body);
     this.sw.addErrors("hello from javascript");
@@ -82,5 +101,7 @@ export class SailWatch extends WebComponent {
     this.sw.addErrors(`started app with version ${gitVersion}`);
     this.sw.footer.style.display = "block";
     this.sw.refreshTimeLine();
+    window.onstorage= this.sw.onstorage.bind(this.sw);
+    globalThis['on_latestStart']=this.sw.onLatestStart.bind(this.sw);
   }
 }

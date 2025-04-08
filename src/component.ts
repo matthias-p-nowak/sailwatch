@@ -1,3 +1,4 @@
+import { SailWatch } from "./sailwatch";
 
 /** @class WebComponent provides easy linkage between javascript and html elements */
 export class WebComponent {
@@ -73,8 +74,14 @@ export class WebComponent {
             if(parts.length < 2)
                 return;
             let eventFn = 'on' + parts[1];
-            let obj= component[fn].bind(component);
-            component[parts[0]][eventFn] = obj;
+            try{
+
+                let obj= component[fn].bind(component);
+                component[parts[0]][eventFn] = obj;
+            }catch(e){
+                console.log(e);
+                SailWatch.sw.addErrors(`error assigning ${fn} ${e}`);
+            }
         });
     }
 }
