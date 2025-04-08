@@ -1,7 +1,7 @@
 
 export class ServiceWorker{
     static Start(gitVersion: string){
-        // throw new Error('Method not implemented.');
+        console.log('### more implementation needed in service worker');
     }
     
 }
