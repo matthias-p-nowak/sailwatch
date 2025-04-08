@@ -64,9 +64,7 @@ export class WebComponent {
                     let obj = component.root.querySelector('.js_' + key);
                     component[key] = obj;
                 }
-            } else {
-                console.log(`what is ${key}?`, value);
-            }
+            } 
         });
         WebComponent.getEventFunctions(component).forEach((value, idx) => {
             let fn = value as string;

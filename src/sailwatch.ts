@@ -5,24 +5,23 @@ import { SailWatchDB } from "./sailwatchdb";
 import { TimeLine } from "./timeline";
 
 export class SailWatch extends WebComponent {
-
   errors: HTMLUListElement = undefined;
   previously: HTMLDivElement = undefined;
   main: HTMLDivElement = undefined;
   footer: HTMLDivElement = undefined;
   registerFinish: HTMLDivElement = undefined;
   takeNote: HTMLDivElement = undefined;
-  newStart: HTMLDivElement = undefined;  
+  newStart: HTMLDivElement = undefined;
   static sw: SailWatch = undefined;
-  timeLine= new TimeLine();
+  timeLine = new TimeLine();
   displayed: Map<HTMLElement, WebComponent> = new Map();
 
-  errors_onclick (ev: MouseEvent) {
+  errors_onclick(ev: MouseEvent) {
     let target = ev.target as HTMLElement;
     if (target.tagName == "LI") {
       target.remove();
     }
-  };
+  }
 
   addErrors(msg: string) {
     let li = document.createElement("li");
@@ -30,55 +29,58 @@ export class SailWatch extends WebComponent {
     this.errors.appendChild(li);
   }
 
-  previously_onclick(ev: MouseEvent) {
-    this.addErrors('previously_onclick');  
+  async previously_onclick(ev: MouseEvent) {
+    this.addErrors("previously_onclick");
+    let dt = this.timeLine.firstStamp;
+    await this.timeLine.refresh(dt);
   }
 
   takeNote_onclick(ev: MouseEvent) {
-    let note=Note.fromTemplate();
+    let note = Note.fromTemplate();
     note.render();
     this.insert(note);
     note.text.focus();
   }
 
-  insert(node: WebComponent){
+  insert(node: WebComponent) {
     this.displayed.set(node.root, node);
-    let appended=false;
+    let appended = false;
     this.main.childNodes.forEach((child) => {
-      let elem=child as HTMLElement;
-      if( elem.dataset.time > node.root.dataset.time){
+      let elem = child as HTMLElement;
+      if (elem.dataset.time > node.root.dataset.time) {
         this.main.insertBefore(node.root, elem);
-        appended=true;
+        appended = true;
       }
     });
-    if(!appended){
+    if (!appended) {
       this.main.appendChild(node.root);
     }
   }
 
   newStart_onclick(ev: MouseEvent) {
-    this.addErrors('newStart_onclick');  
-    let cns= NewStart.fromElement(document.getElementById('confNewStart'));
-    cns.sailwatch=this;
+    this.addErrors("newStart_onclick");
+    let cns = NewStart.fromElement(document.getElementById("confNewStart"));
+    cns.sailwatch = this;
     cns.show();
   }
-  
+
   registerFinish_onclick(ev: MouseEvent) {
-    this.addErrors('registerFinish_onclick');
+    this.addErrors("registerFinish_onclick");
   }
 
   async refreshTimeLine() {
-    this.main.replaceChildren();      
-    await this.timeLine.refresh();
+    // clear out main
+    this.main.replaceChildren();
+    await this.timeLine.refresh(new Date());
   }
 
   static async Start(gitVersion: string) {
     this.sw = SailWatch.fromElement(document.body);
     this.sw.addErrors("hello from javascript");
-    window.sw=this.sw;
+    window.sw = this.sw;
     await SailWatchDB.ready;
     this.sw.addErrors(`started app with version ${gitVersion}`);
-    this.sw.footer.style.display="block";
+    this.sw.footer.style.display = "block";
     this.sw.refreshTimeLine();
   }
 }
