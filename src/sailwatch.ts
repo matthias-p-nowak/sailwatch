@@ -1,4 +1,5 @@
 import { WebComponent } from "./component";
+import { NewStart } from "./newstart";
 import { Note } from "./note";
 import { SailWatchDB } from "./sailwatchdb";
 import { TimeLine } from "./timeline";
@@ -6,11 +7,12 @@ import { TimeLine } from "./timeline";
 export class SailWatch extends WebComponent {
 
   errors: HTMLUListElement = undefined;
+  previously: HTMLDivElement = undefined;
   main: HTMLDivElement = undefined;
   footer: HTMLDivElement = undefined;
   registerFinish: HTMLDivElement = undefined;
   takeNote: HTMLDivElement = undefined;
-  newStart: HTMLDivElement = undefined;
+  newStart: HTMLDivElement = undefined;  
   static sw: SailWatch = undefined;
   timeLine= new TimeLine();
   displayed: Map<HTMLElement, WebComponent> = new Map();
@@ -28,6 +30,10 @@ export class SailWatch extends WebComponent {
     this.errors.appendChild(li);
   }
 
+  previously_onclick(ev: MouseEvent) {
+    this.addErrors('previously_onclick');  
+  }
+
   takeNote_onclick(ev: MouseEvent) {
     let note=Note.fromTemplate();
     note.render();
@@ -35,21 +41,32 @@ export class SailWatch extends WebComponent {
     note.text.focus();
   }
 
-  insert(obj: WebComponent){
-    this.displayed.set(obj.root, obj);
+  insert(node: WebComponent){
+    this.displayed.set(node.root, node);
     let appended=false;
     this.main.childNodes.forEach((child) => {
       let elem=child as HTMLElement;
-      if( elem.dataset.time > obj.root.dataset.time){
-        this.main.insertBefore(obj.root, elem);
+      if( elem.dataset.time > node.root.dataset.time){
+        this.main.insertBefore(node.root, elem);
         appended=true;
       }
     });
     if(!appended){
-      this.main.appendChild(obj.root);
+      this.main.appendChild(node.root);
     }
   }
+
+  newStart_onclick(ev: MouseEvent) {
+    this.addErrors('newStart_onclick');  
+    let cns= NewStart.fromElement(document.getElementById('confNewStart'));
+    cns.sailwatch=this;
+    cns.show();
+  }
   
+  registerFinish_onclick(ev: MouseEvent) {
+    this.addErrors('registerFinish_onclick');
+  }
+
   async refreshTimeLine() {
     this.main.replaceChildren();      
     await this.timeLine.refresh();

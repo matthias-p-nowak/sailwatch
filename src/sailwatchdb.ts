@@ -3,6 +3,7 @@ import { SailWatch } from "./sailwatch";
 export class SailWatchDB {
   static db: IDBDatabase = undefined;
   static ready: Promise<any>;
+
   static saveEvent(data: Object) {
     console.log("saving event", data);
     let tx = SailWatchDB.db.transaction(["events"], "readwrite");
@@ -15,6 +16,7 @@ export class SailWatchDB {
     let store = tx.objectStore("events");
     store.put(data);
   }
+  
   static deleteEvent(timeStamp: Date) {
     let tx = SailWatchDB.db.transaction(["events"], "readwrite");
     tx.oncomplete= function(ev){

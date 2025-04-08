@@ -9,7 +9,7 @@ export class Note extends WebComponent {
   delayId: number = 0;
   text_oninput(ev: Event) {
     this.text.style.height = "auto";
-    this.text.style.height = this.text.scrollHeight + "px";
+    this.text.style.height = this.text.scrollHeight + 2 + "px";
     console.log("text_oninput");
     this.text.classList.add("saving");
     if (this.delayId > 0) clearInterval(this.delayId);
@@ -21,7 +21,7 @@ export class Note extends WebComponent {
     this.time.innerText = dateFmt("%y-%m-%d %h:%i:%s", this.timeStamp);
     setTimeout(() => {
         this.text.style.height = "auto";
-        this.text.style.height = this.text.scrollHeight + "px";        
+        this.text.style.height = this.text.scrollHeight +2 + "px";        
     }, 100);
   }
   doSave() {
