@@ -16,6 +16,7 @@ export class SailWatch extends WebComponent {
   timeLine = new TimeLine();
   displayed: Map<HTMLElement, WebComponent> = new Map();
   latestStart: Date;
+  fleets: string[] = [];
 
   errors_onclick(ev: MouseEvent) {
     let target = ev.target as HTMLElement;
@@ -74,23 +75,38 @@ export class SailWatch extends WebComponent {
     this.main.replaceChildren();
     await this.timeLine.refresh(new Date());
   }
+  
+  addStart(startTimeStamp: Date, fleets: string[]) {
+    let allFleets=new Set<string>(this.fleets);
+    fleets.forEach((fleet) => allFleets.add(fleet));
+    this.fleets=Array.from(allFleets);
+    this.latestStart=startTimeStamp;
+    window.localStorage.setItem('fleets', this.fleets.join('\n'));
+  }
 
-  onstorage(ev: StorageEvent){
-    console.log(`got a storage event ${ev.url}(${ev.key})= ${ev.newValue}`);    
-    if(ev.key == null) {
-      console.log('key is null');
+
+  onstorage(ev: StorageEvent) {
+    console.log(`got a storage event ${ev.url}(${ev.key})= ${ev.newValue}`);
+    if (ev.key == null) {
+      console.log("key is null");
       return;
-  }
-  let functionName='on_'+ev.key;
-  if( typeof globalThis[functionName] == 'function') {
+    }
+    let functionName = "on_" + ev.key;
+    let fn= this[functionName];
+    if( typeof fn == 'function') {
       console.log(`invoking ${functionName}(${ev.newValue})`);
-      globalThis[functionName](ev.newValue);
-  }
+      fn(ev.newValue);
+    }
   }
 
-  onLatestStart(value: string){
+  on_latestStart(value: string) {
     console.log(`got latest start ${value}`);
-    this.latestStart=new Date(value);
+    this.latestStart = new Date(value);
+  }
+
+  on_fleets(value: string) {
+    console.log(`got fleets ${value}`);
+    this.fleets= value.split('\n').filter((f) => f.length > 0);
   } 
 
   static async Start(gitVersion: string) {
@@ -101,7 +117,11 @@ export class SailWatch extends WebComponent {
     this.sw.addErrors(`started app with version ${gitVersion}`);
     this.sw.footer.style.display = "block";
     this.sw.refreshTimeLine();
-    window.onstorage= this.sw.onstorage.bind(this.sw);
-    globalThis['on_latestStart']=this.sw.onLatestStart.bind(this.sw);
+    window.onstorage = this.sw.onstorage.bind(this.sw);
+    let fleets= window.localStorage.getItem('fleets');
+    if(fleets != null) {
+      console.log(`got fleets ${fleets} from localStorage`);
+      this.sw.on_fleets(fleets);
+    }
   }
 }

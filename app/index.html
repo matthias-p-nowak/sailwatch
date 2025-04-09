@@ -1,58 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="main.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="main.css" />
     <script src="main.js" defer></script>
     <link rel="shortcut icon" type="image/x-icon" href="sailwatch.ico" />
     <title>Sail race watch</title>
-</head>
-<body>
-<header>
-    <div class="errors">
+  </head>
+  <body>
+    <header>
+      <div class="errors">
         <h2>Messages and errors</h2>
         <ul class="js_errors">
-            <li>here are the messages</li>
+          <li>here are the messages</li>
         </ul>
-    </div>
-</header>
-<div class="js_previously">
-    Previously...
-</div>
-<main class="js_main">
-
-</main>
-<footer class="js_footer">
-    <div class="js_registerFinish">
-        <img src="img/finish.png" alt="register a finish" >
-    </div>
-    <div class="bottomRight">
+      </div>
+    </header>
+    <div class="js_previously">Previously...</div>
+    <main class="js_main"></main>
+    <footer class="js_footer">
+      <div class="js_registerFinish">
+        <img src="img/finish.png" alt="register a finish" />
+      </div>
+      <div class="bottomRight">
         <div class="js_takeNote">
-            <img src="img/note.png" alt="take a note">
+          <img src="img/note.png" alt="take a note" />
         </div>
         <div class="js_newStart">
-            <img src="img/start.png" alt="register new start">
+          <img src="img/start.png" alt="register new start" />
         </div>
-    </div>
-</footer>
-<template id="template_Note">
-    <article >
+      </div>
+    </footer>
+    <template id="template_Note">
+      <article>
         <div class="js_time">no time recorded</div>
         <textarea class="js_text" placeholder="take a note"></textarea>
-    </article>
-</template>
-<dialog id="confNewStart">
-    <h2>New start</h2>
-    <div class="js_times">
-        <input type="time" name="time" id="" class="js_othertime">
-    </div>
-    
-    
-    <div class="buttons">
+      </article>
+    </template>
+    <dialog id="confNewStart">
+      <h3>New start</h3>
+      <fieldset>
+        <legend>Start signal at</legend>
+        <div class="js_times">
+          <input type="time" class="js_othertime" />
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Fleets</legend>
+        <div class="js_fleets">
+          <input class="js_newfleet" type="text" placeholder="new fleet" />
+        </div>
+      </fieldset>
+      <div class="buttons">
         <button class="js_cancel">Cancel</button>
-        <button class="js_register">Register start</button>
-    </div>
-</dialog>
-</body>
+        <button class="js_register" disabled="true">Register start</button>
+      </div>
+    </dialog>
+  </body>
 </html>

@@ -107,21 +107,38 @@ main {
       border: thin solid orange;
     }
   }
-  .js_times {
-    margin-top: 0.5rem;
-    span {
-      border: thin solid orange;
-      border-radius: 0.2rem;
-      padding: 0.2rem;
-      margin: 0.3rem;
-      &.selected {
-        background-color: orange;
+  fieldset {
+    border: thin solid rgb(250, 225, 178);
+    legend {
+      margin-left: 0.5rem;
+    }
+    div {
+      margin: 0.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.2rem;
+      span {
+        border: thin solid orange;
+        border-radius: 0.2rem;
+        padding: 0.2rem;
+        // margin: 0.3rem;
+        &.selected {
+          background-color: orange;
+        }
+      }
+      input {
+        padding: 0.2rem;
+        border-radius: 0.2rem;
+        border: thin solid green;
       }
     }
+  }
+  .js_times {
+    $comment: "comment";
+  }
+  .js_fleets {
     input {
-      padding: 0.2rem;
-      border-radius: 0.2rem;
-      border: thin solid green;
+      width: 5rem;
     }
   }
 }
