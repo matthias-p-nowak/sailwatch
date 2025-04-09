@@ -2,6 +2,7 @@ import { WebComponent } from "./component";
 import { NewStart } from "./newstart";
 import { Note } from "./note";
 import { SailWatchDB } from "./sailwatchdb";
+import { Start } from "./start";
 import { TimeLine } from "./timeline";
 
 export class SailWatch extends WebComponent {
@@ -32,7 +33,6 @@ export class SailWatch extends WebComponent {
   }
 
   async previously_onclick(ev: MouseEvent) {
-    this.addErrors("previously_onclick");
     let dt = this.timeLine.firstStamp;
     await this.timeLine.refresh(dt);
   }
@@ -47,20 +47,31 @@ export class SailWatch extends WebComponent {
   insert(node: WebComponent) {
     this.displayed.set(node.root, node);
     let appended = false;
-    this.main.childNodes.forEach((child) => {
-      let elem = child as HTMLElement;
-      if (elem.dataset.time > node.root.dataset.time) {
-        this.main.insertBefore(node.root, elem);
-        appended = true;
+    let sortTime: string;
+    try {
+      sortTime = node.root.dataset.time;
+    } catch (e) {
+      sortTime = new Date().toISOString();
+    }
+    let cl = this.main.childNodes.length;
+    if (cl > 0) {
+      let last = this.main.lastChild as HTMLElement;
+      if (sortTime < last.dataset.time) {
+        this.main.childNodes.forEach((child) => {
+          let elem = child as HTMLElement;
+          if (elem.dataset.time > sortTime) {
+            this.main.insertBefore(node.root, elem);
+            appended = true;
+          }
+        });
       }
-    });
+    }
     if (!appended) {
       this.main.appendChild(node.root);
     }
   }
 
   newStart_onclick(ev: MouseEvent) {
-    this.addErrors("newStart_onclick");
     let cns = NewStart.fromElement(document.getElementById("confNewStart"));
     cns.sailwatch = this;
     cns.show();
@@ -75,15 +86,18 @@ export class SailWatch extends WebComponent {
     this.main.replaceChildren();
     await this.timeLine.refresh(new Date());
   }
-  
-  addStart(startTimeStamp: Date, fleets: string[]) {
-    let allFleets=new Set<string>(this.fleets);
-    fleets.forEach((fleet) => allFleets.add(fleet));
-    this.fleets=Array.from(allFleets);
-    this.latestStart=startTimeStamp;
-    window.localStorage.setItem('fleets', this.fleets.join('\n'));
-  }
 
+  addStart(startTimeStamp: Date, fleets: string[]) {
+    let allFleets = new Set<string>(this.fleets);
+    fleets.forEach((fleet) => allFleets.add(fleet));
+    this.fleets = Array.from(allFleets);
+    window.localStorage.setItem("fleets", this.fleets.join("\n"));
+    this.latestStart = startTimeStamp;
+    window.localStorage.setItem("latestStart", this.latestStart.toISOString());
+    let start = Start.fromTemplate();
+    start.initialize(startTimeStamp, fleets);
+    this.insert(start);
+  }
 
   onstorage(ev: StorageEvent) {
     console.log(`got a storage event ${ev.url}(${ev.key})= ${ev.newValue}`);
@@ -92,8 +106,8 @@ export class SailWatch extends WebComponent {
       return;
     }
     let functionName = "on_" + ev.key;
-    let fn= this[functionName];
-    if( typeof fn == 'function') {
+    let fn = this[functionName];
+    if (typeof fn == "function") {
       console.log(`invoking ${functionName}(${ev.newValue})`);
       fn(ev.newValue);
     }
@@ -106,20 +120,18 @@ export class SailWatch extends WebComponent {
 
   on_fleets(value: string) {
     console.log(`got fleets ${value}`);
-    this.fleets= value.split('\n').filter((f) => f.length > 0);
-  } 
+    this.fleets = value.split("\n").filter((f) => f.length > 0);
+  }
 
   static async Start(gitVersion: string) {
     this.sw = SailWatch.fromElement(document.body);
-    this.sw.addErrors("hello from javascript");
     window.sw = this.sw;
     await SailWatchDB.ready;
-    this.sw.addErrors(`started app with version ${gitVersion}`);
     this.sw.footer.style.display = "block";
     this.sw.refreshTimeLine();
     window.onstorage = this.sw.onstorage.bind(this.sw);
-    let fleets= window.localStorage.getItem('fleets');
-    if(fleets != null) {
+    let fleets = window.localStorage.getItem("fleets");
+    if (fleets != null) {
       console.log(`got fleets ${fleets} from localStorage`);
       this.sw.on_fleets(fleets);
     }

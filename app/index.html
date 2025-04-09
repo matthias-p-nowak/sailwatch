@@ -12,9 +12,7 @@
     <header>
       <div class="errors">
         <h2>Messages and errors</h2>
-        <ul class="js_errors">
-          <li>here are the messages</li>
-        </ul>
+        <ul class="js_errors"></ul>
       </div>
     </header>
     <div class="js_previously">Previously...</div>
@@ -41,7 +39,7 @@
     <dialog id="confNewStart">
       <h3>New start</h3>
       <fieldset>
-        <legend>Start signal at</legend>
+        <legend>Start signal at <span class="js_signal"></span></legend>
         <div class="js_times">
           <input type="time" class="js_othertime" />
         </div>
@@ -57,5 +55,34 @@
         <button class="js_register" disabled="true">Register start</button>
       </div>
     </dialog>
+    <template id="template_Start">
+      <article>
+        <h2>Start</h2>
+        <div>
+            <div class="row">
+                <span>Start at</span>
+                <span class="js_starttime"></span>
+                <span class="js_fleets"></span>
+            </div>
+            <div class="row">
+                <span>start in</span>
+                <span class="js_duration"></span>
+                <span></span>
+            </div>
+            <div class="row">
+                <span>flag in</span>
+                <span class="js_flagtime"></span>
+                <span class="js_nextflag"></span>
+            </div>
+        </div>
+        <div>
+            <span class="imgrow">
+                <img class="js_flagap" src="img/flag_ap.png" alt="AP" />
+                <img class="js_flagx" src="img/flag_x.png" alt="X" />
+                <img class="js_flagrecall" src="img/flag_recall.png" alt="Recall" />
+            </span>
+        </div>
+        </article>
+    </template>
   </body>
 </html>

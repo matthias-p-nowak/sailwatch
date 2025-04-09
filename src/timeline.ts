@@ -18,7 +18,6 @@ export class TimeLine {
         SailWatch.sw.insert(note);
       }
     });
-    console.log(events);
   }
 
   private adjustTimeframe(timeStamp: Date) {

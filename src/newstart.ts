@@ -11,6 +11,7 @@ export class NewStart extends WebComponent {
   othertime: HTMLInputElement = undefined;
   fleets: HTMLDivElement = undefined;
   newfleet: HTMLInputElement = undefined;
+  signal: HTMLSpanElement = undefined;
 
   currentStart: Date = undefined;
 
@@ -47,7 +48,6 @@ export class NewStart extends WebComponent {
   }
 
   times_onclick(ev: MouseEvent) {
-    SailWatch.sw.addErrors("normal time click");
     console.log(ev);
     Array.from(this.times.children).forEach((ch) => {
       ch.classList.remove("selected");
@@ -66,12 +66,11 @@ export class NewStart extends WebComponent {
     });
   }
 
-  othertime_oninput(ev: MouseEvent) {
-    SailWatch.sw.addErrors("other time input");
-  }
 
   othertime_onblur(ev: MouseEvent) {
-    SailWatch.sw.addErrors("other time blur");
+    if(this.othertime.value.length<5){
+      return;
+    }
     const [hours, minutes] = this.othertime.value.split(":");
     this.currentStart = new Date();
     this.currentStart.setHours(parseInt(hours));
@@ -89,16 +88,16 @@ export class NewStart extends WebComponent {
   }
 
   fleets_onclick(ev: MouseEvent) {
-    SailWatch.sw.addErrors("fleets click");
     let fleet = ev.target as HTMLSpanElement;
     fleet.classList.toggle("selected");
     this.checkValidStart();
   }
 
   newfleet_onblur(ev: MouseEvent) {
-    SailWatch.sw.addErrors(`newfleet blur ${this.newfleet.value}`);
     let fleet = this.newfleet.value;
     this.newfleet.value = "";
+    if(fleet.length < 1) 
+      return;
     if (SailWatch.sw.fleets.includes(fleet)) return;
     SailWatch.sw.fleets.push(this.newfleet.value);
     let span = document.createElement("span");
@@ -127,10 +126,12 @@ export class NewStart extends WebComponent {
 
   checkValidStart() {
     this.register.disabled = true;
-    if (this.currentStart == undefined) {
+    this.signal.innerText = " -- ";
+    if (this.currentStart == undefined || isNaN(this.currentStart.getHours()) ) {
       console.log("missing start time");
       return;
     }
+    this.currentStart.getFullYear
     let possible = new Date();
     possible.setMinutes(possible.getMinutes() + 5);
     if (this.currentStart < possible) {
@@ -147,6 +148,8 @@ export class NewStart extends WebComponent {
       console.log("no fleets selected");
       return;
     }
+    let timeString=dateFmt("%h:%i:%s", this.currentStart);
+    this.signal.innerText = timeString;
     this.register.disabled = false;
   }
 }
