@@ -38,7 +38,8 @@ export class WebComponent {
         }
         const component = new this();
         // Todo: testing with a template that contains empty text nodes
-        component.root  = template.content.cloneNode(true) as HTMLDivElement;
+        let cloned=template.content.firstElementChild?.cloneNode(true) || template.content.cloneNode(true);
+        component.root  = cloned as HTMLElement;
         WebComponent.fillElement<T>(component);
         return component;
     }

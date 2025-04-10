@@ -57,32 +57,34 @@
     </dialog>
     <template id="template_Start">
       <article>
-        <h2>Start</h2>
-        <div>
+        <fieldset>
+          <legend>Start</legend>
+          <div>
             <div class="row">
-                <span>Start at</span>
-                <span class="js_starttime"></span>
-                <span class="js_fleets"></span>
+              <span>Start at</span>
+              <span class="js_starttime"></span>
+              <span class="js_fleets"></span>
             </div>
-            <div class="row">
-                <span>start in</span>
-                <span class="js_duration"></span>
-                <span></span>
+            <div class="row js_durationrow">
+              <span>start in</span>
+              <span class="js_duration"></span>
+              <span></span>
             </div>
-            <div class="row">
-                <span>flag in</span>
-                <span class="js_flagtime"></span>
-                <span class="js_nextflag"></span>
+            <div class="row js_flagrow">
+              <span>flag in</span>
+              <span class="js_flagtime"></span>
+              <span class="js_nextflag"></span>
             </div>
-        </div>
-        <div>
+          </div>
+          <div>
             <span class="imgrow">
-                <img class="js_flagap" src="img/flag_ap.png" alt="AP" />
-                <img class="js_flagx" src="img/flag_x.png" alt="X" />
-                <img class="js_flagrecall" src="img/flag_recall.png" alt="Recall" />
+              <img class="js_flagap" src="img/flag_ap.png" alt="AP" />
+              <img class="js_flagx" src="img/flag_x.png" alt="X" />
+              <img class="js_flagrecall" src="img/flag_recall.png" alt="Recall" />
             </span>
-        </div>
-        </article>
+          </div>
+        </fieldset>
+      </article>
     </template>
   </body>
 </html>
