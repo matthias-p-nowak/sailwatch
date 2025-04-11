@@ -28,11 +28,11 @@ footer {
     width: fit-content;
     bottom: 0.5rem;
     left: 0.5rem;
-    padding: 0.3rem;
     img {
-      height: 3rem;
+      height: 4rem;      
+      padding: 0.3rem;
+      box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
     }
-    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
   }
   .bottomRight {
     width: fit-content;
@@ -42,9 +42,11 @@ footer {
     div {
       display: inline-block;
       img {
-        height: 3rem;
+        height: 4rem;
         box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
-        margin: 0.5rem;
+        border-radius: 0.3rem;
+        margin: 0.3rem;
+        padding: 0.2rem;
       }
     }
   }
@@ -58,8 +60,8 @@ main {
     grid-column: middle;
     // width: fit-content;
     margin: 0.2rem;
-    margin-left: auto;
-    margin-right: auto;
+    // margin-left: auto;
+    // margin-right: auto;
     &:has(.saving)::before {
       content: "saving";
       display: block;
@@ -88,7 +90,7 @@ main {
   margin-top: 0.5rem;
   padding: 0.5rem;
   border-radius: 0.5rem;
-  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
+  // box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
 }
 
 #confNewStart {
@@ -150,7 +152,7 @@ div:has(> div.row) {
   display: table;
   min-width: 50%;
   // margin-left: auto;
-  margin-right: auto;
+  // margin-right: auto;
   div.row {
     display: table-row;
     > * {

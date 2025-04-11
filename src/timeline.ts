@@ -6,8 +6,9 @@ export class TimeLine {
   firstStamp: Date = new Date('9999-12-31');
   lastStamp: Date = new Date('1900-01-01');
 
-  async refresh(dt: Date) {
+  async refresh(dt: Date): Promise<boolean> {
     let events= await SailWatchDB.getEventsBefore(dt);
+    let foundSome=false;
     events.forEach((event) => {
       if(event.note){
         let note=Note.fromTemplate();
@@ -16,8 +17,10 @@ export class TimeLine {
         note.text.value=event.note;
         note.render();
         SailWatch.sw.insert(note);
+        foundSome=true;
       }
     });
+    return foundSome;
   }
 
   private adjustTimeframe(timeStamp: Date) {

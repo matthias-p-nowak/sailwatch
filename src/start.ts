@@ -1,5 +1,8 @@
 import { WebComponent } from "./component";
 import { dateFmt, untilNext } from "./datefmt";
+import { Note } from "./note";
+import { SailWatch } from "./sailwatch";
+import { SailWatchDB } from "./sailwatchdb";
 import { Sounds } from "./sounds";
 
 export class Start extends WebComponent {
@@ -18,6 +21,7 @@ export class Start extends WebComponent {
   starttimeStamp: Date;
   oldDiff = 1;
   flagtimeStamp: Date;
+  fleetsData: string[];
 
   initialize(startTimeStamp: Date, fleets: string[]) {
     console.log(`initialize start ${startTimeStamp} ${fleets}`);
@@ -25,11 +29,18 @@ export class Start extends WebComponent {
     console.log(dateFmt("%h:%i:%s", startTimeStamp));
     this.root.dataset.time = startTimeStamp.toISOString();
     this.starttime.innerText = dateFmt("%h:%i:%s", this.starttimeStamp);
-    this.fleets.innerText = fleets.join(", ");
+    this.fleetsData = fleets.filter((f) => f.length > 0);
+    this.fleets.innerText = this.fleetsData.join(", ");
     this.setFlag();
     this.countDown();
     Sounds.retrieveAllSounds();
     Sounds.sound.triple.play();
+    SailWatchDB.saveEvent({
+      time: this.starttimeStamp,
+      event: "start",
+      started: false,
+      fleets: this.fleetsData,
+    });
   }
 
   setFlag() {
@@ -46,7 +57,7 @@ export class Start extends WebComponent {
     }
     if (flag == undefined) return;
     this.nextflag.innerText = flag.flag;
-    this.flagtimeStamp= new Date(this.starttimeStamp);
+    this.flagtimeStamp = new Date(this.starttimeStamp);
     this.flagtimeStamp.setSeconds(this.flagtimeStamp.getSeconds() - flag.seconds);
   }
 
@@ -62,12 +73,18 @@ export class Start extends WebComponent {
       this.setFlag();
     }
     if (diff * this.oldDiff <= 0) {
-      console.log('started...');
+      console.log("started...");
       this.durationrow.style.display = "none";
       this.flagrow.style.display = "none";
       this.flagap.style.display = "none";
       this.flagx.style.display = "inline";
       this.flagrecall.style.display = "inline";
+      SailWatchDB.saveEvent({
+        time: this.starttimeStamp,
+        event: "start",
+        started: true,
+        fleets: this.fleetsData,
+      });
     }
     this.oldDiff = diff;
     if (diff >= 0) {
@@ -81,31 +98,56 @@ export class Start extends WebComponent {
       dt.setHours(0);
       dt.setMinutes(0);
       dt.setSeconds(0);
-      let flagDiff= this.flagtimeStamp.getTime() - now.getTime();
+      let flagDiff = this.flagtimeStamp.getTime() - now.getTime();
       dt.setMilliseconds(flagDiff);
       this.flagtime.innerText = dateFmt("%h:%i:%s", dt);
-    }    
+    }
     if (diff >= -60_000) {
       setTimeout(() => this.countDown(), untilNext(now, 1));
     } else {
       this.imgrow.style.display = "none";
     }
-    if(secondsLeft >= -45 && secondsLeft <= 330) {
-      if(!this.root.classList.contains('active')) {
-        console.log('activating start');
+    if (secondsLeft >= -45 && secondsLeft <= 330) {
+      if (!this.root.classList.contains("active")) {
+        console.log("activating start");
         this.flagap.style.display = "inline";
         this.flagrow.style.display = "table-row";
-        this.root.classList.add('active');
+        this.root.classList.add("active");
       }
-    }else{
-      if(this.root.classList.contains('active')){
-        console.log('deactivating start');
-        this.root.classList.remove('active');
+    } else {
+      if (this.root.classList.contains("active")) {
+        console.log("deactivating start");
+        this.root.classList.remove("active");
       }
     }
   }
-}
 
+  flagap_onclick(ev: MouseEvent) {
+    ev.stopPropagation();
+    let note=Note.createNote(new Date(),"Flag AP raised for fleets: "+this.fleetsData.join(", "));
+    SailWatch.sw.insert(note);
+    this.removeStart();
+  }
+
+  private removeStart() {
+    SailWatchDB.deleteEvent(new Date(this.starttimeStamp));
+    this.root.remove();
+    this.starttimeStamp = new Date();
+    this.starttimeStamp.setFullYear(0);
+  }
+
+  flagx_onclick(ev: MouseEvent) {
+    ev.stopPropagation();
+    let note=Note.createNote(new Date(),"Flag X raised for fleets: "+this.fleetsData.join(", "));
+    SailWatch.sw.insert(note);
+  }
+  flagrecall_onclick(ev: MouseEvent) {
+    ev.stopPropagation();
+    let note=Note.createNote(new Date(),"Flag Recall raised for fleets: "+this.fleetsData.join(", "));
+    SailWatch.sw.insert(note);
+    this.removeStart();
+  }
+}
 const start_signals = {
   0: { signal: "long" },
   1: { signal: "single" },
@@ -146,7 +188,7 @@ const start_signals = {
   301: { signal: "single" },
   302: { signal: "single" },
   303: { signal: "single" },
-  304: { signal: "single" },  
+  304: { signal: "single" },
   305: { signal: "single" },
   306: { signal: "prep" },
 };

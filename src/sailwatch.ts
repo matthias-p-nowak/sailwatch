@@ -34,7 +34,10 @@ export class SailWatch extends WebComponent {
 
   async previously_onclick(ev: MouseEvent) {
     let dt = this.timeLine.firstStamp;
-    await this.timeLine.refresh(dt);
+    let foundSome = await this.timeLine.refresh(dt);
+    if(!foundSome){
+      this.previously.style.display = "none";
+    }
   }
 
   takeNote_onclick(ev: MouseEvent) {

@@ -3,10 +3,12 @@ import { dateFmt } from "./datefmt";
 import { SailWatchDB } from "./sailwatchdb";
 
 export class Note extends WebComponent {
+
   timeStamp: Date = new Date();
   text: HTMLTextAreaElement = undefined;
   time: HTMLDivElement = undefined;
   delayId: number = 0;
+  
   text_oninput(ev: Event) {
     this.text.style.height = "auto";
     this.text.style.height = this.text.scrollHeight + 2 + "px";
@@ -33,5 +35,13 @@ export class Note extends WebComponent {
       SailWatchDB.deleteEvent(this.timeStamp);
       this.time.parentElement.remove();
     }
+  }
+  static createNote(timeStamp: Date, text: string): Note {
+    let note = Note.fromTemplate();
+    note.timeStamp = timeStamp;
+    note.text.value = text;
+    note.render();
+    note.doSave();
+    return note;
   }
 }

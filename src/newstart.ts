@@ -25,7 +25,7 @@ export class NewStart extends WebComponent {
       dt = sw.latestStart;
     }
     dt.setSeconds(dt.getSeconds() + 330);
-    dt.setSeconds(dt.getSeconds() % 15);
+    dt.setSeconds( dt.getSeconds() - dt.getSeconds() % 15);
     dt.setMilliseconds(0);
     for (let i = 0; i < 12; ++i) {
       console.log(dt);
