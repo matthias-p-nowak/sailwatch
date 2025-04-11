@@ -24,8 +24,8 @@ export class NewStart extends WebComponent {
     if (sw.latestStart != undefined && sw.latestStart > dt) {
       dt = sw.latestStart;
     }
-    dt.setMinutes(dt.getMinutes() + 6);
-    dt.setSeconds(0);
+    dt.setSeconds(dt.getSeconds() + 330);
+    dt.setSeconds(dt.getSeconds() % 15);
     dt.setMilliseconds(0);
     for (let i = 0; i < 12; ++i) {
       console.log(dt);
@@ -34,7 +34,7 @@ export class NewStart extends WebComponent {
       span.innerText = dateStr;
       span.dataset.timeStamp = dt.toISOString();
       this.times.appendChild(span);
-      dt.setSeconds(dt.getSeconds() + 30);
+      dt.setSeconds(dt.getSeconds() + 15);
     }
     let dateStr = dateFmt("%h:%i:%s", dt);
     this.othertime.value = dateStr;

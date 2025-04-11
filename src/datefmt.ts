@@ -12,3 +12,10 @@ export function dateFmt (fmt: string, dt: Date) {
         }
     });
 }
+
+export function untilNext(dt: Date, addSeconds: number) {
+    dt.setSeconds(dt.getSeconds() + addSeconds);
+    dt.setMilliseconds(0);
+    let now = new Date();
+    return dt.getTime() - now.getTime();
+}

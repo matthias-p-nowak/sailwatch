@@ -57,34 +57,44 @@
     </dialog>
     <template id="template_Start">
       <article>
-        <fieldset>
-          <legend>Start</legend>
-          <div>
-            <div class="row">
-              <span>Start at</span>
-              <span class="js_starttime"></span>
-              <span class="js_fleets"></span>
-            </div>
-            <div class="row js_durationrow">
-              <span>start in</span>
-              <span class="js_duration"></span>
-              <span></span>
-            </div>
-            <div class="row js_flagrow">
-              <span>flag in</span>
-              <span class="js_flagtime"></span>
-              <span class="js_nextflag"></span>
-            </div>
+        <div class="start_table">
+          <div class="row">
+            <span>Start at</span>
+            <span class="js_starttime"></span>
+            <span class="js_fleets"></span>
           </div>
-          <div>
-            <span class="imgrow">
-              <img class="js_flagap" src="img/flag_ap.png" alt="AP" />
-              <img class="js_flagx" src="img/flag_x.png" alt="X" />
-              <img class="js_flagrecall" src="img/flag_recall.png" alt="Recall" />
-            </span>
+          <div class="row js_durationrow">
+            <span>start in</span>
+            <span class="js_duration"></span>
+            <span class="js_nowStamp"></span>
           </div>
-        </fieldset>
+          <div class="row js_flagrow" style="display: none">
+            <span>flag in</span>
+            <span class="js_flagtime bold"></span>
+            <span class="js_nextflag bold">class up</span>
+          </div>
+        </div>
+        <div class="js_imgrow">
+          <span class="imgrow">
+            <img class="js_flagap" src="img/flag_ap.png" style="display: none;" alt"="AP" />
+            <img class="js_flagx" style="display: none" src="img/flag_x.png" alt="X" />
+            <img
+              class="js_flagrecall"
+              style="display: none"
+              src="img/flag_recall.png"
+              alt="Recall"
+            />
+          </span>
+        </div>
       </article>
     </template>
+    <div id="sounds">
+      <audio class="js_single" src="snd/single.wav" preload="auto"></audio>
+      <audio class="js_double" src="snd/double.wav" preload="auto"></audio>
+      <audio class="js_triple" src="snd/triple.wav" preload="auto"></audio>
+      <audio class="js_short" src="snd/short.wav" preload="auto"></audio>
+      <audio class="js_long" src="snd/long.wav" preload="auto"></audio>
+      <audio class="js_prep" src="snd/prep.wav" preload="auto"></audio>
+    </div>
   </body>
 </html>

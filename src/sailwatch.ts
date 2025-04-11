@@ -88,9 +88,10 @@ export class SailWatch extends WebComponent {
   }
 
   addStart(startTimeStamp: Date, fleets: string[]) {
+    fleets = fleets.filter((f) => f.length > 0);
     let allFleets = new Set<string>(this.fleets);
     fleets.forEach((fleet) => allFleets.add(fleet));
-    this.fleets = Array.from(allFleets);
+    this.fleets = Array.from(allFleets).filter((f) => f.length > 0);
     window.localStorage.setItem("fleets", this.fleets.join("\n"));
     this.latestStart = startTimeStamp;
     window.localStorage.setItem("latestStart", this.latestStart.toISOString());

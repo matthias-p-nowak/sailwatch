@@ -56,7 +56,10 @@ main {
     [middle-end] 1fr [bigger-end] 1fr;
   > article {
     grid-column: middle;
+    // width: fit-content;
     margin: 0.2rem;
+    margin-left: auto;
+    margin-right: auto;
     &:has(.saving)::before {
       content: "saving";
       display: block;
@@ -83,9 +86,9 @@ main {
   margin-left: auto;
   margin-right: auto;
   margin-top: 0.5rem;
-  padding: 1rem;
+  padding: 0.5rem;
   border-radius: 0.5rem;
-  box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
 }
 
 #confNewStart {
@@ -162,10 +165,37 @@ div:has(> div.row) {
 }
 
 span.imgrow {
+  margin-left: auto;
+  margin-right: auto;
+  width: fit-content;
   display: flex;
   // border: thin solid red;
   img {
     max-width: 3rem;
     margin: 0.3rem;
+  }
+}
+
+div.start_table{
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  span {
+    text-align: center;
+  }
+  // .bold {
+  //   font-weight: bold;
+  //   font-size: larger;
+  // }
+}
+
+article.active{
+  border: thick green solid;
+  border-radius: 1rem;
+  padding: 1rem;  
+  box-shadow: 0px 0px 20px 0px rgba(42, 236, 20, 0.5);
+  .bold {
+    font-weight: bold;
+    font-size: larger;
   }
 }
