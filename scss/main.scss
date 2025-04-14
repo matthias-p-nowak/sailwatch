@@ -3,24 +3,24 @@
 html {
   font-size: 5mm;
 }
-header {
-  .errors {
-    width: fit-content;
-    margin-left: auto;
-    margin-right: auto;
-    color: darkred;
-    display: none;
-    border: thin solid red;
-    border-radius: 0.5rem;
-    padding: 1.5rem;
-    &:has(li) {
-      display: block;
-    }
+.errors {
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  color: darkred;
+  display: none;
+  top: 0.5rem;
+  border: thin solid red;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  &:has(li) {
+    display: block;
+    position: sticky;
+    background-color: white;
+    box-shadow: 0 0 5rem 5rem rgb(254, 243, 243);
   }
-  //   .errors:has(li){
-  //     display: block;
-  //   }
 }
+
 footer {
   display: none;
   .js_registerFinish {
@@ -29,7 +29,7 @@ footer {
     bottom: 0.5rem;
     left: 0.5rem;
     img {
-      height: 4rem;      
+      height: 4rem;
       padding: 0.3rem;
       box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
     }
@@ -145,7 +145,7 @@ main {
     input {
       width: 5rem;
     }
-  } 
+  }
 }
 
 div:has(> div.row) {
@@ -178,7 +178,7 @@ span.imgrow {
   }
 }
 
-div.start_table{
+div.start_table {
   width: fit-content;
   margin-left: auto;
   margin-right: auto;
@@ -191,10 +191,10 @@ div.start_table{
   // }
 }
 
-article.active{
+article.active {
   border: thick green solid;
   border-radius: 1rem;
-  padding: 1rem;  
+  padding: 1rem;
   box-shadow: 0px 0px 20px 0px rgba(42, 236, 20, 0.5);
   .bold {
     font-weight: bold;
@@ -202,7 +202,7 @@ article.active{
   }
 }
 
-dialog{
+dialog {
   margin: auto;
   border: thin solid lightblue;
   border-radius: 1rem;

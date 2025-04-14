@@ -70,9 +70,9 @@ export class Start extends WebComponent {
     if (start_signals[secondsLeft] != undefined) {
       let signal = start_signals[secondsLeft].signal;
       console.log(diff, secondsLeft, dateFmt("%h:%i:%s", now), signal);
-      try{
+      try {
         Sounds.sound.playSound(signal);
-      }catch(e){
+      } catch (e) {
         alert("can't play sound yet");
       }
       this.setFlag();
@@ -139,7 +139,7 @@ export class Start extends WebComponent {
 
   private removeStart() {
     SailWatchDB.deleteEvent(new Date(this.starttimeStamp));
-    this.root.remove();
+    SailWatch.sw.remove(this.root);
     this.starttimeStamp = new Date();
     this.starttimeStamp.setFullYear(0);
   }
@@ -163,8 +163,11 @@ export class Start extends WebComponent {
   }
 
   root_onclick(ev: MouseEvent) {
-    SailWatch.sw.addErrors("Start root element clicked");
-
+    let dt = new Date();
+    dt.setMinutes(dt.getMinutes() + 5);
+    if (this.starttimeStamp.getTime() < dt.getTime()) {
+      return;
+    }
     let newStart = NewStart.Show();
     newStart.configure(this.starttimeStamp, this.fleetsData);
     let msg = `Start removed for fleets: ${this.fleetsData.join(", ")} at ${dateFmt(
@@ -173,7 +176,8 @@ export class Start extends WebComponent {
     )}`;
     let note = Note.createNote(new Date(), msg);
     SailWatch.sw.insert(note);
-    this.root.remove();
+    this.removeStart();
+    console.log(this.root);
   }
 }
 

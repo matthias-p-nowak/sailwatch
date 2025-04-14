@@ -80,6 +80,11 @@ export class SailWatch extends WebComponent {
     }
   }
 
+  remove(elem: HTMLElement) {
+    this.displayed.delete(elem);
+    elem.remove();
+  }
+
   newStart_onclick(ev: MouseEvent) {
     NewStart.Show();
   }
@@ -91,8 +96,8 @@ export class SailWatch extends WebComponent {
   async refreshTimeLine() {
     // clear out main
     this.main.replaceChildren();
-    let dt=new Date();
-    dt.setFullYear(dt.getFullYear()+100);
+    let dt = new Date();
+    dt.setFullYear(dt.getFullYear() + 100);
     await this.timeLine.refresh(dt);
   }
 
@@ -133,9 +138,9 @@ export class SailWatch extends WebComponent {
 
   dialogStart_onclick(ev: MouseEvent) {
     this.dialogStart.close();
-    Sounds.sound.playSound('prep');
+    Sounds.sound.playSound("prep");
   }
-  
+
   static async Start(gitVersion: string) {
     this.sw = SailWatch.fromElement(document.body);
     window.sw = this.sw;

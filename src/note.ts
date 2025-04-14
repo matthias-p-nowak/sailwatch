@@ -1,6 +1,7 @@
 import { WebComponent } from "./component";
 import { dateFmt } from "./datefmt";
 import { SailWatchDB } from "./sailwatchdb";
+import { SailWatch } from "./sailwatch";
 
 export class Note extends WebComponent {
 
@@ -33,7 +34,7 @@ export class Note extends WebComponent {
       SailWatchDB.saveEvent({ time: this.timeStamp, note: this.text.value });
     } else {
       SailWatchDB.deleteEvent(this.timeStamp);
-      this.time.parentElement.remove();
+      SailWatch.sw.remove(this.root);
     }
   }
   static createNote(timeStamp: Date, text: string): Note {
