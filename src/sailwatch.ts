@@ -1,4 +1,5 @@
 import { WebComponent } from "./component";
+import { dateFmt } from "./datefmt";
 import { NewStart } from "./newstart";
 import { Note } from "./note";
 import { SailWatchDB } from "./sailwatchdb";
@@ -17,7 +18,7 @@ export class SailWatch extends WebComponent {
   timeLine = new TimeLine();
   displayed: Map<HTMLElement, WebComponent> = new Map();
   latestStart: Date;
-  fleets: string[] = [];
+  fleets: Set<string> = new Set<string>([]);
 
   errors_onclick(ev: MouseEvent) {
     let target = ev.target as HTMLElement;
@@ -35,7 +36,7 @@ export class SailWatch extends WebComponent {
   async previously_onclick(ev: MouseEvent) {
     let dt = this.timeLine.firstStamp;
     let foundSome = await this.timeLine.refresh(dt);
-    if(!foundSome){
+    if (!foundSome) {
       this.previously.style.display = "none";
     }
   }
@@ -54,6 +55,7 @@ export class SailWatch extends WebComponent {
     try {
       sortTime = node.root.dataset.time;
     } catch (e) {
+      console.log(`fallback to now ${e}`);
       sortTime = new Date().toISOString();
     }
     let cl = this.main.childNodes.length;
@@ -61,6 +63,7 @@ export class SailWatch extends WebComponent {
       let last = this.main.lastChild as HTMLElement;
       if (sortTime < last.dataset.time) {
         this.main.childNodes.forEach((child) => {
+          if (appended) return;
           let elem = child as HTMLElement;
           if (elem.dataset.time > sortTime) {
             this.main.insertBefore(node.root, elem);
@@ -75,9 +78,7 @@ export class SailWatch extends WebComponent {
   }
 
   newStart_onclick(ev: MouseEvent) {
-    let cns = NewStart.fromElement(document.getElementById("confNewStart"));
-    cns.sailwatch = this;
-    cns.show();
+    NewStart.Show();
   }
 
   registerFinish_onclick(ev: MouseEvent) {
@@ -87,20 +88,19 @@ export class SailWatch extends WebComponent {
   async refreshTimeLine() {
     // clear out main
     this.main.replaceChildren();
-    await this.timeLine.refresh(new Date());
+    let dt=new Date();
+    dt.setFullYear(dt.getFullYear()+100);
+    await this.timeLine.refresh(dt);
   }
 
-  addStart(startTimeStamp: Date, fleets: string[]) {
-    fleets = fleets.filter((f) => f.length > 0);
-    let allFleets = new Set<string>(this.fleets);
-    fleets.forEach((fleet) => allFleets.add(fleet));
-    this.fleets = Array.from(allFleets).filter((f) => f.length > 0);
-    window.localStorage.setItem("fleets", this.fleets.join("\n"));
+  addStart(startTimeStamp: Date, fleets: string[]): Start {
+    fleets.filter((f) => f.length > 0).forEach((f) => this.fleets.add(f));
     this.latestStart = startTimeStamp;
     window.localStorage.setItem("latestStart", this.latestStart.toISOString());
     let start = Start.fromTemplate();
     start.initialize(startTimeStamp, fleets);
     this.insert(start);
+    return start;
   }
 
   onstorage(ev: StorageEvent) {
@@ -113,7 +113,7 @@ export class SailWatch extends WebComponent {
     let fn = this[functionName];
     if (typeof fn == "function") {
       console.log(`invoking ${functionName}(${ev.newValue})`);
-      fn(ev.newValue);
+      fn.bind(this)(ev.newValue);
     }
   }
 
@@ -122,9 +122,10 @@ export class SailWatch extends WebComponent {
     this.latestStart = new Date(value);
   }
 
-  on_fleets(value: string) {
-    console.log(`got fleets ${value}`);
-    this.fleets = value.split("\n").filter((f) => f.length > 0);
+  on_SailWatch(value: string) {
+    this.addErrors(`got SailWatch ${value}`);
+    console.log(`got SailWatch ${value}`);
+    window.focus();
   }
 
   static async Start(gitVersion: string) {
@@ -134,10 +135,14 @@ export class SailWatch extends WebComponent {
     this.sw.footer.style.display = "block";
     this.sw.refreshTimeLine();
     window.onstorage = this.sw.onstorage.bind(this.sw);
-    let fleets = window.localStorage.getItem("fleets");
-    if (fleets != null) {
-      console.log(`got fleets ${fleets} from localStorage`);
-      this.sw.on_fleets(fleets);
-    }
+    document.addEventListener("visibilitychange", () => {
+      this.sw.addErrors(`visibilitychange ${document.visibilityState}`);
+      if (!document.hidden) {
+        window.localStorage.setItem(
+          "SailWatch",
+          "visible " + dateFmt("%y-%m-%d %h:%i:%s", new Date())
+        );
+      }
+    });
   }
 }

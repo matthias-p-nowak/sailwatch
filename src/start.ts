@@ -1,5 +1,6 @@
 import { WebComponent } from "./component";
 import { dateFmt, untilNext } from "./datefmt";
+import { NewStart } from "./newstart";
 import { Note } from "./note";
 import { SailWatch } from "./sailwatch";
 import { SailWatchDB } from "./sailwatchdb";
@@ -33,8 +34,8 @@ export class Start extends WebComponent {
     this.fleets.innerText = this.fleetsData.join(", ");
     this.setFlag();
     this.countDown();
-    Sounds.retrieveAllSounds();
-    Sounds.sound.triple.play();
+  }
+  saveStart() {
     SailWatchDB.saveEvent({
       time: this.starttimeStamp,
       event: "start",
@@ -124,7 +125,10 @@ export class Start extends WebComponent {
 
   flagap_onclick(ev: MouseEvent) {
     ev.stopPropagation();
-    let note=Note.createNote(new Date(),"Flag AP raised for fleets: "+this.fleetsData.join(", "));
+    let note = Note.createNote(
+      new Date(),
+      "Flag AP raised for fleets: " + this.fleetsData.join(", ")
+    );
     SailWatch.sw.insert(note);
     this.removeStart();
   }
@@ -138,16 +142,35 @@ export class Start extends WebComponent {
 
   flagx_onclick(ev: MouseEvent) {
     ev.stopPropagation();
-    let note=Note.createNote(new Date(),"Flag X raised for fleets: "+this.fleetsData.join(", "));
+    let note = Note.createNote(
+      new Date(),
+      "Flag X raised for fleets: " + this.fleetsData.join(", ")
+    );
     SailWatch.sw.insert(note);
   }
   flagrecall_onclick(ev: MouseEvent) {
     ev.stopPropagation();
-    let note=Note.createNote(new Date(),"Flag Recall raised for fleets: "+this.fleetsData.join(", "));
+    let note = Note.createNote(
+      new Date(),
+      "Flag Recall raised for fleets: " + this.fleetsData.join(", ")
+    );
     SailWatch.sw.insert(note);
     this.removeStart();
   }
+  root_onclick(ev: MouseEvent) {
+    SailWatch.sw.addErrors("Start root element clicked");
+    let newStart = NewStart.Show();
+    newStart.configure(this.starttimeStamp, this.fleetsData);
+    let msg = `Start removed for fleets: ${this.fleetsData.join(", ")} at ${dateFmt(
+      "%h:%i:%s",
+      this.starttimeStamp
+    )}`;
+    let note = Note.createNote(new Date(), msg);
+    SailWatch.sw.insert(note);
+    this.root.remove();
+  }
 }
+
 const start_signals = {
   0: { signal: "long" },
   1: { signal: "single" },

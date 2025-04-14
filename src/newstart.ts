@@ -1,10 +1,10 @@
 import { WebComponent } from "./component";
 import { dateFmt } from "./datefmt";
 import { SailWatch } from "./sailwatch";
+import { Sounds } from "./sounds";
 
 export class NewStart extends WebComponent {
   dialog: HTMLDialogElement = undefined;
-  sailwatch: SailWatch = undefined;
   cancel: HTMLButtonElement = undefined;
   register: HTMLButtonElement = undefined;
   times: HTMLDivElement = undefined;
@@ -15,7 +15,7 @@ export class NewStart extends WebComponent {
 
   currentStart: Date = undefined;
 
-  show() {
+  render() {
     this.dialog.showModal();
     this.times.replaceChildren();
     this.fleets.replaceChildren();
@@ -25,7 +25,7 @@ export class NewStart extends WebComponent {
       dt = sw.latestStart;
     }
     dt.setSeconds(dt.getSeconds() + 330);
-    dt.setSeconds( dt.getSeconds() - dt.getSeconds() % 15);
+    dt.setSeconds(dt.getSeconds() - (dt.getSeconds() % 15));
     dt.setMilliseconds(0);
     for (let i = 0; i < 12; ++i) {
       console.log(dt);
@@ -66,9 +66,8 @@ export class NewStart extends WebComponent {
     });
   }
 
-
   othertime_onblur(ev: MouseEvent) {
-    if(this.othertime.value.length<5){
+    if (this.othertime.value.length < 5) {
       return;
     }
     const [hours, minutes] = this.othertime.value.split(":");
@@ -96,10 +95,9 @@ export class NewStart extends WebComponent {
   newfleet_onblur(ev: MouseEvent) {
     let fleet = this.newfleet.value;
     this.newfleet.value = "";
-    if(fleet.length < 1) 
-      return;
-    if (SailWatch.sw.fleets.includes(fleet)) return;
-    SailWatch.sw.fleets.push(this.newfleet.value);
+    if (fleet.length < 1) return;
+    if (SailWatch.sw.fleets.has(fleet)) return;
+    SailWatch.sw.fleets.add(this.newfleet.value);
     let span = document.createElement("span");
     span.innerText = fleet;
     span.classList.add("selected");
@@ -110,6 +108,7 @@ export class NewStart extends WebComponent {
   cancel_onclick(ev: MouseEvent) {
     this.dialog.close();
   }
+
   register_onclick(ev: MouseEvent) {
     this.dialog.close();
     let startTimeStamp = this.currentStart;
@@ -121,17 +120,20 @@ export class NewStart extends WebComponent {
         fleets.push(fleet);
       }
     });
-    SailWatch.sw.addStart(startTimeStamp, fleets);
+    let start = SailWatch.sw.addStart(startTimeStamp, fleets);
+    start.saveStart();
+    // Sounds.retrieveAllSounds();
+    Sounds.sound.playSound("triple");
   }
 
   checkValidStart() {
     this.register.disabled = true;
     this.signal.innerText = " -- ";
-    if (this.currentStart == undefined || isNaN(this.currentStart.getHours()) ) {
+    if (this.currentStart == undefined || isNaN(this.currentStart.getHours())) {
       console.log("missing start time");
       return;
     }
-    this.currentStart.getFullYear
+    this.currentStart.getFullYear;
     let possible = new Date();
     possible.setMinutes(possible.getMinutes() + 5);
     if (this.currentStart < possible) {
@@ -148,8 +150,30 @@ export class NewStart extends WebComponent {
       console.log("no fleets selected");
       return;
     }
-    let timeString=dateFmt("%h:%i:%s", this.currentStart);
+    let timeString = dateFmt("%h:%i:%s", this.currentStart);
     this.signal.innerText = timeString;
     this.register.disabled = false;
+  }
+
+  static Show(): NewStart {
+    let cns = NewStart.fromElement(document.getElementById("confNewStart"));
+    cns.render();
+    return cns;
+  }
+
+  configure(starttimeStamp: Date, fleetsData: string[]) {
+    this.currentStart = starttimeStamp;
+    let dateStr = dateFmt("%h:%i:%s", this.currentStart);
+    let span = document.createElement("span");
+    span.classList.add("selected");
+    span.innerText = dateStr;
+    span.dataset.timeStamp = this.currentStart.toISOString();
+    this.times.prepend(span);
+    Array.from(this.fleets.children).forEach((ch) => {
+      let span = ch as HTMLSpanElement;
+      if (fleetsData.includes(span.innerText)) {
+        span.classList.add("selected");
+      }
+    });
   }
 }

@@ -8,7 +8,7 @@ export class Sounds extends WebComponent {
     long: HTMLAudioElement = undefined;
     prep: HTMLAudioElement = undefined;
 
-    static sound: Sounds=undefined;
+    static sound: Sounds=Sounds.fromElement(document.getElementById("sounds"));
 
     playSound(type: string) {
         switch (type) {
@@ -41,8 +41,8 @@ export class Sounds extends WebComponent {
                 break;
         }
     }
-    static retrieveAllSounds() {
-        Sounds.sound=Sounds.fromElement(document.getElementById("sounds"));
-    }
+    // static retrieveAllSounds() {
+    //     Sounds.sound=Sounds.fromElement(document.getElementById("sounds"));
+    // }
     
 }

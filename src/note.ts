@@ -20,7 +20,7 @@ export class Note extends WebComponent {
   render() {
     this.root = this.time.parentElement;
     this.root.dataset.time=this.timeStamp.toISOString();    
-    this.time.innerText = dateFmt("%y-%m-%d %h:%i:%s", this.timeStamp);
+    this.time.innerText = dateFmt("%h:%i:%s", this.timeStamp);
     setTimeout(() => {
         this.text.style.height = "auto";
         this.text.style.height = this.text.scrollHeight +2 + "px";        
