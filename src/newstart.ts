@@ -121,7 +121,7 @@ export class NewStart extends WebComponent {
       }
     });
     let start = SailWatch.sw.addStart(startTimeStamp, fleets);
-    start.saveStart();
+    start.saveFresh();
     // Sounds.retrieveAllSounds();
     Sounds.sound.playSound("triple");
   }

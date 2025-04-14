@@ -5,6 +5,7 @@ import { Note } from "./note";
 import { SailWatchDB } from "./sailwatchdb";
 import { Start } from "./start";
 import { TimeLine } from "./timeline";
+import { Sounds } from "./sounds";
 
 export class SailWatch extends WebComponent {
   errors: HTMLUListElement = undefined;
@@ -14,6 +15,8 @@ export class SailWatch extends WebComponent {
   registerFinish: HTMLDivElement = undefined;
   takeNote: HTMLDivElement = undefined;
   newStart: HTMLDivElement = undefined;
+  dialogStart: HTMLDialogElement = undefined;
+
   static sw: SailWatch = undefined;
   timeLine = new TimeLine();
   displayed: Map<HTMLElement, WebComponent> = new Map();
@@ -128,6 +131,11 @@ export class SailWatch extends WebComponent {
     window.focus();
   }
 
+  dialogStart_onclick(ev: MouseEvent) {
+    this.dialogStart.close();
+    Sounds.sound.playSound('prep');
+  }
+  
   static async Start(gitVersion: string) {
     this.sw = SailWatch.fromElement(document.body);
     window.sw = this.sw;
@@ -144,5 +152,7 @@ export class SailWatch extends WebComponent {
         );
       }
     });
+    Sounds.retrieveAllSounds();
+    this.sw.dialogStart.showModal();
   }
 }

@@ -35,7 +35,7 @@ export class Start extends WebComponent {
     this.setFlag();
     this.countDown();
   }
-  saveStart() {
+  saveFresh() {
     SailWatchDB.saveEvent({
       time: this.starttimeStamp,
       event: "start",
@@ -70,7 +70,11 @@ export class Start extends WebComponent {
     if (start_signals[secondsLeft] != undefined) {
       let signal = start_signals[secondsLeft].signal;
       console.log(diff, secondsLeft, dateFmt("%h:%i:%s", now), signal);
-      Sounds.sound.playSound(signal);
+      try{
+        Sounds.sound.playSound(signal);
+      }catch(e){
+        alert("can't play sound yet");
+      }
       this.setFlag();
     }
     if (diff * this.oldDiff <= 0) {
@@ -157,8 +161,10 @@ export class Start extends WebComponent {
     SailWatch.sw.insert(note);
     this.removeStart();
   }
+
   root_onclick(ev: MouseEvent) {
     SailWatch.sw.addErrors("Start root element clicked");
+
     let newStart = NewStart.Show();
     newStart.configure(this.starttimeStamp, this.fleetsData);
     let msg = `Start removed for fleets: ${this.fleetsData.join(", ")} at ${dateFmt(
