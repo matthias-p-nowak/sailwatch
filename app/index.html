@@ -97,23 +97,24 @@
             <span class="js_finishTime"></span>
             <span class="js_sailNumber">-sail number-</span>
             <span class="js_fleet">-fleet-</span>
+            <span class="js_sailed"></span>
           </div>
         </div>
       </article>
     </template>
+    <dialog id="dialogFinish">
+      <div>
+        <label for="sailnumber" class="js_finished">Finished</label>
+        <input type="number" name="sailnumber" class="js_sailnumber" placeholder="sailnumber"/>
+      </div>
+      <div class="js_fleet spanbuttons"></div>
+      <div class="buttons">
+        <button class="js_cancel">Cancel</button>
+        <button class="js_save">Save</button>
+        <button class="js_next">Save and next</button>
+      </div>
+    </dialog>
     <div class="overlay">
-      <dialog id="dialogFinish">
-        <div>
-          <label for="sailnumber" class="js_finished">Finished</label>
-          <input type="number" name="sailnumber" class="js_sailnumber" placeholder="sailnumber"/>
-        </div>
-        <div class="js_fleet spanbuttons"></div>
-        <div class="buttons">
-          <button class="js_cancel">Cancel</button>
-          <button class="js_save">Save</button>
-          <button class="js_next">Save and next</button>
-        </div>
-      </dialog>
     </div>
     <dialog class="js_dialogStart">
       <img src="img/sailwatch-512.png" alt="show image to get user click" />

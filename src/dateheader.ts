@@ -9,7 +9,7 @@ export class DateHeader extends WebComponent {
         date.setSeconds(0);
         date.setMilliseconds(0);
         this.root = document.createElement('article');
-        this.root.dataset.time=date.toISOString();
+        this.eventTime=date;
         let h2=document.createElement('h3');
         this.root.appendChild(h2);
         h2.innerText = dateFmt("%y-%m-%d", date);

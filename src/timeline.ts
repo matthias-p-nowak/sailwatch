@@ -31,6 +31,7 @@ export class TimeLine {
       } else if (event.sailnumber != undefined) {
         let finish=Finish.fromTemplate();
         finish.finishTimeStamp=event.time as Date;
+        finish.eventTime=event.time as Date;
         finish.sailnumberData=event.sailnumber || '';
         finish.fleetData=event.fleet || '';
         SailWatch.sw.insert(finish);

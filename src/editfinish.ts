@@ -17,9 +17,9 @@ export class EditFinish extends WebComponent{
 
   static  edit(finish: Finish): EditFinish{
         let ef= EditFinish.fromElement(document.getElementById('dialogFinish'));        
-        ef.dialog.show();
+        ef.dialog.showModal();
         ef.finish=finish;
-        ef.finished.innerText=dateFmt('%h:%i:%s.%f', finish.finishTimeStamp);
+        ef.finished.innerText=dateFmt('%h:%i:%s.%f', finish.eventTime);
         ef.sailnumber.value=finish.sailnumberData;
         ef.boatFleet=finish.fleetData;
         let fleets=Array.from(SailWatch.sw.fleets).sort();
@@ -52,7 +52,7 @@ export class EditFinish extends WebComponent{
         this.dialog.close();
         this.finish.fleetData=this.boatFleet;
         this.finish.sailnumberData= this.sailnumber.value;
-        SailWatchDB.saveEvent({time: this.finish.finishTimeStamp, sailnumber: this.finish.sailnumberData, fleet: this.finish.fleetData});
+        SailWatchDB.saveEvent({time: this.finish.eventTime, sailnumber: this.finish.sailnumberData, fleet: this.finish.fleetData});
         this.finish.render();
     }
 

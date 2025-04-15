@@ -19,17 +19,16 @@ export class Start extends WebComponent {
   durationrow: HTMLDivElement = undefined;
   flagrow: HTMLDivElement = undefined;
   imgrow: HTMLDivElement = undefined;
-  starttimeStamp: Date;
   oldDiff = 1;
   flagtimeStamp: Date;
   fleetsData: string[];
 
   initialize(startTimeStamp: Date, fleets: string[]) {
     console.log(`initialize start ${startTimeStamp} ${fleets}`);
-    this.starttimeStamp = new Date(startTimeStamp);
+    this.eventTime = new Date(startTimeStamp);
     console.log(dateFmt("%h:%i:%s", startTimeStamp));
     this.root.dataset.time = startTimeStamp.toISOString();
-    this.starttime.innerText = dateFmt("%h:%i:%s", this.starttimeStamp);
+    this.starttime.innerText = dateFmt("%h:%i:%s", this.eventTime);
     this.fleetsData = fleets.filter((f) => f.length > 0);
     this.fleets.innerText = this.fleetsData.join(", ");
     this.setFlag();
@@ -37,7 +36,7 @@ export class Start extends WebComponent {
   }
   saveFresh() {
     SailWatchDB.saveEvent({
-      time: this.starttimeStamp,
+      time: this.eventTime,
       event: "start",
       started: false,
       fleets: this.fleetsData,
@@ -46,7 +45,7 @@ export class Start extends WebComponent {
 
   setFlag() {
     let now = new Date();
-    let diff = this.starttimeStamp.getTime() - now.getTime();
+    let diff = this.eventTime.getTime() - now.getTime();
     let secondsLeft = Math.floor(diff / 1000);
     if (secondsLeft < 0) return;
     let flag;
@@ -58,14 +57,14 @@ export class Start extends WebComponent {
     }
     if (flag == undefined) return;
     this.nextflag.innerText = flag.flag;
-    this.flagtimeStamp = new Date(this.starttimeStamp);
+    this.flagtimeStamp = new Date(this.eventTime);
     this.flagtimeStamp.setSeconds(this.flagtimeStamp.getSeconds() - flag.seconds);
   }
 
   countDown() {
     let now = new Date();
     now.setMilliseconds(0);
-    let diff = this.starttimeStamp.getTime() - now.getTime();
+    let diff = this.eventTime.getTime() - now.getTime();
     let secondsLeft = Math.floor(diff / 1000);
     if (start_signals[secondsLeft] != undefined) {
       let signal = start_signals[secondsLeft].signal;
@@ -85,13 +84,13 @@ export class Start extends WebComponent {
       this.flagx.style.display = "inline";
       this.flagrecall.style.display = "inline";
       SailWatchDB.saveEvent({
-        time: this.starttimeStamp,
+        time: this.eventTime,
         event: "start",
         started: true,
         fleets: this.fleetsData,
       });
       this.fleetsData.forEach((f) => {
-        SailWatchDB.saveFleet({ name: f, lastUsed: this.starttimeStamp });
+        SailWatchDB.saveFleet({ name: f, lastUsed: this.eventTime });
       });
     }
     this.oldDiff = diff;
@@ -141,10 +140,10 @@ export class Start extends WebComponent {
   }
 
   private removeStart() {
-    SailWatchDB.deleteEvent(new Date(this.starttimeStamp));
+    SailWatchDB.deleteEvent(new Date(this.eventTime));
     SailWatch.sw.remove(this.root);
-    this.starttimeStamp = new Date();
-    this.starttimeStamp.setFullYear(0);
+    this.eventTime = new Date();
+    this.eventTime.setFullYear(0);
   }
 
   flagx_onclick(ev: MouseEvent) {
@@ -168,12 +167,12 @@ export class Start extends WebComponent {
   root_onclick(ev: MouseEvent) {
     let dt = new Date();
     dt.setMinutes(dt.getMinutes() + 5);
-    if (this.starttimeStamp.getTime() < dt.getTime()) {
+    if (this.eventTime.getTime() < dt.getTime()) {
       return;
     }
     let newStart = NewStart.Show();
-    newStart.configure(this.starttimeStamp, this.fleetsData);
-    let msg = `Start removed at ${dateFmt("%h:%i:%s", this.starttimeStamp)}: ${this.fleetsData.join(", ")}`;
+    newStart.configure(this.eventTime, this.fleetsData);
+    let msg = `Start removed at ${dateFmt("%h:%i:%s", this.eventTime)}: ${this.fleetsData.join(", ")}`;
     let note = Note.createNote(new Date(), msg);
     SailWatch.sw.insert(note);
     this.removeStart();

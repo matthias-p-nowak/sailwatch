@@ -7,12 +7,11 @@ export class Finish extends WebComponent {
     finishTime: HTMLSpanElement = undefined;
     sailNumber: HTMLSpanElement = undefined;
     fleet: HTMLSpanElement= undefined;
-    finishTimeStamp: Date = undefined;
-    sailnumberData: string='- sn -';
-    fleetData: string='- fleet -';
+    sailnumberData: string='';
+    fleetData: string='';
 
     render() {
-      this.finishTime.innerText=dateFmt("%h:%i:%s.%f", this.finishTimeStamp)+' f';
+      this.finishTime.innerText=dateFmt("%h:%i:%s.%f", this.eventTime);
       this.sailNumber.innerText=this.sailnumberData;
       this.fleet.innerText=this.fleetData;
       setTimeout(() => {

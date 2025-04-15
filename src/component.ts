@@ -5,6 +5,7 @@ export class WebComponent {
 
     /** The root element of the component */
     root: HTMLElement;
+    eventTime: Date;
     /** place for storing the original data content */
     data: Object    ={ };
 

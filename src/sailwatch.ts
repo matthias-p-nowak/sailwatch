@@ -55,21 +55,21 @@ export class SailWatch extends WebComponent {
   insert(node: WebComponent) {
     this.displayed.set(node.root, node);
     let appended = false;
-    let sortTime: string;
+    let sortTime: Date;
     try {
-      sortTime = node.root.dataset.time;
+      sortTime = node.eventTime;
     } catch (e) {
       console.log(`fallback to now ${e}`);
-      sortTime = new Date().toISOString();
+      sortTime = new Date();
     }
     let cl = this.main.childNodes.length;
     if (cl > 0) {
       let last = this.main.lastChild as HTMLElement;
-      if (sortTime < last.dataset.time) {
+      if (sortTime < this.displayed.get(last).eventTime) {
         this.main.childNodes.forEach((child) => {
           if (appended) return;
           let elem = child as HTMLElement;
-          if (elem.dataset.time > sortTime) {
+          if (this.displayed.get(elem).eventTime > sortTime) {
             this.main.insertBefore(node.root, elem);
             appended = true;
           }
@@ -92,10 +92,10 @@ export class SailWatch extends WebComponent {
 
   registerFinish_onclick(ev: MouseEvent) {
     let finish=Finish.fromTemplate();
-    finish.finishTimeStamp=new Date();
+    finish.eventTime=new Date();
     finish.render();
     SailWatch.sw.insert(finish);
-    SailWatchDB.saveEvent({time: finish.finishTimeStamp, sailnumber: ''});
+    SailWatchDB.saveEvent({time: finish.eventTime, sailnumber: ''});
   }
 
   async refreshTimeLine() {

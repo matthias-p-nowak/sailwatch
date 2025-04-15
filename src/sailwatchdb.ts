@@ -62,8 +62,9 @@ export class SailWatchDB {
     return new Promise<string[]>((resolve, reject) => {      
       let store = SailWatchDB.db.transaction(["fleets"], "readonly").objectStore("fleets");
       let request= store.getAll();
-      request.onsuccess= function(ev:Event){
-        resolve(request.result.map((fleets) => fleets.name));
+      request.onsuccess= function(ev:Event){        
+        let foundFleets = request.result.map((fleets) => fleets.name).filter((f) => f.length > 0);
+        resolve(foundFleets);
       };
       request.onerror= function(ev:Event){
         reject(request.error);
