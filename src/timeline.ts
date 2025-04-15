@@ -28,7 +28,7 @@ export class TimeLine {
         console.log("adding start");
         SailWatch.sw.addStart(event.time, event.fleets);
         foundSome = true;
-      } else if (event.finished) {
+      } else if (event.sailnumber != undefined) {
         console.log("adding finish");
         foundSome = true;
       }

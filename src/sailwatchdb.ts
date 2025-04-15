@@ -58,6 +58,26 @@ export class SailWatchDB {
       };      
     });
   }
+  static async getFleets(): Promise<string[]> {
+    return new Promise<string[]>((resolve, reject) => {      
+      let store = SailWatchDB.db.transaction(["fleets"], "readonly").objectStore("fleets");
+      let request= store.getAll();
+      request.onsuccess= function(ev:Event){
+        resolve(request.result.map((fleets) => fleets.name));
+      };
+      request.onerror= function(ev:Event){
+        reject(request.error);
+      };
+    });
+  }
+
+  static saveFleet(fleet: { name: string; lastUsed: Date}) {
+      let store = SailWatchDB.db.transaction(["fleets"], "readwrite").objectStore("fleets");
+      store.put(fleet);
+  }
+
+
+
 
   // ********************************************
 
@@ -68,9 +88,16 @@ export class SailWatchDB {
       },
       indexes: [],
     },
+    fleets: {
+      options: {
+        keyPath: "name",
+      },
+      indexes: [],
+    },
+   
   };
 
-  static dbUpgrade(db: IDBDatabase, dbSchema: Object, addErrors: (msg: string) => void) {
+  static dbUpgrade(ev:IDBVersionChangeEvent,db: IDBDatabase, dbSchema: Object, addErrors: (msg: string) => void) {
     const stores = Object.keys(dbSchema);
     let existingStoreNames = Array.from(db.objectStoreNames);
     let removeStores = existingStoreNames.filter((name) => !stores.includes(name));
@@ -85,7 +112,8 @@ export class SailWatchDB {
           addErrors(e);
         }
       } else {
-        store = db.transaction(name, "readwrite").objectStore(name);
+        let updateTarget=ev.target as IDBRequest;
+        store = updateTarget.transaction.objectStore(name);
       }
       let indexes = value.indexes;
       let indexNames = Array.from(store.indexNames);
@@ -105,7 +133,7 @@ export class SailWatchDB {
   static StartDb() {
     SailWatchDB.ready = new Promise((resolve, reject) => {
       // ***** Name and version *****
-      const openRequest = window.indexedDB.open("sailwatch-db", 4);
+      const openRequest = window.indexedDB.open("sailwatch-db", 7);
       openRequest.onsuccess = function (ev) {
         SailWatchDB.db = openRequest.result;
         resolve(openRequest.result);
@@ -118,10 +146,10 @@ export class SailWatchDB {
         SailWatch.sw.addErrors(`indexed db blocked ${openRequest.error}`);
         reject(openRequest.error);
       };
-      openRequest.onupgradeneeded = function (ev) {
+      openRequest.onupgradeneeded = function (ev:IDBVersionChangeEvent) {
         SailWatch.sw.addErrors(`indexed db upgrade needed`);
         let db = openRequest.result;
-        SailWatchDB.dbUpgrade(db, SailWatchDB.dbSchema, SailWatch.sw.addErrors);
+        SailWatchDB.dbUpgrade(ev, db, SailWatchDB.dbSchema, SailWatch.sw.addErrors);
       };
     });
   }

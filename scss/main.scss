@@ -28,6 +28,7 @@ footer {
     width: fit-content;
     bottom: 0.5rem;
     left: 0.5rem;
+    z-index: 100;
     img {
       height: 4rem;
       padding: 0.3rem;
@@ -182,13 +183,10 @@ div.start_table {
   width: fit-content;
   margin-left: auto;
   margin-right: auto;
+  border: thin solid orange;
   span {
     text-align: center;
   }
-  // .bold {
-  //   font-weight: bold;
-  //   font-size: larger;
-  // }
 }
 
 article.active {
@@ -207,4 +205,62 @@ dialog {
   border: thin solid lightblue;
   border-radius: 1rem;
   padding: 1rem;
+}
+
+div.finish_table{
+  border: thin solid blue;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  span {
+    text-align: center;
+  }
+}
+
+.overlay{
+  width: 100svw;
+  height: 100svh;
+  display: flex;
+  position: fixed;
+  // background-color: rgba(242, 227, 208, 0.438);
+  top: 0;
+  left: 0;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  dialog {
+    pointer-events: all;
+    z-index: 10;
+  }
+}
+
+#dialogFinish{
+  background-color: rgb(232, 249, 255);
+  input{
+    width: 7rem;
+  }
+  .spanbuttons{
+    margin: 0.5rem;
+    span{
+      margin: 0.2rem;
+      border: thin solid blue;
+      padding: 0.2rem;
+      border-radius: 0.2rem;
+      &.selected{
+        background-color: blue;
+        color: white;
+      }
+    }
+  }
+  div.buttons{
+    text-align: right;
+    margin:5px;
+    padding: 0.2rem;
+    button{
+      background-color: antiquewhite;
+      border: none;
+      border-radius: 0.2rem;
+      padding: 0.2rem;
+    }
+  }
 }

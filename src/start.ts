@@ -73,7 +73,7 @@ export class Start extends WebComponent {
       try {
         Sounds.sound.playSound(signal);
       } catch (e) {
-        alert("can't play sound yet");
+        SailWatch.sw.addErrors(`failed to play sound: ${e}`);
       }
       this.setFlag();
     }
@@ -89,6 +89,9 @@ export class Start extends WebComponent {
         event: "start",
         started: true,
         fleets: this.fleetsData,
+      });
+      this.fleetsData.forEach((f) => {
+        SailWatchDB.saveFleet({ name: f, lastUsed: this.starttimeStamp });
       });
     }
     this.oldDiff = diff;
@@ -170,10 +173,7 @@ export class Start extends WebComponent {
     }
     let newStart = NewStart.Show();
     newStart.configure(this.starttimeStamp, this.fleetsData);
-    let msg = `Start removed for fleets: ${this.fleetsData.join(", ")} at ${dateFmt(
-      "%h:%i:%s",
-      this.starttimeStamp
-    )}`;
+    let msg = `Start removed at ${dateFmt("%h:%i:%s", this.starttimeStamp)}: ${this.fleetsData.join(", ")}`;
     let note = Note.createNote(new Date(), msg);
     SailWatch.sw.insert(note);
     this.removeStart();

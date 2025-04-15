@@ -6,6 +6,7 @@ import { SailWatchDB } from "./sailwatchdb";
 import { Start } from "./start";
 import { TimeLine } from "./timeline";
 import { Sounds } from "./sounds";
+import { Finish } from "./finish";
 
 export class SailWatch extends WebComponent {
   errors: HTMLUListElement = undefined;
@@ -90,7 +91,11 @@ export class SailWatch extends WebComponent {
   }
 
   registerFinish_onclick(ev: MouseEvent) {
-    this.addErrors("registerFinish_onclick");
+    let finish=Finish.fromTemplate();
+    finish.finishTimeStamp=new Date();
+    finish.render();
+    SailWatch.sw.insert(finish);
+    SailWatchDB.saveEvent({time: finish.finishTimeStamp, sailnumber: ''});
   }
 
   async refreshTimeLine() {
@@ -147,6 +152,7 @@ export class SailWatch extends WebComponent {
     await SailWatchDB.ready;
     this.sw.footer.style.display = "block";
     this.sw.refreshTimeLine();
+    this.sw.fleets= new Set(await SailWatchDB.getFleets());
     window.onstorage = this.sw.onstorage.bind(this.sw);
     document.addEventListener("visibilitychange", () => {
       this.sw.addErrors(`visibilitychange ${document.visibilityState}`);
@@ -158,6 +164,13 @@ export class SailWatch extends WebComponent {
       }
     });
     Sounds.retrieveAllSounds();
-    this.sw.dialogStart.showModal();
+    try{
+      Sounds.sound.playSound("prep");
+    }catch(e){      
+      console.log('need interaction with user to play sound');
+      this.sw.dialogStart.showModal();
+    }
   }
+
+ 
 }

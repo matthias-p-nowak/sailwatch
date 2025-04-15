@@ -1,6 +1,7 @@
 import { WebComponent } from "./component";
 import { dateFmt } from "./datefmt";
 import { SailWatch } from "./sailwatch";
+import { SailWatchDB } from "./sailwatchdb";
 import { Sounds } from "./sounds";
 
 export class NewStart extends WebComponent {
@@ -39,7 +40,9 @@ export class NewStart extends WebComponent {
     let dateStr = dateFmt("%h:%i:%s", dt);
     this.othertime.value = dateStr;
     this.times.appendChild(this.othertime);
-    sw.fleets.forEach((fleet) => {
+    let fleets= Array.from(sw.fleets);
+    fleets= fleets.sort();
+    fleets.forEach((fleet) => {
       let span = document.createElement("span");
       span.innerText = fleet;
       this.fleets.appendChild(span);
@@ -98,6 +101,7 @@ export class NewStart extends WebComponent {
     if (fleet.length < 1) return;
     if (SailWatch.sw.fleets.has(fleet)) return;
     SailWatch.sw.fleets.add(this.newfleet.value);
+    SailWatchDB.saveFleet({name: this.newfleet.value, lastUsed: new Date()});
     let span = document.createElement("span");
     span.innerText = fleet;
     span.classList.add("selected");
