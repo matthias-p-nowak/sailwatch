@@ -89,6 +89,7 @@ export class Start extends WebComponent {
         started: true,
         fleets: this.fleetsData,
       });
+      SailWatch.sw.timeLine.addGoneStart(this.fleetsData, this.eventTime);
       this.fleetsData.forEach((f) => {
         SailWatchDB.saveFleet({ name: f, lastUsed: this.eventTime });
       });

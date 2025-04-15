@@ -218,23 +218,6 @@ div.finish_table{
   }
 }
 
-.overlay{
-  width: 100svw;
-  height: 100svh;
-  display: flex;
-  position: fixed;
-  // background-color: rgba(242, 227, 208, 0.438);
-  top: 0;
-  left: 0;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-  dialog {
-    pointer-events: all;
-    z-index: 10;
-  }
-}
-
 #dialogFinish{
   background-color: rgb(232, 249, 255);
   input{
