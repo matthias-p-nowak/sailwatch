@@ -2,6 +2,7 @@ import { WebComponent } from "./component";
 import { dateFmt } from "./datefmt";
 import { Finish } from "./finish";
 import { SailWatch } from "./sailwatch";
+import { SailWatchDB } from "./sailwatchdb";
 
 export class EditFinish extends WebComponent{
     finish: Finish;
@@ -51,6 +52,7 @@ export class EditFinish extends WebComponent{
         this.dialog.close();
         this.finish.fleetData=this.boatFleet;
         this.finish.sailnumberData= this.sailnumber.value;
+        SailWatchDB.saveEvent({time: this.finish.finishTimeStamp, sailnumber: this.finish.sailnumberData, fleet: this.finish.fleetData});
         this.finish.render();
     }
 

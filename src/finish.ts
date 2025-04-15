@@ -12,7 +12,7 @@ export class Finish extends WebComponent {
     fleetData: string='- fleet -';
 
     render() {
-      this.finishTime.innerText=dateFmt("%h:%i:%s.%f", this.finishTimeStamp)+' t';
+      this.finishTime.innerText=dateFmt("%h:%i:%s.%f", this.finishTimeStamp)+' f';
       this.sailNumber.innerText=this.sailnumberData;
       this.fleet.innerText=this.fleetData;
       setTimeout(() => {

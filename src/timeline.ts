@@ -29,7 +29,12 @@ export class TimeLine {
         SailWatch.sw.addStart(event.time, event.fleets);
         foundSome = true;
       } else if (event.sailnumber != undefined) {
-        console.log("adding finish");
+        let finish=Finish.fromTemplate();
+        finish.finishTimeStamp=event.time as Date;
+        finish.sailnumberData=event.sailnumber || '';
+        finish.fleetData=event.fleet || '';
+        SailWatch.sw.insert(finish);
+        finish.render();
         foundSome = true;
       }
     });
