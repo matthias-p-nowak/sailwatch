@@ -21,6 +21,9 @@
         <img src="img/finish.png" alt="register a finish" />
       </div>
       <div class="bottomRight">
+        <div class="js_makeTable">
+          <img src="img/table.png" alt="make a table" />
+        </div>
         <div class="js_takeNote">
           <img src="img/note.png" alt="take a note" />
         </div>
@@ -91,7 +94,7 @@
       </article>
     </template>
     <template id="template_Finish">
-      <article>
+      <article >
         <div class="finish_table js_table">
           <div class="row">
             <span class="js_finishTime"></span>
@@ -101,6 +104,46 @@
           </div>
         </div>
       </article>
+    </template>
+    <template id="template_SumStart">
+      <article class="SumStarts">
+        <fieldset>
+          <legend>Starts</legend>
+          <div class="js_starts">            
+            <div class="row bold"><span>Start time</span><span>Fleets</span>
+            </div>
+          </div>
+        </fieldset>
+      </article>
+    </template>
+    <template id="template_SumStartRow">
+      <div class="row">
+        <span class="js_starttime"></span>
+        <span class="js_fleets"></span>
+      </div>
+    </template>
+    <template id="template_SumFinish">
+      <article class="SumFinish">
+        <fieldset>
+          <legend>Finishes</legend>
+          <div class="js_finishes">
+            <div class="row bold">
+              <span>Finish time</span>
+              <span>Sail number</span>
+              <span>Fleet</span>
+              <span>Sailed</span>
+            </div>
+          </div>
+        </fieldset>
+      </article>
+    </template>
+    <template id="template_SumFinishRow">
+      <div class="row">
+        <span class="js_finishTime"></span>
+        <span class="js_sailNumber"></span>
+        <span class="js_fleet"></span>
+        <span class="js_sailed"></span>
+      </div>
     </template>
     <dialog id="dialogFinish">
       <div>

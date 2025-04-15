@@ -248,3 +248,40 @@ div.finish_table{
     }
   }
 }
+
+.boldFrame{
+  border: 2px solid blue;
+  border-radius: 0.5rem;
+}
+
+article.SumStarts{
+  width: fit-content;
+  margin-right: auto ;
+  margin-left: auto;
+  fieldset{
+    border-color: orange;
+    padding: 0.5rem;
+    .bold{
+      font-weight: bold;
+    } 
+    span{
+      text-align: center;
+    }   
+  }
+}
+
+article.SumFinish {
+  width: fit-content;
+  margin-right: auto ;
+  margin-left: auto;
+  fieldset{
+    border-color: blue;
+    padding: 0.5rem;
+    .bold{
+      font-weight: bold;
+    }
+    span{
+      text-align: center;
+    }
+  }
+}
