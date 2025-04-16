@@ -11,6 +11,7 @@ import { SumStart } from "./sumstart";
 import { SumStartRow } from "./sumstartrow";
 import { SumFinish } from "./sumfinish";
 import { SumFinishRow } from "./sumfinishrow";
+import { Settings } from "./settings";
 
 export class SailWatch extends WebComponent {
   errors: HTMLUListElement = undefined;
@@ -22,7 +23,7 @@ export class SailWatch extends WebComponent {
   takeNote: HTMLDivElement = undefined;
   newStart: HTMLDivElement = undefined;
   dialogStart: HTMLDialogElement = undefined;
-
+  settings: Settings = undefined;
   static sw: SailWatch = undefined;
   timeLine = new TimeLine();
   displayed: WeakMap<HTMLElement, WebComponent> = new WeakMap();
@@ -78,30 +79,29 @@ export class SailWatch extends WebComponent {
     } else if (wc instanceof Finish) {
       let finish = wc as Finish;
       finish.root.classList.add("boldFrame");
-      if(!(last instanceof SumFinish)) {
+      if (!(last instanceof SumFinish)) {
         console.log("new sumfinish");
         last = SumFinish.fromTemplate();
         last.eventTime = finish.eventTime;
         this.insert(last);
       }
       let sumfinish = last as SumFinish;
-      let sfr= SumFinishRow.fromTemplate();
+      let sfr = SumFinishRow.fromTemplate();
       sfr.eventTime = finish.eventTime;
       sfr.render(finish);
       sumfinish.finishes.appendChild(sfr.root);
       this.displayed.set(sfr.root, sfr);
       finish.root.remove();
-     
     } else {
       last = null;
     }
-    setTimeout(this.makingTable.bind(this), 50, nextSibling, last);
+    setTimeout(this.makingTable.bind(this), 10, nextSibling, last);
   }
 
   makeTable_onclick(ev: MouseEvent) {
     let firstChild = this.main.firstChild as HTMLElement;
 
-    setTimeout(this.makingTable.bind(this), 100, firstChild, null);
+    setTimeout(this.makingTable.bind(this), 500, firstChild, null);
   }
 
   takeNote_onclick(ev: MouseEvent) {
@@ -124,13 +124,13 @@ export class SailWatch extends WebComponent {
     let cl = this.main.childNodes.length;
     if (cl > 0) {
       let last = this.main.lastChild as HTMLElement;
-      console.log(this.displayed.get(last).eventTime, sortTime);
+      // console.log(this.displayed.get(last).eventTime, sortTime);
       if (sortTime < this.displayed.get(last).eventTime) {
         this.main.childNodes.forEach((child) => {
           if (appended) return;
           let elem = child as HTMLElement;
           let owc = this.displayed.get(elem);
-          console.log(owc.eventTime, sortTime);
+          // console.log(owc.eventTime, sortTime);
           if (owc.eventTime >= sortTime) {
             this.main.insertBefore(node.root, elem);
             appended = true;
@@ -232,5 +232,7 @@ export class SailWatch extends WebComponent {
       console.log("need interaction with user to play sound");
       this.sw.dialogStart.showModal();
     }
+    this.sw.settings=Settings.fromElement(document.getElementById('settings'));
+    this.sw.settings.gitVersion=gitVersion;
   }
 }

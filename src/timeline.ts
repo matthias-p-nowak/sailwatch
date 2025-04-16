@@ -67,11 +67,11 @@ export class TimeLine {
 
   private adjustTimeframe(timeStamp: Date) {
     if (timeStamp < this.firstStamp) {
-      console.log("setting firstStamp");
+      // console.log("setting firstStamp");
       this.firstStamp = timeStamp;
     }
     if (timeStamp > this.lastStamp) {
-      console.log("setting lastStamp");
+      // console.log("setting lastStamp");
       this.lastStamp = timeStamp;
     }
   }

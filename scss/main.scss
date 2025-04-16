@@ -40,6 +40,7 @@ footer {
     width: fit-content;
     margin-left: auto;
     margin-top: 10rem;
+    margin-bottom: 10rem;
     height: fit-content;
     div {
       display: inline-block;
@@ -279,6 +280,49 @@ article.SumFinish {
     padding: 0.5rem;
     .bold{
       font-weight: bold;
+    }
+    span{
+      text-align: center;
+    }
+  }
+}
+
+
+
+header{
+  display: grid;
+  grid-template-columns:
+    1fr [bigger-start] 1fr [middle-start] clamp(5rem, 80svw, 30rem)
+    [middle-end] 1fr [bigger-end] 1fr;
+    >* {
+      grid-column: middle;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  details {
+    summary {
+      &::marker {
+        content: "";
+      }
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    img{
+      max-height: 20rem;
+    }
+    &[open] {
+      border: thin solid darkblue;
+      border-radius: 0.5rem;
+      background-color: white;
+      padding: 1rem;
+      > summary {
+        display: none;
+      }
+    }
+    > *{
+      margin-left: auto;
+      margin-right: auto;
     }
     span{
       text-align: center;

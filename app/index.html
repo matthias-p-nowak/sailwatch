@@ -3,6 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="manifest" href="manifest.json" />
+    <script src="environ.js"></script>
     <link rel="stylesheet" href="main.css" />
     <script src="main.js" defer></script>
     <link rel="shortcut icon" type="image/x-icon" href="sailwatch.ico" />
@@ -13,7 +15,38 @@
       <h2>Messages and errors</h2>
       <ul class="js_errors"></ul>
     </div>
-    <header></header>
+    <header>
+      <details id="settings">
+        <summary class="js_summary">
+          <img src="img/sailwatch-64.png" alt="Sailwatch" />
+          <span>
+            Sailing Watch <br />
+            Start &amp; Finish</span
+          >
+        </summary>
+        <div class="headerpic">
+          <img src="img/sailwatch-512.png" alt="big sailwatch icon" srcset="" />
+        </div>
+        <div>
+          <div class="row">
+            <span class="right">Notifications</span>
+            <span class="js_notifications">no notifications</span>
+          </div>
+          <div class="row">
+            <span class="right">Clockwork</span>
+            <span class="js_clockwork">not active</span>
+          </div>
+          <div class="row js_approw" >
+            <span class="right">App</span>
+            <span class="js_app">not installed</span>
+          </div>
+          <div class="row">
+            <span class="right">donation</span>
+            <span> <a class="js_donation" target="_blank"></a> </span>
+          </div>
+        </div>
+      </details>
+    </header>
     <div class="js_previously">Previously...</div>
     <main class="js_main"></main>
     <footer class="js_footer">
@@ -31,9 +64,6 @@
           <img src="img/start.png" alt="register new start" />
         </div>
       </div>
-     <!--
-      <div><a href="https://qr.vipps.no/28/2/01/031/4797778239?v=1">Give me money!</a></div>
-      --> 
     </footer>
     <template id="template_Note">
       <article>
@@ -94,7 +124,7 @@
       </article>
     </template>
     <template id="template_Finish">
-      <article >
+      <article>
         <div class="finish_table js_table">
           <div class="row">
             <span class="js_finishTime"></span>
@@ -109,9 +139,8 @@
       <article class="SumStarts">
         <fieldset>
           <legend>Starts</legend>
-          <div class="js_starts">            
-            <div class="row bold"><span>Start time</span><span>Fleets</span>
-            </div>
+          <div class="js_starts">
+            <div class="row bold"><span>Start time</span><span>Fleets</span></div>
           </div>
         </fieldset>
       </article>
@@ -148,7 +177,7 @@
     <dialog id="dialogFinish">
       <div>
         <label for="sailnumber" class="js_finished">Finished</label>
-        <input type="number" name="sailnumber" class="js_sailnumber" placeholder="sailnumber"/>
+        <input type="number" name="sailnumber" class="js_sailnumber" placeholder="sailnumber" />
       </div>
       <div class="js_fleet spanbuttons"></div>
       <div class="buttons">
@@ -157,8 +186,7 @@
         <button class="js_next">Save and next</button>
       </div>
     </dialog>
-    <div class="overlay">
-    </div>
+    <div class="overlay"></div>
     <dialog class="js_dialogStart">
       <img src="img/sailwatch-512.png" alt="show image to get user click" />
     </dialog>
