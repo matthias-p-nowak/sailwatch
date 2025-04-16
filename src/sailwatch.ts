@@ -23,12 +23,15 @@ export class SailWatch extends WebComponent {
   takeNote: HTMLDivElement = undefined;
   newStart: HTMLDivElement = undefined;
   dialogStart: HTMLDialogElement = undefined;
+  wakeLockNotice: HTMLSpanElement = undefined;
+
   settings: Settings = undefined;
   static sw: SailWatch = undefined;
   timeLine = new TimeLine();
   displayed: WeakMap<HTMLElement, WebComponent> = new WeakMap();
   latestStart: Date;
   fleets: Set<string> = new Set<string>([]);
+  wakeLock: WakeLockSentinel;
 
   errors_onclick(ev: MouseEvent) {
     let target = ev.target as HTMLElement;
@@ -211,6 +214,7 @@ export class SailWatch extends WebComponent {
   static async Start(gitVersion: string) {
     this.sw = SailWatch.fromElement(document.body);
     window.sw = this.sw;
+    this.sw.wakeLockNotice.hidden=true;
     await SailWatchDB.ready;
     this.sw.footer.style.display = "block";
     this.sw.refreshTimeLine();

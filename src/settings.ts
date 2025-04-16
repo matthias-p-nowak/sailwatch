@@ -54,12 +54,22 @@ export class Settings extends WebComponent {
         this.app.innerText = result.outcome;
     }
 
+    static readonly NotificationFinals = [ 'granted', 'denied'];
+
     notifications_onclick(ev: MouseEvent) {
         this.notifications.innerText='checking';
         if (!("Notification" in window)) {
             this.notifications.innerText='not available';
             return;
         }
+        this.notifications.innerText=Notification.permission;
+        if(Settings.NotificationFinals.includes(Notification.permission)){
+            return;
+        }
+        this.notifications.innerText='requesting';
+        Notification.requestPermission().then( (permission) =>{
+            this.notifications.innerText= permission;
+        });
     }
 
     clockwork_onclick(ev: MouseEvent) {
