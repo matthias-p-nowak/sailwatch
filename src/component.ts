@@ -5,6 +5,7 @@ export class WebComponent {
 
     /** The root element of the component */
     root: HTMLElement;
+    eventTime: Date;
     /** place for storing the original data content */
     data: Object    ={ };
 
@@ -30,7 +31,8 @@ export class WebComponent {
      */
     static fromTemplate<T extends WebComponent>(this: new()=> T): T|null {
         console.log(`constructing ${this.name}`);
-        const templateName = 'template_' + this.name;
+        let templateName = 'template_' + this.name;
+        templateName = templateName.replace('__','_');
         let template = document.getElementById(templateName) as HTMLTemplateElement;
         if (template == null) {
             console.log(`couldn't find template with id ${templateName}`);

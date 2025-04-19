@@ -3,24 +3,24 @@
 html {
   font-size: 5mm;
 }
-header {
-  .errors {
-    width: fit-content;
-    margin-left: auto;
-    margin-right: auto;
-    color: darkred;
-    display: none;
-    border: thin solid red;
-    border-radius: 0.5rem;
-    padding: 1.5rem;
-    &:has(li) {
-      display: block;
-    }
+.errors {
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  color: darkred;
+  display: none;
+  top: 0.5rem;
+  border: thin solid red;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  &:has(li) {
+    display: block;
+    position: sticky;
+    background-color: white;
+    box-shadow: 0 0 5rem 5rem rgb(254, 243, 243);
   }
-  //   .errors:has(li){
-  //     display: block;
-  //   }
 }
+
 footer {
   display: none;
   .js_registerFinish {
@@ -28,24 +28,35 @@ footer {
     width: fit-content;
     bottom: 0.5rem;
     left: 0.5rem;
-    padding: 0.3rem;
+    z-index: 100;
+    background-color: #e7f9ff;
     img {
-      height: 3rem;
+      height: 4rem;
+      padding: 0.3rem;
+      box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
     }
-    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
   }
   .bottomRight {
     width: fit-content;
     margin-left: auto;
     margin-top: 10rem;
+    margin-bottom: 10rem;
     height: fit-content;
     div {
       display: inline-block;
       img {
-        height: 3rem;
+        height: 4rem;
         box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
-        margin: 0.5rem;
+        border-radius: 0.3rem;
+        margin: 0.3rem;
+        padding: 0.2rem;
       }
+    }
+    div.center{
+      display: block;
+      width: fit-content;
+      margin-left: auto;
+      margin-right: auto;
     }
   }
 }
@@ -56,7 +67,10 @@ main {
     [middle-end] 1fr [bigger-end] 1fr;
   > article {
     grid-column: middle;
+    // width: fit-content;
     margin: 0.2rem;
+    // margin-left: auto;
+    // margin-right: auto;
     &:has(.saving)::before {
       content: "saving";
       display: block;
@@ -83,7 +97,7 @@ main {
   margin-left: auto;
   margin-right: auto;
   margin-top: 0.5rem;
-  padding: 1rem;
+  padding: 0.5rem;
   border-radius: 0.5rem;
   // box-shadow: 0px 0px 2rem 1rem rgba(143, 255, 148, 0.2);
 }
@@ -140,14 +154,14 @@ main {
     input {
       width: 5rem;
     }
-  } 
+  }
 }
 
 div:has(> div.row) {
   display: table;
   min-width: 50%;
   // margin-left: auto;
-  margin-right: auto;
+  // margin-right: auto;
   div.row {
     display: table-row;
     > * {
@@ -162,10 +176,162 @@ div:has(> div.row) {
 }
 
 span.imgrow {
+  margin-left: auto;
+  margin-right: auto;
+  width: fit-content;
   display: flex;
   // border: thin solid red;
   img {
     max-width: 3rem;
     margin: 0.3rem;
+  }
+}
+
+div.start_table {
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  border: thin solid orange;
+  span {
+    text-align: center;
+  }
+}
+
+article.active {
+  border: thick green solid;
+  border-radius: 1rem;
+  padding: 1rem;
+  box-shadow: 0px 0px 20px 0px rgba(42, 236, 20, 0.5);
+  .bold {
+    font-weight: bold;
+    font-size: larger;
+  }
+}
+
+dialog {
+  margin: auto;
+  border: thin solid lightblue;
+  border-radius: 1rem;
+  padding: 1rem;
+}
+
+div.finish_table{
+  border: thin solid blue;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  span {
+    text-align: center;
+  }
+}
+
+#dialogFinish{
+  background-color: rgb(232, 249, 255);
+  input{
+    width: 7rem;
+  }
+  .spanbuttons{
+    margin: 0.5rem;
+    span{
+      margin: 0.2rem;
+      border: thin solid blue;
+      padding: 0.2rem;
+      border-radius: 0.2rem;
+      &.selected{
+        background-color: blue;
+        color: white;
+      }
+    }
+  }
+  div.buttons{
+    text-align: right;
+    margin:5px;
+    padding: 0.2rem;
+    button{
+      background-color: antiquewhite;
+      border: none;
+      border-radius: 0.2rem;
+      padding: 0.2rem;
+    }
+  }
+}
+
+.boldFrame{
+  border: 2px solid blue;
+  border-radius: 0.5rem;
+}
+
+article.SumStarts{
+  width: fit-content;
+  margin-right: auto ;
+  margin-left: auto;
+  fieldset{
+    border-color: orange;
+    padding: 0.5rem;
+    .bold{
+      font-weight: bold;
+    } 
+    span{
+      text-align: center;
+    }   
+  }
+}
+
+article.SumFinish {
+  width: fit-content;
+  margin-right: auto ;
+  margin-left: auto;
+  fieldset{
+    border-color: blue;
+    padding: 0.5rem;
+    .bold{
+      font-weight: bold;
+    }
+    span{
+      text-align: center;
+    }
+  }
+}
+
+
+
+header{
+  display: grid;
+  grid-template-columns:
+    1fr [bigger-start] 1fr [middle-start] clamp(5rem, 80svw, 30rem)
+    [middle-end] 1fr [bigger-end] 1fr;
+    >* {
+      grid-column: middle;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  details {
+    summary {
+      &::marker {
+        content: "";
+      }
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    img{
+      max-height: 20rem;
+    }
+    &[open] {
+      border: thin solid darkblue;
+      border-radius: 0.5rem;
+      background-color: white;
+      padding: 1rem;
+      > summary {
+        display: none;
+      }
+    }
+    > *{
+      margin-left: auto;
+      margin-right: auto;
+    }
+    span{
+      text-align: center;
+    }
   }
 }

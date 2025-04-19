@@ -3,17 +3,51 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="manifest" href="manifest.json" />
+    <script src="environ.js"></script>
     <link rel="stylesheet" href="main.css" />
     <script src="main.js" defer></script>
     <link rel="shortcut icon" type="image/x-icon" href="sailwatch.ico" />
     <title>Sail race watch</title>
   </head>
   <body>
+    <div class="errors">
+      <h2>Messages and errors</h2>
+      <ul class="js_errors"></ul>
+    </div>
     <header>
-      <div class="errors">
-        <h2>Messages and errors</h2>
-        <ul class="js_errors"></ul>
-      </div>
+      <details id="settings">
+        <summary class="js_summary">
+          <img src="img/sailwatch-64.png" alt="Sailwatch" />
+          <span>
+            Sailing Watch <br />
+            Start &amp; Finish</span
+          >
+        </summary>
+        <div class="headerpic">
+          <img src="img/sailwatch-512.png" alt="big sailwatch icon" srcset="" />
+        </div>
+        <div>
+          <div class="row">
+            <span class="right">Notifications</span>
+            <span class="js_notifications">no notifications</span>
+          </div>
+          <div class="row">
+            <span class="right">Clockwork</span>
+            <span class="js_clockwork">not active</span>
+          </div>
+          <div class="row js_approw" >
+            <span class="right">App</span>
+            <span class="js_app">not installed</span>
+          </div>
+          <div class="row"><span class="right">Awake</span>
+          <span class="js_awake">can go to sleep</span></div>
+          <div class="row">
+            <span class="right">donation</span>
+            <span> <a class="js_donation" target="_blank"></a> </span>
+          </div>
+        </div>
+      </details>
     </header>
     <div class="js_previously">Previously...</div>
     <main class="js_main"></main>
@@ -22,11 +56,17 @@
         <img src="img/finish.png" alt="register a finish" />
       </div>
       <div class="bottomRight">
+        <div class="js_makeTable">
+          <img src="img/table.png" alt="make a table" />
+        </div>
         <div class="js_takeNote">
           <img src="img/note.png" alt="take a note" />
         </div>
         <div class="js_newStart">
           <img src="img/start.png" alt="register new start" />
+        </div>
+        <div class="center">       
+          <span class="js_wakeLockNotice">Not going to sleep</span>
         </div>
       </div>
     </footer>
@@ -57,34 +97,111 @@
     </dialog>
     <template id="template_Start">
       <article>
-        <fieldset>
-          <legend>Start</legend>
-          <div>
-            <div class="row">
-              <span>Start at</span>
-              <span class="js_starttime"></span>
-              <span class="js_fleets"></span>
-            </div>
-            <div class="row js_durationrow">
-              <span>start in</span>
-              <span class="js_duration"></span>
-              <span></span>
-            </div>
-            <div class="row js_flagrow">
-              <span>flag in</span>
-              <span class="js_flagtime"></span>
-              <span class="js_nextflag"></span>
-            </div>
+        <div class="start_table">
+          <div class="row">
+            <span>Start at</span>
+            <span class="js_starttime"></span>
+            <span class="js_fleets"></span>
           </div>
-          <div>
-            <span class="imgrow">
-              <img class="js_flagap" src="img/flag_ap.png" alt="AP" />
-              <img class="js_flagx" src="img/flag_x.png" alt="X" />
-              <img class="js_flagrecall" src="img/flag_recall.png" alt="Recall" />
-            </span>
+          <div class="row js_durationrow">
+            <span>start in</span>
+            <span class="js_duration"></span>
+            <span class="js_nowStamp"></span>
+          </div>
+          <div class="row js_flagrow" style="display: none">
+            <span>flag in</span>
+            <span class="js_flagtime bold"></span>
+            <span class="js_nextflag bold">class up</span>
+          </div>
+        </div>
+        <div class="js_imgrow">
+          <span class="imgrow">
+            <img class="js_flagap" src="img/flag_ap.png" style="display: none;" alt"="AP" />
+            <img class="js_flagx" style="display: none" src="img/flag_x.png" alt="X" />
+            <img
+              class="js_flagrecall"
+              style="display: none"
+              src="img/flag_recall.png"
+              alt="Recall"
+            />
+          </span>
+        </div>
+      </article>
+    </template>
+    <template id="template_Finish">
+      <article>
+        <div class="finish_table js_table">
+          <div class="row">
+            <span class="js_finishTime"></span>
+            <span class="js_sailNumber">-sail number-</span>
+            <span class="js_fleet">-fleet-</span>
+            <span class="js_sailed"></span>
+          </div>
+        </div>
+      </article>
+    </template>
+    <template id="template_SumStart">
+      <article class="SumStarts">
+        <fieldset>
+          <legend>Starts</legend>
+          <div class="js_starts">
+            <div class="row bold"><span>Start time</span><span>Fleets</span></div>
           </div>
         </fieldset>
       </article>
     </template>
+    <template id="template_SumStartRow">
+      <div class="row">
+        <span class="js_starttime"></span>
+        <span class="js_fleets"></span>
+      </div>
+    </template>
+    <template id="template_SumFinish">
+      <article class="SumFinish">
+        <fieldset>
+          <legend>Finishes</legend>
+          <div class="js_finishes">
+            <div class="row bold">
+              <span>Finish time</span>
+              <span>Sail number</span>
+              <span>Fleet</span>
+              <span>Sailed</span>
+            </div>
+          </div>
+        </fieldset>
+      </article>
+    </template>
+    <template id="template_SumFinishRow">
+      <div class="row">
+        <span class="js_finishTime"></span>
+        <span class="js_sailNumber"></span>
+        <span class="js_fleet"></span>
+        <span class="js_sailed"></span>
+      </div>
+    </template>
+    <dialog id="dialogFinish">
+      <div>
+        <label for="sailnumber" class="js_finished">Finished</label>
+        <input type="number" name="sailnumber" class="js_sailnumber" placeholder="sailnumber" />
+      </div>
+      <div class="js_fleet spanbuttons"></div>
+      <div class="buttons">
+        <button class="js_cancel">Cancel</button>
+        <button class="js_save">Save</button>
+        <button class="js_next">Save and next</button>
+      </div>
+    </dialog>
+    <div class="overlay"></div>
+    <dialog class="js_dialogStart">
+      <img src="img/sailwatch-512.png" alt="show image to get user click" />
+    </dialog>
+    <div id="sounds">
+      <audio class="js_single" src="snd/single.wav" preload="auto"></audio>
+      <audio class="js_double" src="snd/double.wav" preload="auto"></audio>
+      <audio class="js_triple" src="snd/triple.wav" preload="auto"></audio>
+      <audio class="js_short" src="snd/short.wav" preload="auto"></audio>
+      <audio class="js_long" src="snd/long.wav" preload="auto"></audio>
+      <audio class="js_prep" src="snd/prep.wav" preload="auto"></audio>
+    </div>
   </body>
 </html>
