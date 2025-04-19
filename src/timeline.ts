@@ -3,37 +3,32 @@ import { Note } from "./note";
 import { SailWatch } from "./sailwatch";
 
 export class TimeLine {
-  firstStamp: Date = new Date('9999-12-31');
-  lastStamp: Date = new Date('1900-01-01');
-
+  
+  events: Map<Date, Object> = new Map();
+  hasMorePreviouslyEvents: boolean = true;
+  
   async refresh(dt: Date) {
-    let events= await SailWatchDB.getEventsBefore(dt);
-    events.forEach((event) => {
+    let cursor= await SailWatchDB.getEventsBefore(this, dt);
+    console.log('running cursor');
+    cursor.forEach((event) => {
+      this.events.set(event.time as Date, event);
       if(event.note){
         let note=Note.fromTemplate();
         note.timeStamp=event.time as Date;
-        this.adjustTimeframe(note.timeStamp);
         note.text.value=event.note;
         note.render();
         SailWatch.sw.insert(note);
       }
     });
+    console.log('cursor done');
+  }
+  
+  getFirstTimeStamp(): Date {
+    let keys=Array.from(this.events.keys());
+    if(keys.length==0) 
+      return new Date();
+    keys.sort();
+    return keys[0];
   }
 
-  private adjustTimeframe(timeStamp: Date) {
-    if (timeStamp < this.firstStamp) {
-      console.log('setting firstStamp');
-      this.firstStamp = timeStamp;
-    }
-    if(timeStamp > this.lastStamp){
-      console.log('setting lastStamp');
-      this.lastStamp=timeStamp;
-    }
-  }
-}
-
-export class TimeDivision {
-  type: "start" | "note" | "finish" = undefined;
-  first: Date = undefined;
-  last: Date = undefined;
 }

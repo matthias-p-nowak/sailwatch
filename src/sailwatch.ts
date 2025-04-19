@@ -33,8 +33,9 @@ export class SailWatch extends WebComponent {
   }
 
   async previously_onclick(ev: MouseEvent) {
-    let dt = this.timeLine.firstStamp;
+    let dt = this.timeLine.getFirstTimeStamp();
     await this.timeLine.refresh(dt);
+    this.previously.hidden = !this.timeLine.hasMorePreviouslyEvents;
   }
 
   takeNote_onclick(ev: MouseEvent) {
@@ -85,6 +86,7 @@ export class SailWatch extends WebComponent {
     // clear out main
     this.main.replaceChildren();
     await this.timeLine.refresh(new Date());
+    this.previously.hidden = !this.timeLine.hasMorePreviouslyEvents;
   }
 
   addStart(startTimeStamp: Date, fleets: string[]) {
