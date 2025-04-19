@@ -15,7 +15,8 @@ export class Settings extends WebComponent {
     clockwork: HTMLSpanElement= undefined;
     summary: HTMLElement= undefined;
     app: HTMLSpanElement= undefined;
-    approw: HTMLDivElement = undefined;
+    appRow: HTMLDivElement = undefined;
+    donationRow: HTMLDivElement = undefined;
     donation: HTMLAnchorElement = undefined;
     notifications: HTMLSpanElement= undefined;
 
@@ -34,10 +35,10 @@ export class Settings extends WebComponent {
  
     summary_onclick(ev: MouseEvent) {
         if(Settings.installPrompt ){
-            this.approw.hidden = false;
+            this.appRow.hidden = false;
             this.app.innerText='can install';
         }else{
-            this.approw.hidden=true;
+            this.appRow.hidden=true;
         }        
         if('Notification' in window){
             this.notifications.innerText= window.Notification.permission;
@@ -45,8 +46,14 @@ export class Settings extends WebComponent {
             this.notifications.innerText='not available';
             this.notifications.onclick=null;
         }
-        this.donation.href=window.donation.href;
-        this.donation.text= window.donation.text;
+        if(window.donation!=undefined){   
+            console.log('got donation');
+            this.donation.href=window.donation.href ;
+            this.donation.text= window.donation.text;
+        }else{
+            console.log('no donation');
+            this.donationRow.style.display='none';
+        }
     }
 
     async app_onclick(ev:MouseEvent){

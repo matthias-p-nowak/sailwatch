@@ -1,4 +1,5 @@
 import { SailWatch } from "./sailwatch";
+import { TimeLine } from "./timeline";
 
 export class SailWatchDB {
   static db: IDBDatabase = undefined;
@@ -29,10 +30,15 @@ export class SailWatchDB {
     store.delete(timeStamp);
   }
 
-  static async getEventsBefore(timeStamp: Date) {
+  static async getEventsBefore( timeStamp: Date) {
     return new Promise<any[]>((resolve, reject) => {      
       let events = [];
       let store = SailWatchDB.db.transaction(["events"], "readonly").objectStore("events");
+      console.log('getting events before', timeStamp);
+      if(timeStamp==undefined){
+        console.log('### correcting mistake!')
+        timeStamp=new Date();
+      }
       let range = IDBKeyRange.upperBound(timeStamp, true);
       let request =store.openCursor(range,'prev');
       let prevDate:Date = undefined;
@@ -76,9 +82,6 @@ export class SailWatchDB {
       let store = SailWatchDB.db.transaction(["fleets"], "readwrite").objectStore("fleets");
       store.put(fleet);
   }
-
-
-
 
   // ********************************************
 

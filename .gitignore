@@ -1,3 +1,5 @@
 app/*.css*
 app/*.js*
+!app/environ.js
 sailwatch.code-workspace
+
