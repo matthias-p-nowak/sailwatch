@@ -31,7 +31,7 @@
 			],
 			"problemMatcher": ["$tsc-watch"],
 			"isBackground": true
-		  },
+		  },		 
 		  {
 			"label": "all tasks",
 			"dependsOn": ["compile css", "compile js"],

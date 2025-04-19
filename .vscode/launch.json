@@ -5,8 +5,8 @@
             "name": "debug app",
             "type": "firefox",
             "request": "attach",
-            "url": "http://localhost:5500/app/index.html",
-            "webRoot": "${workspaceFolder}/app",
+            "url": "https://127.0.0.1:5500/app/index.html",
+            //"webRoot": "${workspaceFolder}/app",
             "pathMappings": [
                 {
                     "url": "https://127.0.0.1:5500",

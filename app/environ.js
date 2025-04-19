@@ -1,0 +1,1 @@
+window.donation={ href: 'https://vipps.no', text: 'vipps' };

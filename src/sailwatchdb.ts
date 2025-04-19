@@ -30,7 +30,7 @@ export class SailWatchDB {
     store.delete(timeStamp);
   }
 
-  static async getEventsBefore(tl: TimeLine, timeStamp: Date) {
+  static async getEventsBefore( timeStamp: Date) {
     return new Promise<any[]>((resolve, reject) => {      
       let events = [];
       let store = SailWatchDB.db.transaction(["events"], "readonly").objectStore("events");
@@ -45,7 +45,6 @@ export class SailWatchDB {
       request.onsuccess = function (ev) {
         const cursor = request.result;
         if(cursor==null){
-          tl.hasMorePreviouslyEvents=false;
           resolve(events);
           return;
         }else{
@@ -56,7 +55,6 @@ export class SailWatchDB {
           }else if(prevDate.getDay()!= timeStamp.getDay() ||
           prevDate.getMonth()!= timeStamp.getMonth() || prevDate.getFullYear()!= timeStamp.getFullYear()){
             console.log('got another day');
-            tl.hasMorePreviouslyEvents=true;
             resolve(events);
             return;
           }
@@ -84,9 +82,6 @@ export class SailWatchDB {
       let store = SailWatchDB.db.transaction(["fleets"], "readwrite").objectStore("fleets");
       store.put(fleet);
   }
-
-
-
 
   // ********************************************
 

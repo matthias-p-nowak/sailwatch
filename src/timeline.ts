@@ -5,17 +5,19 @@ import { Finish } from "./finish";
 import { DateHeader } from "./dateheader";
 
 export class TimeLine {
-  firstStamp: Date = new Date("9999-12-31");
-  lastStamp: Date = new Date("1900-01-01");
+
   starts: Map<string, Date[]> = new Map<string, Date[]>();
 
+  events: Map<Date, Object> = new Map<Date, Object>();
+  
+
   async refresh(dt: Date): Promise<boolean> {
-    let events = await SailWatchDB.getEventsBefore(dt);
+    let cursor = await SailWatchDB.getEventsBefore( dt);
     let foundSome = false;
     let foundTime: Date = undefined;
-    events.forEach((event) => {
+    cursor.forEach((event) => {
       foundTime = event.time as Date;
-      this.adjustTimeframe(event.time);
+      this.events.set(event.time as Date, event);
       if (event.note) {
         console.log("adding note");
         let note = Note.fromTemplate();
@@ -65,20 +67,14 @@ export class TimeLine {
     return times[times.length - 1];
   }
 
-  private adjustTimeframe(timeStamp: Date) {
-    if (timeStamp < this.firstStamp) {
-      // console.log("setting firstStamp");
-      this.firstStamp = timeStamp;
-    }
-    if (timeStamp > this.lastStamp) {
-      // console.log("setting lastStamp");
-      this.lastStamp = timeStamp;
-    }
+  getFirstTimestamp(){
+    let keys = Array.from( this.events.keys());
+    if(keys.length==0)
+      return new Date();
+    keys.sort();
+    return keys[0];
   }
+
 }
 
-// export class TimeDivision {
-//   type: "start" | "note" | "finish" = undefined;
-//   first: Date = undefined;
-//   last: Date = undefined;
-// }
+

@@ -47,7 +47,7 @@ export class SailWatch extends WebComponent {
   }
 
   async previously_onclick(ev: MouseEvent) {
-    let dt = this.timeLine.firstStamp;
+    let dt = this.timeLine.getFirstTimestamp();
     let foundSome = await this.timeLine.refresh(dt);
     if (!foundSome) {
       this.previously.style.display = "none";
@@ -218,6 +218,7 @@ export class SailWatch extends WebComponent {
     await SailWatchDB.ready;
     this.sw.footer.style.display = "block";
     this.sw.refreshTimeLine();
+ 
     this.sw.fleets = new Set(await SailWatchDB.getFleets());
     window.onstorage = this.sw.onstorage.bind(this.sw);
     document.addEventListener("visibilitychange", () => {
