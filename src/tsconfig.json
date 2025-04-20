@@ -1,0 +1,11 @@
+{
+  // purely needed to get VS code to work right
+    "compilerOptions": {
+      "target": "es2020",   // Use ES2020 features like optional chaining, nullish coalescing
+      "lib": ["dom", "es2020", "webworker"],  // Add webworker lib for service workers
+      "types": [ "./window.d.ts" ],
+      "module": "esnext",    // Or "es2020" for modern module handling
+      "moduleResolution": "bundler",
+    }
+  }
+  
