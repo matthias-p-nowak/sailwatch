@@ -41,7 +41,7 @@ jobs:
           npm install esbuild sass typescript
           npx sass scss/main.scss app/main.css
           npx esbuild src/main.ts src/service-worker.ts --outdir=app/js 
-          sed -i -e "s/currentGitVersion/$(git rev-parse --short HEAD)/" app/js/main.js app/js/server-worker.js
+          sed -i -e "s/currentGitVersion/$(git rev-parse --short HEAD)/" app/js/main.js app/js/service-worker.js
           date
           ls -l app
       - name: Setup Pages
