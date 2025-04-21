@@ -1,10 +1,15 @@
 import { TimeLine } from "./timeline";
 
-export class SailWatch {
-    testEvent() {
-        let tl = TimeLine.getInstance();
-        tl.addEventListener('added', ev => console.log('added', ev));
-        tl.addEvent(new Date(), { time: new Date(), note: 'submarine' })
+
+class SailWatch {
+    constructor() {
+        console.log("SailWatch instantiated");
+    }
+
+    ping() {
+        console.log("ping ping");
     }
 
 }
+
+export let sw: SailWatch = new SailWatch();
