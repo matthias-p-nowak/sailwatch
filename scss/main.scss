@@ -3,3 +3,79 @@
 html {
   font-size: 5mm;
 }
+
+.notifications {
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  // border: thin solid orange;
+  top: 0.5rem;
+  box-shadow: 0 0 5rem 5rem rgb(254, 243, 243);
+
+  div.autohide {
+    display: none;
+    margin: 0.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+
+    &:has(li) {
+      display: block;
+      position: sticky;
+      background-color: white;
+    }
+
+    &.infos {
+      // border: thin solid green;
+      color: blue;
+    }
+
+    &.errors {
+      color: red;
+      // border: thin solid red;
+    }
+  }
+}
+
+header {
+  display: grid;
+  grid-template-columns:
+    1fr [middle-start] clamp(5rem, 80svw, 30rem) [middle-end] 1fr;
+
+  >* {
+    grid-column: middle;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  details {
+    summary {
+      &::marker {
+        content: "";
+      }
+
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    img {
+      max-height: 20rem;
+    }
+
+    &[open] {
+      border: thin solid darkblue;
+      border-radius: 0.5rem;
+      background-color: white;
+      padding: 1rem;
+
+      >summary {
+        display: none;
+      }
+    }
+
+    >* {
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+}

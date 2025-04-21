@@ -1,5 +1,5 @@
 
-export class Dom_Hook {
+export class DomHook {
 
     /** 
      * retrieves all functions in the prototype chain that contain _on 
@@ -50,7 +50,7 @@ export class Dom_Hook {
     /**
      *  creates a new DOM-element from a template and assigns the hooks
      */
-    fromTemplate<T extends Dom_Hook>(this: T): HTMLElement | null {
+    fromTemplate<T extends DomHook>(this: T): HTMLElement | null {
         console.log(`constructing ${this.constructor.name}`);
         let templateName = 'template_' + this.constructor.name;
         templateName = templateName.replace('__', '_');

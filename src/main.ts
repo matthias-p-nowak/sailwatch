@@ -1,11 +1,13 @@
-import { sw } from "./sailwatch";
+import { sailwatch } from "./sailwatch";
+import { Settings } from "./settings";
 
 /** value to be replaced during deployment */
 let gitVersion = 'currentGitVersion';
 
 (async () => {
     console.log(`running inside main thread gitVersion=${gitVersion}`);
-    sw.ping();
+    window.addEventListener("beforeinstallprompt", Settings.setInstallPrompt);
+    sailwatch.ping();
     if ('serviceWorker' in navigator) {
         // let service = await 
         navigator.serviceWorker.register('service-main.js');
