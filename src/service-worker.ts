@@ -28,3 +28,8 @@ sw.onfetch = function (event) {
     console.log("service worker is fetching");
     event.respondWith(fetch(event.request));
 };
+
+sw.onmessage = function (event) {
+    console.log("service worker is handling message");
+    // event.waitUntil();
+};

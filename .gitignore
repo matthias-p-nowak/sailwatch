@@ -1,4 +1,4 @@
 tmp/
-app/*js*
-app/*css*
+app/*js
+app/*css
 app/**/*map

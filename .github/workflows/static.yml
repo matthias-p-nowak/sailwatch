@@ -40,7 +40,7 @@ jobs:
           ls -al
           npm install esbuild sass typescript
           npx sass scss/main.scss app/main.css
-          npx esbuild src/main.ts src/service-worker.ts --outdir=app/js 
+          npx esbuild --bundle src/main.ts src/service-worker.ts --outdir=app
           sed -i -e "s/currentGitVersion/$(git rev-parse --short HEAD)/" app/main.js app/service-worker.js
           date
           ls -l app

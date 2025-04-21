@@ -1,0 +1,39 @@
+{
+    "name": "Sailing start and stop watch",
+    "short_name": "SailingWatch",
+    "description": "A simple start and stop watch for sailing",
+    "display": "standalone",
+    "id": "index.html",
+    "start_url": "index.html",
+    "icons":[
+        {
+            "src": "./img/sailwatch-64.png",
+            "type": "image/png",
+            "sizes": "64x64"
+        },
+        {
+            "src": "./img/sailwatch-512.png",
+            "type": "image/png",
+            "sizes": "512x512"
+        },
+        {
+            "src": "./img/sailwatch-192.png",
+            "type": "image/png",
+            "sizes": "192x192"
+        }
+    ],
+    "screenshots": [
+        {
+            "src": "./img/sailwatch-512.png",
+            "type": "image/png",
+            "sizes": "512x512",
+            "form_factor": "narrow"
+        },
+        {
+            "src": "./img/sailwatch-512.png",
+            "type": "image/png",
+            "sizes": "512x512",
+            "form_factor": "wide"
+        }
+    ]
+}
