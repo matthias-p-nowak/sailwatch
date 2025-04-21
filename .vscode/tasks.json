@@ -5,42 +5,51 @@
 			"label": "compile css",
 			"type": "shell",
 			"command": "sass",
-			"args": ["-w", "scss/main.scss", "app/main.css"],
+			"args": [
+				"-w",
+				"scss/main.scss",
+				"app/main.css"
+			],
 			"problemMatcher": [],
 			"presentation": {
-			  "echo": true,
-			  "reveal": "always",
-			  "focus": false,
-			  "panel": "shared",
-			  "showReuseMessage": true,
-			  "clear": false
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": true,
+				"clear": false
 			},
 			"isBackground": true
-		  },
-		  {
+		},
+		{
 			"label": "compile js",
 			"type": "shell",
 			"command": "esbuild",
 			"args": [
-			  "--bundle",
-			  "src/main.ts",
-			  "src/service-worker.ts",
-			  "--outdir=app",
-			  "--sourcemap",
-			  "--watch"
+				"--bundle",
+				"src/main.ts",
+				"src/service-main.ts",
+				"--outdir=app",
+				"--sourcemap",
+				"--watch"
 			],
-			"problemMatcher": ["$tsc-watch"],
+			"problemMatcher": [
+				"$tsc-watch"
+			],
 			"isBackground": true
-		  },		 
-		  {
+		},
+		{
 			"label": "all tasks",
-			"dependsOn": ["compile css", "compile js"],
+			"dependsOn": [
+				"compile css",
+				"compile js"
+			],
 			"dependsOrder": "parallel",
 			"problemMatcher": [],
 			"group": {
-			  "kind": "build",
-			  "isDefault": true
+				"kind": "build",
+				"isDefault": true
 			}
-		  }
+		}
 	]
 }
