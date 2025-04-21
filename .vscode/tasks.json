@@ -24,7 +24,7 @@
 			"args": [
 			  "src/main.ts",
 			  "src/service-worker.ts",
-			  "--outdir=app/js",
+			  "--outdir=app",
 			  "--sourcemap",
 			  "--watch"
 			],
