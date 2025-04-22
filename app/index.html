@@ -1,41 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <link rel="manifest" href="manifest.json" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sail race watch: start &amp; finish</title>
     <link rel="stylesheet" href="main.css" />
     <link rel="shortcut icon" type="image/x-icon" href="sailwatch.ico" />
-    <script type="module" src="main.js"></script>
-</head>
+    <script defer src="main.js"></script>
+  </head>
 
-<body>
+  <body>
     <div class="notifications">
-        <div class="autohide infos">
-            <h2>Notifications</h2>
-            <ul class="hook_infos">
-            </ul>
-        </div>
-        <div class="autohide errors">
-            <h2>Errors</h2>
-            <ul class="hook_errors"></ul>
-        </div>
+        <ul class="hook_infos infos"></ul>
+        <ul class="hook_errors errors"></ul>
+      </div>
     </div>
     <header>
-        <details id="settings">
-            <summary class="js_summary">
-                <img src="img/sailwatch-64.png" alt="Sailwatch" />
-                <span>
-                    Sailing Watch <br />
-                    Start &amp; Finish</span>
-            </summary>
+      <details id="settings">
+        <summary class="hook_summary">
+          <img src="img/sailwatch-64.png" alt="Sailwatch" />
+          <span> Sailing Watch <br /> Start &amp; Finish</span>
+        </summary>
+        <div class="headerpic">
+            <img src="img/sailwatch-512.png" alt="big sailwatch icon" srcset="" />
+          </div>
+        <div>
+            <div class="row">
+                <span class="right">Notifications</span>
+                <span class="hook_notifications">nothing yet</span>
+            </div>
+            <div class="row">
+                <span class="right">Clockwork</span>
+                <span class="hook_clockwork">standing still</span>
+              </div>
+            <div class="row hook_approw" >
+                <span class="right">App</span>
+                <span class="hook_app">not installed</span>
+              </div>
+        </div>
+      </details>
     </header>
     <main></main>
-    <footer>
-
-    </footer>
-</body>
-
+    <footer></footer>
+  </body>
 </html>

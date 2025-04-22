@@ -1,6 +1,5 @@
 import { DomHook } from "./dom-hooks";
 import { Settings } from "./settings";
-import { TimeLine } from "./timeline";
 
 
 class SailWatch extends DomHook {
