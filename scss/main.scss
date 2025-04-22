@@ -10,8 +10,11 @@ html {
   margin-right: auto;
   // border: thin solid orange;
   top: 0.5rem;
-  box-shadow: 0 0 5rem 5rem rgb(254, 243, 243);
-
+  border-radius: 0.5rem;
+  &:has(li){
+    box-shadow: 0 0 5rem 5rem rgba(255, 198, 134, 0.268);
+  }
+  
   div.autohide {
     display: none;
     margin: 0.5rem;
@@ -27,12 +30,26 @@ html {
     &.infos {
       // border: thin solid green;
       color: blue;
+      li {
+        animation: shrinkDown 3s ease 10s 1 forwards;
+      }
     }
 
     &.errors {
       color: red;
       // border: thin solid red;
     }
+  }
+}
+
+@keyframes shrinkDown {
+  to {
+      height: 0;
+      opacity: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+      margin-top: 0;
+      margin-bottom: 0;
   }
 }
 

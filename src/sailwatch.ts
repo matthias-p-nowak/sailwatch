@@ -55,9 +55,8 @@ class SailWatch extends DomHook {
         let li = document.createElement("li");
         li.innerText = msg;
         this.infos.appendChild(li);
-        setTimeout(() => {
-            li.remove();
-        }, 5000);
+        li.style.height = li.scrollHeight + 'px';
+        li.onanimationend=()=>{li.remove();};
     }
 
 
