@@ -26,13 +26,21 @@ class SailWatch extends DomHook {
     }
 
     private async initialize() {
-        TimeLine.getInstance().addEventListener('added', (ev: CustomEvent) => {
+        let tl=TimeLine.getInstance();
+        tl.addEventListener('added', (ev: CustomEvent) => {
             SailwatchDatabase.getInstance().saveEvent(ev.detail);
         });
+        tl.addEventListener('added', this.loadEvent.bind(this));
         // await db connection
         await SailwatchDatabase.getInstance().ready;
         this.footer.style.display='block';
         this.addInfo('sailwatch initialized');        
+    }
+
+    loadEvent(ev: CustomEvent) {
+        if (ev.detail instanceof Note) {
+            this.addInfo('note added');
+        }
     }
 
     summary_onclick(ev: MouseEvent) {
