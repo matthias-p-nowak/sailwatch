@@ -5,9 +5,7 @@ import { Settings } from "./settings";
 let gitVersion = 'currentGitVersion';
 
 (async () => {
-    console.log(`running inside main thread gitVersion=${gitVersion}`);
     window.addEventListener("beforeinstallprompt", Settings.setInstallPrompt);
-    sailwatch.ping();
     if ('serviceWorker' in navigator) {
         // let service = await 
         navigator.serviceWorker.register('service-main.js');
@@ -17,4 +15,5 @@ let gitVersion = 'currentGitVersion';
             reg.active.postMessage({ gitVersion: gitVersion });
         });
     }
+    sailwatch.addInfo(`running inside main thread gitVersion=${gitVersion}`);
 })();

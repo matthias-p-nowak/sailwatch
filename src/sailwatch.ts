@@ -2,6 +2,7 @@ import { SailwatchDatabase } from "./database";
 import { DomHook } from "./dom-hooks";
 import { Settings } from "./settings";
 import { TimeLine } from "./timeline";
+import { Note } from "./note";
 
 
 class SailWatch extends DomHook {
@@ -11,7 +12,9 @@ class SailWatch extends DomHook {
     summary: HTMLElement= undefined;
     footer: HTMLDivElement = undefined;
     registerFinish: HTMLDivElement = undefined;
-    
+    makeTable: HTMLDivElement = undefined;
+    takeNote: HTMLDivElement = undefined;
+    newStart: HTMLDivElement = undefined;
  
 
     constructor() {
@@ -35,11 +38,6 @@ class SailWatch extends DomHook {
     summary_onclick(ev: MouseEvent) {
         let _ = new Settings();
     }
-
-    ping() {
-        this.addInfo('ping');
-    }
-
 
     /**
      * allows the user to acknowledge an error and remove the entry
@@ -73,6 +71,12 @@ class SailWatch extends DomHook {
         li.onanimationend=()=>{li.remove();};
     }
 
+    takeNote_onclick(ev: MouseEvent) {
+            let note=new Note();
+            note.time=new Date();
+            note.note='';
+            TimeLine.getInstance().addEvent(note.time, note);
+    }
 
 }
 

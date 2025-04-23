@@ -86,6 +86,15 @@ export class SailwatchDatabase {
   }
 
   saveEvent(detail: any) {
-    throw new Error("Method not implemented.");
+    console.log("saving event", detail);
+    let tx = this.db.transaction(["events"], "readwrite");
+    tx.oncomplete = function (ev) {
+      console.log("completed save");
+    };
+    tx.onerror = function (ev) {
+      sailwatch.addError(`indexed db error ${tx.error}`);
+    };
+    let store = tx.objectStore("events");
+    store.put(detail);
   }
 }
