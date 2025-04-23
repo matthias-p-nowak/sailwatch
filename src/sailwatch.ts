@@ -1,12 +1,18 @@
+import { SailwatchDatabase } from "./database";
 import { DomHook } from "./dom-hooks";
 import { Settings } from "./settings";
+import { TimeLine } from "./timeline";
 
 
 class SailWatch extends DomHook {
 
     infos: HTMLUListElement = undefined;
     errors: HTMLUListElement = undefined;
-    settings: Settings;
+    summary: HTMLElement= undefined;
+    footer: HTMLDivElement = undefined;
+    registerFinish: HTMLDivElement = undefined;
+    
+ 
 
     constructor() {
         super();
@@ -17,10 +23,19 @@ class SailWatch extends DomHook {
     }
 
     private async initialize() {
-        console.log("initializing", this);
-        this.addInfo('initializing');
-        this.settings = new Settings();
+        TimeLine.getInstance().addEventListener('added', (ev: CustomEvent) => {
+            SailwatchDatabase.getInstance().saveEvent(ev.detail);
+        });
+        // await db connection
+        await SailwatchDatabase.getInstance().ready;
+        this.footer.style.display='block';
+        this.addInfo('sailwatch initialized');        
     }
+
+    summary_onclick(ev: MouseEvent) {
+        let _ = new Settings();
+    }
+
     ping() {
         this.addInfo('ping');
     }

@@ -31,11 +31,9 @@ html {
 
   .errors {
     // border: thin solid red;
-    color: red;   
+    color: red;
   }
 }
-
-
 
 @keyframes shrinkDown {
   to {
@@ -56,6 +54,7 @@ header {
     grid-column: middle;
     margin-left: auto;
     margin-right: auto;
+    margin-top: 1rem;
   }
 
   details {
@@ -104,5 +103,62 @@ div:has(> div.row) {
     .right {
       text-align: right;
     }
+  }
+}
+
+main{
+  display: grid;
+  grid-template-columns:
+    1fr [bigger-start] 1fr [middle-start] 
+    clamp(5rem, 80svw, 30rem)
+    [middle-end] 1fr [bigger-end] 1fr;
+  > article.note {
+    grid-column: bigger;
+  }  
+  > article.start {
+    grid-column: middle;
+    div.fixed{
+      span:nth-child(1) {
+        text-align: right;
+        width: 10rem;
+      }
+      span:nth-child(2) {
+        text-align: right;
+        width: 10rem;
+      }
+      span:nth-child(3) {
+        text-align: right;
+        width: 10rem;
+      }
+    }
+  }
+  > article.finish {
+    grid-column: middle;
+  }
+}
+
+footer {
+  display: none;
+  .registerFinish {
+    position: fixed;
+    width: fit-content;
+    bottom: 0.5rem;
+    left: 0.5rem;
+    z-index: 100;
+  }
+  .bottomRight{
+    width: fit-content;
+    margin-left: auto;
+    margin-top: 10rem;
+    margin-bottom: 10rem;
+    height: fit-content;
+    div{
+      display: inline-block;
+    }
+  }
+  img {
+    height: 4rem;
+    padding: 0.3rem;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
   }
 }

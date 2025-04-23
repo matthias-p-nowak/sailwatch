@@ -9,21 +9,12 @@ export class Settings extends DomHook {
     clockwork: HTMLSpanElement= undefined;
     details: HTMLDetailsElement = undefined;
     notifications: HTMLSpanElement= undefined;
-    summary: HTMLElement= undefined;
+    
 
     constructor() {
         super();
         this.details = document.getElementById('settings') as HTMLDetailsElement;
         this.hook(this.details);
-        sailwatch.addInfo('settings hooked up');
-    }
-
-    static setInstallPrompt(event: any) {
-        Settings.installPrompt = event;
-        sailwatch.addInfo('setInstallPrompt called');
-    }
-
-    summary_onclick(ev: MouseEvent) {
         if(Settings.installPrompt){
             this.approw.hidden=false;
             this.app.innerText = 'can install';
@@ -36,7 +27,15 @@ export class Settings extends DomHook {
             this.notifications.innerText='not available';
             this.notifications.onclick=null;
         }
+        sailwatch.addInfo('settings hooked up');
     }
+
+    static setInstallPrompt(event: any) {
+        Settings.installPrompt = event;
+        sailwatch.addInfo('setInstallPrompt called');
+    }
+
+    
 
     details_onclick(ev: MouseEvent) {
         let target = ev.target as HTMLElement;
