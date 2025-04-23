@@ -9,13 +9,14 @@ class SailWatch extends DomHook {
 
     infos: HTMLUListElement = undefined;
     errors: HTMLUListElement = undefined;
-    summary: HTMLElement= undefined;
+    summary: HTMLElement = undefined;
     footer: HTMLDivElement = undefined;
     registerFinish: HTMLDivElement = undefined;
     makeTable: HTMLDivElement = undefined;
     takeNote: HTMLDivElement = undefined;
     newStart: HTMLDivElement = undefined;
- 
+    main: HTMLDivElement = undefined;
+
 
     constructor() {
         super();
@@ -23,23 +24,26 @@ class SailWatch extends DomHook {
         this.addInfo('all hooked up');
         requestIdleCallback(() => this.initialize());
         console.log("SailWatch instantiated");
-    }
+   }
 
     private async initialize() {
-        let tl=TimeLine.getInstance();
+        let tl = TimeLine.getInstance();
         tl.addEventListener('added', (ev: CustomEvent) => {
             SailwatchDatabase.getInstance().saveEvent(ev.detail);
         });
         tl.addEventListener('added', this.loadEvent.bind(this));
         // await db connection
         await SailwatchDatabase.getInstance().ready;
-        this.footer.style.display='block';
-        this.addInfo('sailwatch initialized');        
+        this.footer.style.display = 'block';
+        this.addInfo('sailwatch initialized');
     }
 
     loadEvent(ev: CustomEvent) {
-        if (ev.detail instanceof Note) {
+        if (ev.detail.note != undefined) {
             this.addInfo('note added');
+            let note = Note.fromData(ev.detail);
+            let nodeDisplay = note.render();
+            this.main.appendChild(nodeDisplay);
         }
     }
 
@@ -76,14 +80,14 @@ class SailWatch extends DomHook {
         li.innerText = msg;
         this.infos.appendChild(li);
         li.style.height = li.scrollHeight + 'px';
-        li.onanimationend=()=>{li.remove();};
+        li.onanimationend = () => { li.remove(); };
     }
 
     takeNote_onclick(ev: MouseEvent) {
-            let note=new Note();
-            note.time=new Date();
-            note.note='';
-            TimeLine.getInstance().addEvent(note.time, note);
+        let note = new Note();
+        note.time = new Date();
+        note.note = '';
+        TimeLine.getInstance().addEvent(note.time, note.getData());
     }
 
 }

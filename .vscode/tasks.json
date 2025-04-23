@@ -42,7 +42,7 @@
 			"label": "all tasks",
 			"dependsOn": [
 				"compile css",
-				"compile js"
+				"compile js",
 			],
 			"dependsOrder": "parallel",
 			"problemMatcher": [],
@@ -50,6 +50,19 @@
 				"kind": "build",
 				"isDefault": true
 			}
-		}
+		},
+		{
+			"label": "firefox-devel",
+			"type": "shell",
+			"command": "firefox",
+			"args": [
+				"-P",
+				"devel",
+				"https://127.0.0.1:5500/",
+				"--start-debugger-server"
+			],
+			"problemMatcher": [],
+			"isBackground": true,
+		},
 	]
 }

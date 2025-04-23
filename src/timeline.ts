@@ -1,6 +1,6 @@
 import { sailwatch } from "./sailwatch";
 
-type EventBase = { time: Date };
+export type EventBase = { time: Date, getData(): Object };
 
 function deepEqual(obj1, obj2) {
     if (obj1 === obj2) return true;  

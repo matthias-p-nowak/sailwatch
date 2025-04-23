@@ -56,8 +56,7 @@ export class DomHook {
         templateName = templateName.replace('__', '_');
         let template = document.getElementById(templateName) as HTMLTemplateElement;
         if (template == null) {
-            console.log(`couldn't find template with id ${templateName}`);
-            return null;
+            throw new Error(`couldn't find template with id ${templateName}`);
         }
         let cloned = template.content.firstElementChild?.cloneNode(true) || template.content.cloneNode(true);
         this.hook(cloned as HTMLElement);

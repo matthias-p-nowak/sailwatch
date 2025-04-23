@@ -12,6 +12,7 @@ html {
   top: 0.5rem;
   border-radius: 0.5rem;
   display: none;
+
   &:has(li) {
     box-shadow: 0 0 5rem 5rem rgba(255, 198, 134, 0.268);
     padding-left: 1rem;
@@ -21,9 +22,11 @@ html {
     display: block;
     background-color: white;
   }
+
   .infos {
     // border: thin solid green;
     color: blue;
+
     li {
       animation: shrinkDown 3s ease 10s 1 forwards;
     }
@@ -46,11 +49,19 @@ html {
   }
 }
 
+@keyframes slidefade {
+  0% { opacity: 0; }
+  5% { opacity: 1; }
+  45% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
 header {
   display: grid;
   grid-template-columns: 1fr [middle-start] clamp(5rem, 80svw, 30rem) [middle-end] 1fr;
 
-  > * {
+  >* {
     grid-column: middle;
     margin-left: auto;
     margin-right: auto;
@@ -72,18 +83,41 @@ header {
       max-height: 20rem;
     }
 
+    .slideshow {
+      position: relative;
+      width: 20rem;
+      height: 20rem;
+      img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0;
+        animation: slidefade 16s infinite;
+        &:nth-child(1) {
+          animation-delay: 0s;
+        }
+        &:nth-child(2) {
+          animation-delay: 8s;
+        }
+      
+      }
+    }
+
     &[open] {
       border: thin solid darkblue;
       border-radius: 0.5rem;
       background-color: white;
       padding: 1rem;
 
-      > summary {
+      >summary {
         display: none;
       }
     }
 
-    > * {
+    >* {
       margin-left: auto;
       margin-right: auto;
     }
@@ -93,52 +127,63 @@ header {
 div:has(> div.row) {
   display: table;
   min-width: 50%;
+
   div.row {
     display: table-row;
-    > * {
+
+    >* {
       display: table-cell;
       border: thin solid #ddd;
       padding: 0.2rem;
     }
+
     .right {
       text-align: right;
     }
   }
 }
 
-main{
+main {
   display: grid;
   grid-template-columns:
-    1fr [bigger-start] 1fr [middle-start] 
-    clamp(5rem, 80svw, 30rem)
-    [middle-end] 1fr [bigger-end] 1fr;
-  > article.note {
+    1fr [bigger-start] 1fr [middle-start] clamp(5rem, 80svw, 30rem) [middle-end] 1fr [bigger-end] 1fr;
+
+  >article.note {
     grid-column: bigger;
-  }  
-  > article.start {
+    textarea {
+      width: 100%;
+    }
+  }
+
+  >article.start {
     grid-column: middle;
-    div.fixed{
+
+    div.fixed {
       span:nth-child(1) {
         text-align: right;
         width: 10rem;
       }
+
       span:nth-child(2) {
         text-align: right;
         width: 10rem;
       }
+
       span:nth-child(3) {
         text-align: right;
         width: 10rem;
       }
     }
   }
-  > article.finish {
+
+  >article.finish {
     grid-column: middle;
   }
 }
 
 footer {
   display: none;
+
   .registerFinish {
     position: fixed;
     width: fit-content;
@@ -146,16 +191,19 @@ footer {
     left: 0.5rem;
     z-index: 100;
   }
-  .bottomRight{
+
+  .bottomRight {
     width: fit-content;
     margin-left: auto;
     margin-top: 10rem;
     margin-bottom: 10rem;
     height: fit-content;
-    div{
+
+    div {
       display: inline-block;
     }
   }
+
   img {
     height: 4rem;
     padding: 0.3rem;

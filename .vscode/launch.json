@@ -7,7 +7,8 @@
       "request": "launch",
       "type": "msedge",
       "webRoot": "${workspaceFolder}",
-      "url": "https://192.168.137.1:5500"
+      "url": "https://192.168.137.1:5500",
+      "windows": {}
     },
     {
       "name": "debug app firefox",
@@ -20,7 +21,10 @@
           "url": "https://127.0.0.1:5500",
           "path": "${workspaceFolder}"
         }
-      ]
+      ],
+      "linux": {
+        "preLaunchTask": "firefox-devel"
+      }
     }
   ]
 }
