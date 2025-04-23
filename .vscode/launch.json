@@ -1,18 +1,30 @@
 {
-    "version": "0.2.0",
-    "configurations": [
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launching Edge",
+      "port": 9222,
+      "request": "launch",
+      "type": "msedge",
+      "webRoot": "${workspaceFolder}",
+      "url": "https://192.168.137.1:5500",
+      "windows": {}
+    },
+    {
+      "name": "debug app firefox",
+      "type": "firefox",
+      "request": "attach",
+      "url": "https://127.0.0.1:5500/app/index.html",
+      //"webRoot": "${workspaceFolder}/app",
+      "pathMappings": [
         {
-            "name": "debug app",
-            "type": "firefox",
-            "request": "attach",
-            "url": "https://127.0.0.1:5500/app/index.html",
-            //"webRoot": "${workspaceFolder}/app",
-            "pathMappings": [
-                {
-                    "url": "https://127.0.0.1:5500",
-                    "path": "${workspaceFolder}"
-                }
-            ]
+          "url": "https://127.0.0.1:5500",
+          "path": "${workspaceFolder}"
         }
-    ]
+      ],
+      "linux": {
+        "preLaunchTask": "firefox-devel"
+      }
+    }
+  ]
 }

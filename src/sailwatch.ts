@@ -1,13 +1,22 @@
+import { SailwatchDatabase } from "./database";
 import { DomHook } from "./dom-hooks";
 import { Settings } from "./settings";
 import { TimeLine } from "./timeline";
+import { Note } from "./note";
 
 
 class SailWatch extends DomHook {
 
     infos: HTMLUListElement = undefined;
     errors: HTMLUListElement = undefined;
-    settings: Settings;
+    summary: HTMLElement = undefined;
+    footer: HTMLDivElement = undefined;
+    registerFinish: HTMLDivElement = undefined;
+    makeTable: HTMLDivElement = undefined;
+    takeNote: HTMLDivElement = undefined;
+    newStart: HTMLDivElement = undefined;
+    main: HTMLDivElement = undefined;
+
 
     constructor() {
         super();
@@ -15,17 +24,32 @@ class SailWatch extends DomHook {
         this.addInfo('all hooked up');
         requestIdleCallback(() => this.initialize());
         console.log("SailWatch instantiated");
-    }
+   }
 
     private async initialize() {
-        console.log("initializing", this);
-        this.addInfo('initializing');
-        this.settings = new Settings();
-    }
-    ping() {
-        this.addInfo('ping');
+        let tl = TimeLine.getInstance();
+        tl.addEventListener('added', (ev: CustomEvent) => {
+            SailwatchDatabase.getInstance().saveEvent(ev.detail);
+        });
+        tl.addEventListener('added', this.loadEvent.bind(this));
+        // await db connection
+        await SailwatchDatabase.getInstance().ready;
+        this.footer.style.display = 'block';
+        this.addInfo('sailwatch initialized');
     }
 
+    loadEvent(ev: CustomEvent) {
+        if (ev.detail.note != undefined) {
+            this.addInfo('note added');
+            let note = Note.fromData(ev.detail);
+            let nodeDisplay = note.render();
+            this.main.appendChild(nodeDisplay);
+        }
+    }
+
+    summary_onclick(ev: MouseEvent) {
+        let _ = new Settings();
+    }
 
     /**
      * allows the user to acknowledge an error and remove the entry
@@ -55,11 +79,16 @@ class SailWatch extends DomHook {
         let li = document.createElement("li");
         li.innerText = msg;
         this.infos.appendChild(li);
-        setTimeout(() => {
-            li.remove();
-        }, 5000);
+        li.style.height = li.scrollHeight + 'px';
+        li.onanimationend = () => { li.remove(); };
     }
 
+    takeNote_onclick(ev: MouseEvent) {
+        let note = new Note();
+        note.time = new Date();
+        note.note = '';
+        TimeLine.getInstance().addEvent(note.time, note.getData());
+    }
 
 }
 

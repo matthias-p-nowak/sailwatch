@@ -2,40 +2,70 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <link rel="manifest" href="manifest.json" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sail race watch: start &amp; finish</title>
-    <link rel="stylesheet" href="main.css" />
-    <link rel="shortcut icon" type="image/x-icon" href="sailwatch.ico" />
-    <script type="module" src="main.js"></script>
+  <meta charset="UTF-8" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sail race watch: start &amp; finish</title>
+  <link rel="stylesheet" href="main.css" />
+  <link rel="shortcut icon" type="image/x-icon" href="sailwatch.ico" />
+  <script defer src="main.js"></script>
 </head>
 
 <body>
-    <div class="notifications">
-        <div class="autohide infos">
-            <h2>Notifications</h2>
-            <ul class="hook_infos">
-            </ul>
+  <div class="notifications">
+    <ul class="hook_infos infos"></ul>
+    <ul class="hook_errors errors"></ul>
+  </div>
+  </div>
+  <header>
+    <details id="settings">
+      <summary class="hook_summary">
+        <img src="img/sailwatch-64.png" alt="Sailwatch" />
+        <span> Sailing Watch <br /> Start &amp; Finish</span>
+      </summary>
+      <div class="headerpic slideshow">
+        <img src="img/sailwatch-512.png" alt="big sailwatch icon" />
+        <img src="img/qr-code.png" alt="qr code" />
+      </div>
+      <div>
+        <div class="row">
+          <span class="right">Notifications</span>
+          <span class="hook_notifications">nothing yet</span>
         </div>
-        <div class="autohide errors">
-            <h2>Errors</h2>
-            <ul class="hook_errors"></ul>
+        <div class="row">
+          <span class="right">Clockwork</span>
+          <span class="hook_clockwork">standing still</span>
         </div>
+        <div class="row hook_approw">
+          <span class="right">App</span>
+          <span class="hook_app">not installed</span>
+        </div>
+      </div>
+    </details>
+  </header>
+  <main class="hook_main"></main>
+  <footer class="hook_footer">
+    <div class="hook_registerFinish registerFinish">
+      <img src="img/finish.png" alt="register a finish" />
     </div>
-    <header>
-        <details id="settings">
-            <summary class="js_summary">
-                <img src="img/sailwatch-64.png" alt="Sailwatch" />
-                <span>
-                    Sailing Watch <br />
-                    Start &amp; Finish</span>
-            </summary>
-    </header>
-    <main></main>
-    <footer>
-
-    </footer>
+    <div class="bottomRight">
+      <div class="hook_makeTable">
+        <img src="img/table.png" alt="make a table" />
+      </div>
+      <div class="hook_takeNote">
+        <img src="img/note.png" alt="take a note" />
+      </div>
+      <div class="hook_newStart">
+        <img src="img/start.png" alt="register new start" />
+      </div>
+    </div>
+  </footer>
+  <template id="template_NoteDisplay">
+    <article class="note">      
+        <div class="hook_time">no time recorded</div>
+        <textarea class="hook_text" placeholder="take a note"></textarea>
+    </article>
+  </template>
 </body>
 
 </html>
