@@ -15,12 +15,12 @@ export class SailWatch extends DomHook {
   footer: HTMLDivElement = undefined;
 
   mainDisplay: WeakMap<HTMLElement, Date> = new WeakMap();
-  
+
 
   constructor() {
     super();
     this.hook(document.body);
-    requestIdleCallback(() => this.initialize());
+    setTimeout(() => {  this.initialize();},1);
     console.log("SailWatch instantiated");
   }
 
@@ -34,32 +34,52 @@ export class SailWatch extends DomHook {
   timelineEvent(ce: CustomEvent) {
     let event = ce.detail as EventBase;
     console.log(event);
-    let found=false;
-    Array.from( this.main.children)
-      .filter((e:HTMLElement) => this.mainDisplay.get(e) == event.time)
-      .forEach((e:HTMLElement) => {
+    let found = false;
+    Array.from(this.main.children)
+      .filter((e: HTMLElement) => this.mainDisplay.get(e) == event.time)
+      .forEach((e: HTMLElement) => {
         console.log('updating a displayed main event');
         e.dispatchEvent(new CustomEvent('update', { detail: event }));
-        found=true;
+        found = true;
       });
-    if(found){
+    if (found) {
       return;
     }
     if (ce.detail.note != undefined) {
-    
-        let t = DomHook.fromTemplate("NoteView");
-        let nd = new NoteView(t,ce.detail);
-        this.insert(ce.detail.time,t);
-  
-    }else{
+
+      let t = DomHook.fromTemplate("NoteView");
+      let nd = new NoteView(t, ce.detail);
+      this.insert(ce.detail.time, t);
+
+    } else {
       console.log('not a recognized event');
     }
   }
-  
-    insert(time: Date, elem: HTMLElement) {
-        this.mainDisplay.set(elem, time);
-        this.main.appendChild(elem);
+
+  _sortingId: number = 0;
+
+  insert(time: Date, elem: HTMLElement) {
+    this.mainDisplay.set(elem, time);
+    this.main.appendChild(elem);
+    clearTimeout(this._sortingId);
+    this._sortingId = setTimeout(this.sortMain.bind(this), 100);
+  }
+
+  sortMain() {
+    const desiredOrder = Array.from(this.main.children).sort((a, b) => {
+      const aTime = this.mainDisplay.get(a as HTMLElement);
+      const bTime = this.mainDisplay.get(b as HTMLElement);
+      return bTime.getTime() - aTime.getTime();
+    });
+    for (let i = 0; i < desiredOrder.length; i++) {
+      const current = this.main.children[i];
+      const target = desiredOrder[i];
+
+      if (current !== target) {
+        this.main.insertBefore(target, current);
+      }
     }
+  }
 
   infos_onclick(ev: MouseEvent) {
     let target = ev.target as HTMLElement;
