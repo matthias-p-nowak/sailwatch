@@ -14,7 +14,7 @@ function deepEqual(obj1, obj2) {
     return true;
   }
 
-  type EventBase = {
+export  type EventBase = {
     time: Date
   }
 
@@ -40,6 +40,13 @@ export class TimeLine extends EventTarget {
         if (!deepEqual(old, event)) {
             console.log('updated...');
             this.dispatchEvent(new CustomEvent('updated', { detail: event }));
+            if(Object.keys(event).length == 1){
+              setTimeout(() => {
+                console.log('deleting something from timeline');
+                this.events.delete(event.time);
+              }, 30_000);
+              }
+            return;
         }
     }
 }

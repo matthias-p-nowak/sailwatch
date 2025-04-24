@@ -1,7 +1,7 @@
 import { DomHook } from "./domhook";
 import { NoteView } from "./note";
 import { Settings } from "./settings";
-import { TimeLine } from "./timeline";
+import { EventBase, TimeLine } from "./timeline";
 
 /**
  * the global SailWatch instance
@@ -14,12 +14,8 @@ export class SailWatch extends DomHook {
   main: HTMLDivElement = undefined;
   footer: HTMLDivElement = undefined;
 
-  displayed: WeakMap<Date,DomHook> = new WeakMap();
-
-  /** show all the garbage collected objects - for detection of memory leaks */
-  debugRegistry = new FinalizationRegistry((heldvalue) => {
-    console.log("garbage collected", heldvalue);
-  });
+  mainDisplay: WeakMap<HTMLElement, Date> = new WeakMap();
+  
 
   constructor() {
     super();
@@ -31,26 +27,38 @@ export class SailWatch extends DomHook {
   private async initialize() {
     let tl = TimeLine.instance;
     tl.addEventListener("added", this.timelineEvent.bind(this));
+    tl.addEventListener("updated", this.timelineEvent.bind(this));
     this.footer.style.display = "block";
   }
 
-  timelineEvent(event: CustomEvent) {
+  timelineEvent(ce: CustomEvent) {
+    let event = ce.detail as EventBase;
     console.log(event);
-    if (event.detail.note != undefined) {
-      let nd = this.displayed.get(event.detail.time);
-      if (nd == undefined) {
+    let found=false;
+    Array.from( this.main.children)
+      .filter((e:HTMLElement) => this.mainDisplay.get(e) == event.time)
+      .forEach((e:HTMLElement) => {
+        console.log('updating a displayed main event');
+        e.dispatchEvent(new CustomEvent('update', { detail: event }));
+        found=true;
+      });
+    if(found){
+      return;
+    }
+    if (ce.detail.note != undefined) {
+    
         let t = DomHook.fromTemplate("NoteView");
-        nd = new NoteView(t,event.detail);
-        this.insert(event.detail.time, nd);
-      } else {
-
-      }
+        let nd = new NoteView(t,ce.detail);
+        this.insert(ce.detail.time,t);
+  
+    }else{
+      console.log('not a recognized event');
     }
   }
   
-    insert(time: Date, elem: DomHook) {
-        this.displayed.set(time,elem);
-        this.main.appendChild(elem.root);
+    insert(time: Date, elem: HTMLElement) {
+        this.mainDisplay.set(elem, time);
+        this.main.appendChild(elem);
     }
 
   infos_onclick(ev: MouseEvent) {
@@ -89,7 +97,6 @@ export class SailWatch extends DomHook {
     li.onanimationend = () => {
       li.remove();
     };
-    this.debugRegistry.register(li, "info " + msg);
   }
 
   addError(msg: string) {
