@@ -153,6 +153,15 @@ main {
     textarea {
       width: 100%;
     }
+    textarea {
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      outline: none;
+      border: thin solid rgb(232, 232, 232);
+    }
+    .saving {
+      outline: thin solid lightgreen;
+    }
   }
 
   >article.start {

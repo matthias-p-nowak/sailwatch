@@ -1,7 +1,7 @@
 import { sailwatch } from "./sailwatch";
 
 export class SailwatchDatabase {
-  static instance: SailwatchDatabase;
+  static _instance: SailwatchDatabase;
   ready: Promise<any>;
   db: IDBDatabase = undefined;
 
@@ -33,8 +33,8 @@ export class SailwatchDatabase {
 
 
 
-  static getInstance(): SailwatchDatabase {
-    return this.instance || (this.instance = new SailwatchDatabase());
+  static get instance(): SailwatchDatabase {
+    return this._instance || (this._instance = new SailwatchDatabase());
   }
   
   static dbSchema = {
