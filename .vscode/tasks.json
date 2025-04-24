@@ -28,7 +28,7 @@
 			"args": [
 				"--bundle",
 				"src/main.ts",
-				"src/service-main.ts",
+				"src/background.ts",
 				"--outdir=app",
 				"--sourcemap",
 				"--watch"
