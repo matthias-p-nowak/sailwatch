@@ -1,7 +1,8 @@
-import { SailWatch } from "./sailwatch";
+import { sailwatch } from "./sailwatch";
+
 
 /** value to be replaced during deployment */
-let mainGitVersion = "currentGitVersion";
+export let mainGitVersion = "currentGitVersion";
 (async () => {
   console.log(`running inside main thread gitVersion=${mainGitVersion}`);
   // prompt
@@ -13,5 +14,5 @@ let mainGitVersion = "currentGitVersion";
       reg.active.postMessage({ gitVersion: mainGitVersion });
     });
   }
-  let sailwatch = new SailWatch(document.body);
+  sailwatch.addInfo(`running inside main thread gitVersion=${mainGitVersion}`);
 })();

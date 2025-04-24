@@ -13,7 +13,7 @@ swgs.oninstall = function (event) {
 };
 
 swgs.onmessage = function (event) {
-    console.log("background worker is handling message", event.data);
+    // console.log("background worker is handling message", event.data);
     let d = event.data;
     if (d.gitVersion != undefined) {
         if (d.gitVersion != gitVersion) {

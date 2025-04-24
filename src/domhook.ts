@@ -1,6 +1,14 @@
+/**
+ * DomHook is used to hook DOM elements to functions and members
+ */
 export class DomHook {
 
-  static getEventFunctions(obj): string[] {
+    /**
+     * provides a list of member functions that contain '_on'
+     * @param obj class object
+     * @returns list of function names
+     */
+  private static getEventFunctions(obj): string[] {
     let functions = new Set<string>();
     while (obj) {
       Object.getOwnPropertyNames(obj).forEach((key: string) => {
@@ -13,7 +21,14 @@ export class DomHook {
     return [...functions];
   }
 
+  /**
+   * should be called once in the constructor
+   * @param element the element that contains all the hooks
+   * will traverse the prototype chain, and assign any functions that contain _on to their respective event handlers
+   * and assign any undefined values to their respective queried elements
+   */
   hook(root: HTMLElement) {
+    // hooking properties
     Object.entries(this).forEach(([key, value], idx) => {
       // console.log(`got ${idx}: key=${key} value=${value}`);
       if (value == undefined) {
@@ -21,16 +36,22 @@ export class DomHook {
         this[key] = obj;
       }
     });
+    // hooking functions
     DomHook.getEventFunctions(this).forEach((value, idx) => {
       let functionName = value as string;
-      console.log(`assigning ${idx} ${functionName}`);
+    //   console.log(`assigning ${idx} ${functionName}`);
       let parts = functionName.split("_on");
       if (parts.length < 2) return;
-      console.log(parts);
+    //   console.log(parts);
       let assignedFunction = this[functionName].bind(this);
       root.querySelectorAll(".hook_" + parts[0]).forEach((element) => {
           element.addEventListener(parts[1], assignedFunction);
-      })
+      });
+      let idElement=document.getElementById(parts[0]);
+      if(idElement){
+        idElement.addEventListener(parts[1], assignedFunction);
+      }
     });
   }
 }
+
