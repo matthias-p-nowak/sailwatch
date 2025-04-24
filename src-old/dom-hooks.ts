@@ -45,6 +45,10 @@ export class DomHook {
             let assignedFunction = this[functionName].bind(this);
             this[parts[0]][eventFunction] = assignedFunction;
         });
+        if(typeof this['update'] == 'function'){
+            console.log(`assigning update`);
+            element.addEventListener('update', this['update'].bind(this));
+        }
     }
 
     /**

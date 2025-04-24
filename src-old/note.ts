@@ -1,8 +1,7 @@
-import { SailwatchDatabase } from "./database";
 import { dateFmt } from "./datefmt";
 import { DomHook } from "./dom-hooks";
 import { sailwatch } from "./sailwatch";
-import { EventBase } from "./timeline";
+import { EventBase, TimeLine } from "./timeline";
 
 
 export class Note implements EventBase {
@@ -21,10 +20,11 @@ export class Note implements EventBase {
   render(): HTMLElement{
     let display=new NoteDisplay(this);
     let result=display.fromTemplate();
-    display.update();
+    display.update(null);
     return result;
   }
 }
+
 export class NoteDisplay extends DomHook {
 
   data: Note;
@@ -35,11 +35,17 @@ export class NoteDisplay extends DomHook {
   constructor(note:Note){
     super();
     this.data=note;
+    sailwatch.debugRegistry.register(this, "note deleted");
   }
 
-  update() {
+  update(ev: CustomEvent) {
+    console.log("note update");
+    this.data.time= ev.detail.time;
     this.time.innerText= dateFmt('%h:%i:%s', this.data.time);
     this.text.value=this.data.note;
+    if(this.text.value.length==0){
+      this.delayId = setTimeout(this.doSave.bind(this), 30_000);
+    }
   }
 
   text_oninput(ev: Event) {
@@ -56,9 +62,11 @@ export class NoteDisplay extends DomHook {
     let length = this.text.value.length;
     this.data.note = this.text.value;
     if (length > 0) {
-      SailwatchDatabase.instance.saveEvent(this.data.getData());
+      console.log("saving updated note");
+      TimeLine.instance.addEvent(this.data.getData());
     } else {
-      SailwatchDatabase.instance.saveEvent({time: this.data.time});
+      console.log('removing note, leaving thombstone');
+      TimeLine.instance.addEvent({time: this.data.time});
     }
   }
 

@@ -20,6 +20,9 @@ function deepEqual(obj1, obj2) {
   
 
 export class TimeLine extends EventTarget {
+    events: Map<Date, Object> = new Map<Date, Object>();
+    private static _instance: TimeLine = undefined;
+
     private constructor() {
         super();
         setTimeout(() => {
@@ -27,8 +30,6 @@ export class TimeLine extends EventTarget {
         }, 50);
     }
 
-    private static _instance: TimeLine = undefined;
-    events: Map<Date, Object> = new Map<Date, Object>();
 
     /**
      * @returns the only instance of TimeLine
@@ -43,7 +44,7 @@ export class TimeLine extends EventTarget {
      * @param event the event to add
      * @fires added
      */
-    addEvent<T extends EventBase>(dt: Date, obj: Object) {
+    addEvent<T extends EventBase>(obj: Object) {
         let event=obj as T;
         let old=this.events.get(event.time);
         this.events.set(event.time, event);

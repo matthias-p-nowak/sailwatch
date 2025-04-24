@@ -1,19 +1,17 @@
-import { sailwatch } from "./sailwatch";
-import { Settings } from "./settings";
+import { SailWatch } from "./sailwatch";
 
 /** value to be replaced during deployment */
-let gitVersion = 'currentGitVersion';
-
+let mainGitVersion = "currentGitVersion";
 (async () => {
-    window.addEventListener("beforeinstallprompt", Settings.setInstallPrompt);
-    if ('serviceWorker' in navigator) {
-        // let service = await 
-        navigator.serviceWorker.register('service-main.js');
-        console.log('service worker registered');
-        navigator.serviceWorker.ready.then((reg: ServiceWorkerRegistration) => {
-            console.log("service worker is ready");
-            reg.active.postMessage({ gitVersion: gitVersion });
-        });
-    }
-    sailwatch.addInfo(`running inside main thread gitVersion=${gitVersion}`);
+  console.log(`running inside main thread gitVersion=${mainGitVersion}`);
+  // prompt
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("background.js");
+    console.log("background worker registered");
+    navigator.serviceWorker.ready.then((reg: ServiceWorkerRegistration) => {
+      console.log("background worker is ready");
+      reg.active.postMessage({ gitVersion: mainGitVersion });
+    });
+  }
+  let sailwatch = new SailWatch(document.body);
 })();

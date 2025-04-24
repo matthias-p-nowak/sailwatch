@@ -40,8 +40,8 @@ jobs:
           ls -al
           npm install esbuild sass typescript
           npx sass scss/main.scss app/main.css --no-source-map
-          npx esbuild --bundle src/main.ts src/service-main.ts --outdir=app
-          sed -i -e "s/currentGitVersion/$(git rev-parse --short HEAD)/" app/main.js app/service-main.js
+          npx esbuild --bundle src/main.ts src/background.ts --outdir=app
+          sed -i -e "s/currentGitVersion/$(git rev-parse --short HEAD)/" app/main.js app/background.js
           date
           ls -l app
       - name: Setup Pages
@@ -49,7 +49,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'app'
+          path: "app"
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
