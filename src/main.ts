@@ -1,10 +1,11 @@
 import { sailwatch } from "./sailwatch";
+import { Settings } from "./settings";
 
 
 /** value to be replaced during deployment */
 export let mainGitVersion = "currentGitVersion";
 (async () => {
-  console.log(`running inside main thread gitVersion=${mainGitVersion}`);
+    window.addEventListener("beforeinstallprompt", Settings.setInstallPrompt);
   // prompt
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("background.js");

@@ -2,12 +2,12 @@
  * DomHook is used to hook DOM elements to functions and members
  */
 export class DomHook {
-
-    /**
-     * provides a list of member functions that contain '_on'
-     * @param obj class object
-     * @returns list of function names
-     */
+  root: HTMLElement;
+  /**
+   * provides a list of member functions that contain '_on'
+   * @param obj class object
+   * @returns list of function names
+   */
   private static getEventFunctions(obj): string[] {
     let functions = new Set<string>();
     while (obj) {
@@ -28,6 +28,7 @@ export class DomHook {
    * and assign any undefined values to their respective queried elements
    */
   hook(root: HTMLElement) {
+    this.root=root;
     // hooking properties
     Object.entries(this).forEach(([key, value], idx) => {
       // console.log(`got ${idx}: key=${key} value=${value}`);
@@ -39,19 +40,28 @@ export class DomHook {
     // hooking functions
     DomHook.getEventFunctions(this).forEach((value, idx) => {
       let functionName = value as string;
-    //   console.log(`assigning ${idx} ${functionName}`);
+      //   console.log(`assigning ${idx} ${functionName}`);
       let parts = functionName.split("_on");
       if (parts.length < 2) return;
-    //   console.log(parts);
+      //   console.log(parts);
       let assignedFunction = this[functionName].bind(this);
       root.querySelectorAll(".hook_" + parts[0]).forEach((element) => {
-          element.addEventListener(parts[1], assignedFunction);
+        element.addEventListener(parts[1], assignedFunction);
       });
-      let idElement=document.getElementById(parts[0]);
-      if(idElement){
+      let idElement = document.getElementById(parts[0]);
+      if (idElement) {
         idElement.addEventListener(parts[1], assignedFunction);
       }
     });
   }
-}
 
+  static fromTemplate(name: string): HTMLElement {
+    let template = document.getElementById(name) as HTMLTemplateElement;
+    if (template == null) {
+      throw new Error(`couldn't find template with id ${name}`);
+    }
+    let cloned =
+      template.content.firstElementChild?.cloneNode(true) || template.content.cloneNode(true);
+    return cloned as HTMLElement;
+  }
+}
