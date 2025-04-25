@@ -1,8 +1,9 @@
-import { SailwatchDatabase } from './database';
-import { DomHook } from './domhook';
-import { NoteView } from './note';
-import { Settings } from './settings';
-import { EventBase, TimeLine } from './timeline';
+import { SailwatchDatabase } from "./database";
+import { DomHook } from "./domhook";
+import { NoteView } from "./note";
+import { Settings } from "./settings";
+import { NewStart } from "./start";
+import { TimeEvent, TimeLine } from "./timeline";
 
 /**
  * the global SailWatch instance
@@ -17,30 +18,36 @@ export class SailWatch extends DomHook {
 
   mainDisplay: WeakMap<HTMLElement, Date> = new WeakMap();
   gitVersion: string;
-
+  fleets: Set<string> = new Set<string>();
 
   constructor() {
     super();
     this.hook(document.body);
-    setTimeout(() => {  this.initialize();},1);
+    setTimeout(() => {
+      this.initialize();
+    }, 1);
     console.log("SailWatch instantiated");
   }
 
   private async initialize() {
     let tl = TimeLine.instance;
-    tl.addEventListener('added', this.timelineEvent.bind(this));
-    tl.addEventListener('updated', this.timelineEvent.bind(this));
-    tl.addEventListener('removed', this.timelineEvent.bind(this));
-    let db= SailwatchDatabase.instance;
-    tl.addEventListener('added', db.saveEvent.bind(db));
-    tl.addEventListener('updated', db.saveEvent.bind(db));
-    tl.addEventListener('removed', db.saveEvent.bind(db));
+    tl.addEventListener("added", this.timelineEvent.bind(this));
+    tl.addEventListener("updated", this.timelineEvent.bind(this));
+    tl.addEventListener("removed", this.timelineEvent.bind(this));
+    let db = SailwatchDatabase.instance;
+    tl.addEventListener("added", db.saveEvent.bind(db));
+    tl.addEventListener("updated", db.saveEvent.bind(db));
+    tl.addEventListener("removed", db.saveEvent.bind(db));
     await db.ready;
     setTimeout(() => {
       this.retrieveOldEntries(new Date());
+      SailwatchDatabase.instance.getAllFleets().then((fleets) => {
+        fleets.forEach((f) => this.fleets.add(f));
+      })
     }, 1);
-    this.footer.style.display = 'block';
+    this.footer.style.display = "block";
   }
+
   retrieveOldEntries(before: Date) {
     let tl = TimeLine.instance;
     let db = SailwatchDatabase.instance;
@@ -50,27 +57,25 @@ export class SailWatch extends DomHook {
   }
 
   timelineEvent(ce: CustomEvent) {
-    let event = ce.detail as EventBase;
+    let event = ce.detail as TimeEvent;
     console.log(event);
     let found = false;
     Array.from(this.main.children)
       .filter((e: HTMLElement) => this.mainDisplay.get(e) == event.time)
       .forEach((e: HTMLElement) => {
-        console.log('updating a displayed main event');
-        e.dispatchEvent(new CustomEvent('update', { detail: event }));
+        console.log("updating a displayed main event");
+        e.dispatchEvent(new CustomEvent("update", { detail: event }));
         found = true;
       });
     if (found) {
       return;
     }
     if (ce.detail.note != undefined) {
-
-      let t = DomHook.fromTemplate('NoteView');
+      let t = DomHook.fromTemplate("NoteView");
       let nd = new NoteView(t, ce.detail);
       this.insert(ce.detail.time, t);
-
     } else {
-      console.log('not a recognized event');
+      console.log("not a recognized event");
     }
   }
 
@@ -101,7 +106,7 @@ export class SailWatch extends DomHook {
 
   infos_onclick(ev: MouseEvent) {
     let target = ev.target as HTMLElement;
-    if (target.tagName == 'LI') {
+    if (target.tagName == "LI") {
       target.remove();
     }
   }
@@ -112,7 +117,7 @@ export class SailWatch extends DomHook {
    */
   errors_onclick(ev: MouseEvent) {
     let target = ev.target as HTMLElement;
-    if (target.tagName == 'LI') {
+    if (target.tagName == "LI") {
       target.remove();
     }
   }
@@ -124,21 +129,28 @@ export class SailWatch extends DomHook {
 
   takeNote_onclick(ev: MouseEvent) {
     sailwatch.addInfo("taking a note");
-    TimeLine.instance.submitEvent({ time: new Date(), note: '', focus: true });
+    TimeLine.instance.submitEvent({ time: new Date(), note: "", focus: true });
+  }
+
+  newStart_onclick(ev: MouseEvent) {
+    console.log("new start");
+    let ns = NewStart.instance;
+    ns.initializeNewStart();
+    ns.show();
   }
 
   addInfo(msg: string) {
-    let li = document.createElement('li');
+    let li = document.createElement("li");
     li.innerText = msg;
     this.infos.appendChild(li);
-    li.style.height = li.scrollHeight + 'px';
+    li.style.height = li.scrollHeight + "px";
     li.onanimationend = () => {
       li.remove();
     };
   }
 
   addError(msg: string) {
-    let li = document.createElement('li');
+    let li = document.createElement("li");
     li.innerText = msg;
     this.errors.appendChild(li);
   }

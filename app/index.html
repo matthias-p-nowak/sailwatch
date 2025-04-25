@@ -61,12 +61,40 @@
       </div>
     </div>
   </footer>
+  <dialog id="NewStart">
+    <h3>New start</h3>
+    <fieldset>
+      <legend>Start signal at <span class="hook_signal"></span></legend>
+      <div class="hook_times">
+        <input type="time" class="hook_othertime" />
+      </div>
+    </fieldset>
+    <fieldset>
+      <legend>Fleets</legend>
+      <div class="hook_fleets">
+        <input class="hook_newfleet" type="text" placeholder="new fleet" />
+      </div>
+    </fieldset>
+    <div class="buttons">
+      <button class="hook_cancel">Cancel</button>
+      <button class="hook_register" disabled="true">Register start</button>
+    </div>
+  </dialog>
+  <div id="sounds">
+    <audio class="js_single" src="snd/single.wav" preload="auto"></audio>
+    <audio class="js_double" src="snd/double.wav" preload="auto"></audio>
+    <audio class="js_triple" src="snd/triple.wav" preload="auto"></audio>
+    <audio class="js_short" src="snd/short.wav" preload="auto"></audio>
+    <audio class="js_long" src="snd/long.wav" preload="auto"></audio>
+    <audio class="js_prep" src="snd/prep.wav" preload="auto"></audio>
+  </div>
   <template id="NoteView">
     <article class="note">      
         <div class="hook_time">no time recorded</div>
         <textarea class="hook_text" placeholder="take a note"></textarea>
     </article>
   </template>
+
 </body>
 
 </html>

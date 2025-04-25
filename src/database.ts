@@ -102,7 +102,7 @@ export class SailwatchDatabase {
    * @param detail
    */
   saveEvent(event: CustomEvent) {
-    let detail=event.detail;
+    let detail = event.detail;
     console.log("saving event", detail);
     let tx = this.db.transaction(["events"], "readwrite");
     tx.oncomplete = function (ev) {
@@ -112,42 +112,63 @@ export class SailwatchDatabase {
       sailwatch.addError(`indexed db error ${tx.error}`);
     };
     let store = tx.objectStore("events");
-    if(event.type=='removed'){
+    if (event.type == "removed") {
       store.delete(detail.time);
-    }else{
+    } else {
       store.put(detail);
     }
   }
 
   async getEventsBefore(timeStamp: Date) {
-    return new Promise<any[]>((resolve, reject) => {   
-      console.log('getting events before', timeStamp);   
+    return new Promise<any[]>((resolve, reject) => {
+      console.log("getting events before", timeStamp);
       let events = [];
       let store = this.db.transaction(["events"], "readonly").objectStore("events");
       let range = IDBKeyRange.upperBound(timeStamp, true);
-      let request =store.openCursor(range,'prev');
-      let prevDate:Date = undefined;
+      let request = store.openCursor(range, "prev");
+      let prevDate: Date = undefined;
       request.onsuccess = function (ev) {
         const cursor = request.result;
-        if(cursor==null){
+        if (cursor == null) {
           resolve(events);
           return;
-        }else{
-          let value=cursor.value;
-          let timeStamp=value.time as Date;
-          if(prevDate==undefined){
-            prevDate=timeStamp;
-          }else if(prevDate.getDay()!= timeStamp.getDay() ||
-          prevDate.getMonth()!= timeStamp.getMonth() || prevDate.getFullYear()!= timeStamp.getFullYear()){
-            console.log('got another day');
+        } else {
+          let value = cursor.value;
+          let timeStamp = value.time as Date;
+          if (prevDate == undefined) {
+            prevDate = timeStamp;
+          } else if (
+            prevDate.getDay() != timeStamp.getDay() ||
+            prevDate.getMonth() != timeStamp.getMonth() ||
+            prevDate.getFullYear() != timeStamp.getFullYear()
+          ) {
+            console.log("got another day");
             resolve(events);
             return;
           }
           events.push(value);
           cursor.continue();
         }
-      };      
+      };
     });
   }
 
+  async getAllFleets(): Promise<string[]> {
+    return new Promise<string[]>((resolve, reject) => {
+      let store = this.db.transaction(["fleets"], "readonly").objectStore("fleets");
+      let request = store.getAllKeys();
+      let fleets: string[] = [];
+      request.onsuccess = (ev) => {
+        request.result.forEach((element) => {
+          fleets.push(element as string);
+        });
+        resolve(fleets);
+      };
+    });
+  }
+
+  saveFleet(data: { name: string; lastUsed: Date}) {
+    let store = this.db.transaction(["fleets"], "readwrite").objectStore("fleets");
+      store.put(data);
+  }
 }
