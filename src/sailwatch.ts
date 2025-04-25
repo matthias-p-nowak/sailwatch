@@ -150,6 +150,10 @@ export class SailWatch extends DomHook {
     TimeLine.instance.submitEvent({ time: new Date(), finish: 'timed' });
   }
 
+  makeTable_onclick(ev: MouseEvent) {
+    console.log("make table");
+  }
+
   // #region notifications
   addInfo(msg: string) {
     let li = document.createElement("li");

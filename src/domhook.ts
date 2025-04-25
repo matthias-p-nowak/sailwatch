@@ -2,7 +2,7 @@
  * DomHook is used to hook DOM elements to functions and members
  */
 export class DomHook {
-  root: HTMLElement;
+  root: HTMLDivElement;
   /**
    * provides a list of member functions that contain '_on'
    * @param obj class object

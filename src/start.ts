@@ -171,3 +171,11 @@ export class NewStart extends DomHook {
   }
 
 }
+
+export class StartView extends DomHook {
+    
+  constructor(root: HTMLElement, data:Object) {
+    super();
+    this.hook(root);
+  }
+}
