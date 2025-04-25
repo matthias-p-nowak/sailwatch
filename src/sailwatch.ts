@@ -77,6 +77,9 @@ export class SailWatch extends DomHook {
     } else if (ce.detail.start != undefined) {
       let s=DomHook.fromTemplate("StartView");
       this.insert(ce.detail.time, s);
+    }else if (ce.detail.finish != undefined) {
+      let f=DomHook.fromTemplate("FinishView");
+      this.insert(ce.detail.time, f);    
     } else {
       console.log("not a recognized event");
     }
@@ -142,6 +145,12 @@ export class SailWatch extends DomHook {
     ns.show();
   }
 
+  registerFinish_onclick(ev: MouseEvent) {
+    console.log("register finish");
+    TimeLine.instance.submitEvent({ time: new Date(), finish: 'timed' });
+  }
+
+  // #region notifications
   addInfo(msg: string) {
     let li = document.createElement("li");
     li.innerText = msg;
@@ -157,6 +166,7 @@ export class SailWatch extends DomHook {
     li.innerText = msg;
     this.errors.appendChild(li);
   }
+  // #endregion
 }
 
 export let sailwatch: SailWatch = new SailWatch();

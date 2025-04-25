@@ -144,6 +144,7 @@ div:has(> div.row) {
 }
 
 main {
+  margin-top: 1rem;
   display: grid;
   grid-template-columns:
     1fr [bigger-start] 1fr [middle-start] clamp(5rem, 80svw, 30rem) [middle-end] 1fr [bigger-end] 1fr;
@@ -206,6 +207,8 @@ main {
 
   >article.finish {
     grid-column: middle;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 
