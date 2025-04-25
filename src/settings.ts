@@ -1,5 +1,4 @@
 import { DomHook } from "./domhook";
-import { sailwatch } from "./sailwatch";
 
 export class Settings extends DomHook {
   static installPrompt: any;
@@ -27,8 +26,8 @@ export class Settings extends DomHook {
 
   static setInstallPrompt(event: any) {
     Settings.installPrompt = event;
-    sailwatch.addInfo("setInstallPrompt called");
   }
+  
   settings_onclick(ev: MouseEvent) {
     let target = ev.target as HTMLElement;
     if (target == null) {

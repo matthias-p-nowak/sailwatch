@@ -4,6 +4,8 @@ import { Settings } from "./settings";
 
 /** value to be replaced during deployment */
 export let mainGitVersion = "currentGitVersion";
+
+
 (async () => {
     window.addEventListener("beforeinstallprompt", Settings.setInstallPrompt);
   // prompt
@@ -15,5 +17,5 @@ export let mainGitVersion = "currentGitVersion";
       reg.active.postMessage({ gitVersion: mainGitVersion });
     });
   }
-  sailwatch.addInfo(`running inside main thread gitVersion=${mainGitVersion}`);
+  sailwatch.gitVersion=mainGitVersion
 })();

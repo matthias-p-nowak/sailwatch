@@ -9,12 +9,15 @@ export class NoteView extends DomHook {
   time: HTMLDivElement = undefined;
   text: HTMLTextAreaElement = undefined;
   delayId: number = 0;
+
   constructor(root: HTMLElement, data: Object) {
     super();
     this.hook(root);
     this.data = data as Note;
     this.render();
     root.addEventListener("update", this.update.bind(this));
+    // just in case nothing was noted down, delete after 5 minutes
+    this.delayId = setTimeout(this.doSave.bind(this), 300_000);
   }
 
   update(ev: CustomEvent) {
@@ -42,9 +45,9 @@ export class NoteView extends DomHook {
   }
 
   text_oninput(ev: Event) {
+    console.log("text_oninput");
     this.text.style.height = "auto";
     this.text.style.height = this.text.scrollHeight + 2 + "px";
-    // console.log("text_oninput");
     this.text.classList.add("saving");
     if (this.delayId > 0) clearInterval(this.delayId);
     this.delayId = setTimeout(this.doSave.bind(this), 5000);
@@ -55,7 +58,7 @@ export class NoteView extends DomHook {
     let length = this.text.value.length;
     this.data.note = this.text.value;
     if (length > 0) {
-      console.log("saving updated note");
+      console.log("saving updated note", this.data);
       TimeLine.instance.submitEvent(this.data);
     } else {
       console.log("removing note, leaving thombstone");
