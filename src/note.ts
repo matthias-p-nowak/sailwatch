@@ -49,11 +49,15 @@ export class NoteView extends DomHook {
     this.text.style.height = "auto";
     this.text.style.height = this.text.scrollHeight + 2 + "px";
     this.text.classList.add("saving");
-    if (this.delayId > 0) clearInterval(this.delayId);
+    clearTimeout(this.delayId);
     this.delayId = setTimeout(this.doSave.bind(this), 5000);
+  }
+  text_onblur(ev: Event) {
+    this.doSave();
   }
 
   doSave() {
+    clearTimeout(this.delayId);
     this.text.classList.remove("saving");
     let length = this.text.value.length;
     this.data.note = this.text.value;

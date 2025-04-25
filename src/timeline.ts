@@ -39,12 +39,14 @@ export class TimeLine extends EventTarget {
     if (old === event || !deepEqual(old, event)) {
       console.log("updated...");
       if (Object.keys(event).length == 1) {
+        console.log("fired removed");
         this.dispatchEvent(new CustomEvent("removed", { detail: event }));
         setTimeout(() => {
           console.log("deleting something from timeline");
           this.events.delete(event.time);
         }, 30_000);
       } else {
+        console.log("fired updated");
         this.dispatchEvent(new CustomEvent("updated", { detail: event }));
       }
       return;

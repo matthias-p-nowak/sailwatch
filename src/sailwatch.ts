@@ -30,10 +30,23 @@ export class SailWatch extends DomHook {
     let tl = TimeLine.instance;
     tl.addEventListener('added', this.timelineEvent.bind(this));
     tl.addEventListener('updated', this.timelineEvent.bind(this));
+    tl.addEventListener('removed', this.timelineEvent.bind(this));
     let db= SailwatchDatabase.instance;
     tl.addEventListener('added', db.saveEvent.bind(db));
     tl.addEventListener('updated', db.saveEvent.bind(db));
+    tl.addEventListener('removed', db.saveEvent.bind(db));
+    await db.ready;
+    setTimeout(() => {
+      this.retrieveOldEntries(new Date());
+    }, 1);
     this.footer.style.display = 'block';
+  }
+  retrieveOldEntries(before: Date) {
+    let tl = TimeLine.instance;
+    let db = SailwatchDatabase.instance;
+    db.getEventsBefore(before).then((events) => {
+      events.forEach((e) => tl.submitEvent(e));
+    });
   }
 
   timelineEvent(ce: CustomEvent) {
