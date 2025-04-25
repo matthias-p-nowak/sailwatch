@@ -172,15 +172,34 @@ main {
         text-align: right;
         width: 10rem;
       }
-
       span:nth-child(2) {
         text-align: right;
         width: 10rem;
       }
-
       span:nth-child(3) {
         text-align: right;
         width: 10rem;
+      }
+    }
+    div.start_table{
+      margin-left: auto;
+      margin-right: auto;
+      .bold{
+        font-weight: bolder;
+      }
+      span:nth-child(1) {
+        text-align: right;
+        font-weight: lighter;
+        font-style: italic;        
+      }
+     
+    }
+    span.imgrow{
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      img{
+        height: 3rem;
       }
     }
   }
@@ -229,6 +248,11 @@ dialog {
   &#NewStart {
     $border: thin solid rgb(250, 225, 178);
     $color: rgb(250, 225, 178);
+    .fleets {
+      input {
+        width: 5rem;
+      }
+    }
   }
   border: $border;
   fieldset {

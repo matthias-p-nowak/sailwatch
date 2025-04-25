@@ -2,6 +2,7 @@ import { SailwatchDatabase } from "./database";
 import { dateFmt } from "./datefmt";
 import { DomHook } from "./domhook";
 import { sailwatch } from "./sailwatch";
+import { Sounds } from "./sounds";
 import { TimeLine } from "./timeline";
 
 export class NewStart extends DomHook {
@@ -94,6 +95,50 @@ export class NewStart extends DomHook {
     this.checkValidStart();
   }
 
+  fleets_onclick(ev: MouseEvent) {
+    let fleet = ev.target as HTMLSpanElement;
+    fleet.classList.toggle("selected");
+    this.checkValidStart();
+  }
+
+  othertime_onclick(ev: MouseEvent) {
+    ev.stopPropagation();
+    sailwatch.addInfo("other time click");
+    Array.from(this.times.children).forEach((ch) => {
+      ch.classList.remove("selected");
+    });
+  }
+
+  othertime_onblur(ev: MouseEvent) {
+    if (this.othertime.value.length < 5) {
+      return;
+    }
+    const [hours, minutes] = this.othertime.value.split(":");
+    this.currentStart = new Date();
+    this.currentStart.setHours(parseInt(hours));
+    this.currentStart.setMinutes(parseInt(minutes));
+    this.currentStart.setSeconds(0);
+    this.currentStart.setMilliseconds(0);
+    let dateStr = dateFmt("%h:%i:%s", this.currentStart);
+    let span = document.createElement("span");
+    span.classList.add("selected");
+    span.innerText = dateStr;
+    span.dataset.timeStamp = this.currentStart.toISOString();
+    this.times.appendChild(span);
+    this.times.appendChild(this.othertime);
+    this.checkValidStart();
+  }
+
+  register_onclick(ev: MouseEvent) {
+    let fleetNames = Array.from(this.fleets.children)
+        .filter((ch) => ch.classList.contains("selected"))
+        .map((ch) => (ch as HTMLElement).innerText);
+    let tl=TimeLine.instance;
+    tl.submitEvent({ time: this.currentStart, fleets: fleetNames, start: 'planned' });
+    this.root.close();
+    Sounds.instance.play('triple');
+  }
+
   // #endregion
 
   checkValidStart() {
@@ -124,5 +169,5 @@ export class NewStart extends DomHook {
     this.signal.innerText = timeString;
     this.register.disabled = false;
   }
-  
+
 }

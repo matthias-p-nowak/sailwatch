@@ -71,7 +71,7 @@
     </fieldset>
     <fieldset>
       <legend>Fleets</legend>
-      <div class="hook_fleets">
+      <div class="hook_fleets fleets">
         <input class="hook_newfleet" type="text" placeholder="new fleet" />
       </div>
     </fieldset>
@@ -81,12 +81,12 @@
     </div>
   </dialog>
   <div id="sounds">
-    <audio class="js_single" src="snd/single.wav" preload="auto"></audio>
-    <audio class="js_double" src="snd/double.wav" preload="auto"></audio>
-    <audio class="js_triple" src="snd/triple.wav" preload="auto"></audio>
-    <audio class="js_short" src="snd/short.wav" preload="auto"></audio>
-    <audio class="js_long" src="snd/long.wav" preload="auto"></audio>
-    <audio class="js_prep" src="snd/prep.wav" preload="auto"></audio>
+    <audio class="single" src="snd/single.wav" preload="auto"></audio>
+    <audio class="double" src="snd/double.wav" preload="auto"></audio>
+    <audio class="triple" src="snd/triple.wav" preload="auto"></audio>
+    <audio class="short" src="snd/short.wav" preload="auto"></audio>
+    <audio class="long" src="snd/long.wav" preload="auto"></audio>
+    <audio class="prep" src="snd/prep.wav" preload="auto"></audio>
   </div>
   <template id="NoteView">
     <article class="note">      
@@ -94,7 +94,39 @@
         <textarea class="hook_text" placeholder="take a note"></textarea>
     </article>
   </template>
-
+  <template id="StartView">
+    <article class="start">
+      <div class="start_table">
+        <div class="row hook_title">
+          <span></span>
+          <span class="bold">Time</span>
+          <span class="bold">Action</span>
+        </div>
+        <div class="row">
+          <span>Start at</span>
+          <span class="hook_starttime"></span>
+          <span class="hook_fleets"></span>
+        </div>
+        <div class="row hook_durationrow">
+          <span>start in</span>
+          <span class="hook_duration"></span>
+          <span class="hook_nowStamp"></span>
+        </div>
+        <div class="row hook_flagrow" >
+          <span>flag in</span>
+          <span class="hook_flagtime bold"></span>
+          <span class="hook_nextflag bold">class up</span>
+        </div>
+      </div>
+      <div class="hook_imgrow">
+        <span class="imgrow">
+          <img class="hook_flagap" src="img/flag_ap.png"  alt"="AP" />
+          <img class="hook_flagx" src="img/flag_x.png" alt="X" />
+          <img class="hook_flagrecall" src="img/flag_recall.png" alt="Recall" />
+        </span>
+      </div>
+    </article>
+  </template>
 </body>
 
 </html>

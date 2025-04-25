@@ -74,6 +74,9 @@ export class SailWatch extends DomHook {
       let t = DomHook.fromTemplate("NoteView");
       let nd = new NoteView(t, ce.detail);
       this.insert(ce.detail.time, t);
+    } else if (ce.detail.start != undefined) {
+      let s=DomHook.fromTemplate("StartView");
+      this.insert(ce.detail.time, s);
     } else {
       console.log("not a recognized event");
     }
