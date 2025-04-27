@@ -50,11 +50,25 @@ html {
 }
 
 @keyframes slidefade {
-  0% { opacity: 0; }
-  5% { opacity: 1; }
-  45% { opacity: 1; }
-  50% { opacity: 0; }
-  100% { opacity: 0; }
+  0% {
+    opacity: 0;
+  }
+
+  5% {
+    opacity: 1;
+  }
+
+  45% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 0;
+  }
 }
 
 header {
@@ -87,6 +101,7 @@ header {
       position: relative;
       width: 20rem;
       height: 20rem;
+
       img {
         position: absolute;
         top: 0;
@@ -96,13 +111,15 @@ header {
         object-fit: cover;
         opacity: 0;
         animation: slidefade 16s infinite;
+
         &:nth-child(1) {
           animation-delay: 0s;
         }
+
         &:nth-child(2) {
           animation-delay: 8s;
         }
-      
+
       }
     }
 
@@ -151,15 +168,18 @@ main {
 
   >article.note {
     grid-column: bigger;
+
     textarea {
       width: 100%;
     }
+
     textarea {
       padding: 0.5rem;
       border-radius: 0.5rem;
       outline: none;
       border: thin solid rgb(232, 232, 232);
     }
+
     .saving {
       outline: thin solid lightgreen;
     }
@@ -168,38 +188,28 @@ main {
   >article.start {
     grid-column: middle;
 
-    div.fixed {
-      span:nth-child(1) {
-        text-align: right;
-        width: 10rem;
-      }
-      span:nth-child(2) {
-        text-align: right;
-        width: 10rem;
-      }
-      span:nth-child(3) {
-        text-align: right;
-        width: 10rem;
-      }
-    }
-    div.start_table{
+    div.start_table {
       margin-left: auto;
       margin-right: auto;
-      .bold{
+
+      .bold {
         font-weight: bolder;
       }
+
       span:nth-child(1) {
         text-align: right;
         font-weight: lighter;
-        font-style: italic;        
+        font-style: italic;
       }
-     
+
     }
-    span.imgrow{
+
+    span.imgrow {
       display: flex;
       justify-content: center;
       gap: 1rem;
-      img{
+
+      img {
         height: 3rem;
       }
     }
@@ -248,42 +258,52 @@ dialog {
   padding: 1rem;
   $color: lightblue;
   $border: thin solid $color;
+
   &#NewStart {
     $border: thin solid rgb(250, 225, 178);
     $color: rgb(250, 225, 178);
+
     .fleets {
       input {
         width: 5rem;
       }
     }
   }
+
   border: $border;
+
   fieldset {
     border: $border;
+
     legend {
       margin-left: 1rem;
     }
+
     div {
       margin: 0.5rem;
       display: flex;
       flex-wrap: wrap;
       gap: 0.2rem;
-      span{
+
+      span {
         border: $border;
         border-radius: 0.2rem;
         padding: 0.2rem;
-        &.selected{
+
+        &.selected {
           background-color: $color;
         }
       }
     }
   }
-  .buttons{
+
+  .buttons {
     display: flex;
     gap: 0.5rem;
     flex-direction: row;
     margin-top: 0.5rem;
-    button{
+
+    button {
       padding: 0.2rem;
       border: $border;
       border-radius: 0.2rem;

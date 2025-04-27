@@ -1,13 +1,14 @@
 import { TimeEvent } from "./timeline";
 
-export class ClockWork {
+export class Keeper {
 
-    private static _instance: ClockWork = undefined;
+    private static _instance: Keeper = undefined;
+    lifesign: Date;
     private constructor() {
     };
 
-    static get instance(): ClockWork {
-        return ClockWork._instance || (ClockWork._instance = new ClockWork());
+    static get instance(): Keeper {
+        return Keeper._instance || (Keeper._instance = new Keeper());
     };
 
     initialize(gitVersion) {
@@ -22,14 +23,15 @@ export class ClockWork {
         }
     }
     onMessage(event: MessageEvent) {
-        console.log('got message from backend');
+        console.log('got message from backend', event.data);
+        this.lifesign = new Date();
     };
 
     addEvent(event: CustomEvent) {
-        if(event.detail.time.getTime() > Date.now()){
+        if (event.detail.time.getTime() > Date.now()) {
             navigator.serviceWorker.ready.then((reg: ServiceWorkerRegistration) => {
-                    console.log('posting event',event);
-                 reg.active.postMessage(event.detail);
+                console.log('posting event', event);
+                reg.active.postMessage(event.detail);
             });
         }
     };

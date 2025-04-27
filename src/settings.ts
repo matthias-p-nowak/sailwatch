@@ -1,11 +1,13 @@
+import { dateFmt } from "./datefmt";
 import { DomHook } from "./domhook";
+import { Keeper } from "./keeper";
 
 export class Settings extends DomHook {
   static installPrompt: any;
 
   app: HTMLSpanElement = undefined;
   approw: HTMLDivElement = undefined;
-  clockwork: HTMLSpanElement = undefined;
+  lifesign: HTMLSpanElement = undefined;
   details: HTMLDetailsElement = undefined;
   notifications: HTMLSpanElement = undefined;
 
@@ -27,7 +29,7 @@ export class Settings extends DomHook {
   static setInstallPrompt(event: any) {
     Settings.installPrompt = event;
   }
-  
+
   settings_onclick(ev: MouseEvent) {
     let target = ev.target as HTMLElement;
     if (target == null) {
@@ -41,13 +43,14 @@ export class Settings extends DomHook {
       return;
     }
     this.details.open = false;
+    this.lifesign.innerText = dateFmt("%h:%i:%s", Keeper.instance.lifesign);
   }
 
   app_onclick(ev: MouseEvent) {
     ev.stopPropagation();
-    if(Settings.installPrompt == undefined){
-       this.app.innerText='cannot install';
-       return;
+    if (Settings.installPrompt == undefined) {
+      this.app.innerText = 'cannot install';
+      return;
     }
     Settings.installPrompt.prompt().then((result) => {
       this.app.innerText = result.outcome;

@@ -55,11 +55,6 @@ function sendPing(start: Date) {
             });
         }
     });
-    swgs.registration.showNotification('Background start', {
-        body: 'got a start event from front',
-        icon: 'img/sailwatch-64.png',
-        badge: 'img/sailwatch-192.png',
-    });
 }
 
 /**

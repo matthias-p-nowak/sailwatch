@@ -103,7 +103,12 @@ export class SailwatchDatabase {
    */
   saveEvent(event: CustomEvent) {
     let detail = event.detail;
+    if (detail.source != undefined && detail.source == 'db') {
+      // console.log('got back my own event', detail);
+      return;
+    }
     console.log("saving event", detail);
+    delete detail.source;
     let tx = this.db.transaction(["events"], "readwrite");
     tx.oncomplete = function (ev) {
       console.log("completed save");
@@ -146,6 +151,7 @@ export class SailwatchDatabase {
             resolve(events);
             return;
           }
+          // value.source = 'db';
           events.push(value);
           cursor.continue();
         }
@@ -167,8 +173,8 @@ export class SailwatchDatabase {
     });
   }
 
-  saveFleet(data: { name: string; lastUsed: Date}) {
+  saveFleet(data: { name: string; lastUsed: Date }) {
     let store = this.db.transaction(["fleets"], "readwrite").objectStore("fleets");
-      store.put(data);
+    store.put(data);
   }
 }

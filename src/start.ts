@@ -2,8 +2,9 @@ import { SailwatchDatabase } from "./database";
 import { dateFmt } from "./datefmt";
 import { DomHook } from "./domhook";
 import { sailwatch } from "./sailwatch";
+import { startSequence } from "./sequence";
 import { Sounds } from "./sounds";
-import { TimeLine } from "./timeline";
+import { TimeEvent, TimeLine } from "./timeline";
 
 export class NewStart extends DomHook {
   // #region html elements
@@ -11,19 +12,20 @@ export class NewStart extends DomHook {
   newfleet: HTMLInputElement = undefined;
   othertime: HTMLInputElement = undefined;
   register: HTMLButtonElement = undefined;
-  root: HTMLDialogElement = undefined;
+  dialog: HTMLDialogElement = undefined;
   signal: HTMLSpanElement = undefined;
   times: HTMLDivElement = undefined;
   // #endregion
 
   /** other */
-  currentStart: Date = undefined;
+  currentStart?: Date = undefined;
 
   // #region singleton
   private static _instance: NewStart = undefined;
   private constructor() {
     super();
-    this.hook(document.getElementById("NewStart"));
+    this.dialog = document.getElementById("NewStart") as HTMLDialogElement;
+    this.hook(this.dialog);
     console.log("NewStart initialized", this);
   }
   static get instance(): NewStart {
@@ -61,13 +63,13 @@ export class NewStart extends DomHook {
   }
 
   show() {
-    this.root.showModal();
+    this.dialog.showModal();
   }
   // #endregion
 
   // #region event handlers
   cancel_onclick(ev: MouseEvent) {
-    this.root.close();
+    this.dialog.close();
   }
 
   newfleet_onblur(ev: MouseEvent) {
@@ -135,7 +137,7 @@ export class NewStart extends DomHook {
       .map((ch) => (ch as HTMLElement).innerText);
     let tl = TimeLine.instance;
     tl.submitEvent({ time: this.currentStart, fleets: fleetNames, start: 'planned' });
-    this.root.close();
+    this.dialog.close();
     Sounds.instance.play('triple');
   }
 
@@ -174,9 +176,43 @@ export class NewStart extends DomHook {
 
 export class StartView extends DomHook {
 
-  constructor(root: HTMLElement, data: Object) {
+  starttime: HTMLSpanElement = undefined;
+  fleets: HTMLSpanElement = undefined;
+  nextflag: HTMLSpanElement = undefined;
+
+  data: TimeEvent;
+
+
+  constructor(root: HTMLElement, data: TimeEvent) {
     super();
+    this.data = data;
     this.hook(root);
+    this.render();
+    if (data.time.getTime() > Date.now()) {
+      startSequence.forEach((step) => {
+        let st = new Date(data.time);
+        st.setSeconds(st.getSeconds() - step.time);
+        if (st.getTime() > Date.now()) {
+          setTimeout(this.startStep.bind(this, step), st.getTime() - Date.now());
+        }
+
+      });
+    }
+  }
+
+  startStep(step: any) {
+    console.log('start step', step);
+    if (step.sound) {
+      Sounds.instance.play(step.sound);
+    }
+    if (step.flag) {
+      this.nextflag.innerText = step.flag;
+    }
+  }
+
+  render() {
+    this.starttime.innerText = dateFmt("%h:%i:%s", this.data.time);
+    this.fleets.innerText = this.data.fleets.join(", ");
   }
 
 }

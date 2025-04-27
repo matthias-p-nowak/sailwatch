@@ -21,7 +21,7 @@ audioDataInt=[]
 baseFreq = 660.0
 phase=0.0
 
-volume=1
+volume=125
 
 def appSound(freq1: float, freq2: float,  duration: int):
     global phase
@@ -64,7 +64,10 @@ def appPhrase(s:int, n:int, duration:int):
 #     appSilence(775)
 # appPhrase(5,5,300)
 
-appPhrase(1,1,10)
+appPhrase(1,9,200)
+appPhrase(1,9,200)
+appPhrase(1,9,200)
+
 
 audioData=bytes(audioDataInt)
 sf='sound.wav'
@@ -73,6 +76,6 @@ with wave.open(sf,'wb') as wf:
     wf.setsampwidth(1)
     wf.setframerate(44100)
     wf.writeframes(audioData)
-# subprocess.run(['mpv','--really-quiet',sf])
+subprocess.run(['mpv','--really-quiet',sf])
 
 

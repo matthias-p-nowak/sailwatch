@@ -1,4 +1,4 @@
-import { ClockWork } from "./clockwork";
+import { Keeper } from "./keeper";
 import { Settings } from "./settings";
 
 
@@ -8,6 +8,6 @@ export let mainGitVersion = "currentGitVersion";
 
 (async () => {
   window.addEventListener("beforeinstallprompt", Settings.setInstallPrompt);
-  ClockWork.instance.initialize(mainGitVersion);
+  Keeper.instance.initialize(mainGitVersion);
   import('./sailwatch');
 })();

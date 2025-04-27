@@ -20,16 +20,24 @@ function areDeepEqual(obj1, obj2) {
 /** type of an object with a time field */
 export type TimeEvent = {
   time: Date;
+  source?: string;
+  finish?: string;
+  sailnumber?: string;
+  fleet?: string;
+  fleets?: string[];
+  start?: string;
+  note?: string;
+  focus?: boolean;
 };
 
 /**
  * the global timeline, a restricted history object
  */
 export class TimeLine extends EventTarget {
-  
+
   /** the history */
-  private history: Map<Date, Object> = new Map<Date, Object>();
-  
+  private history: Map<Date, TimeEvent> = new Map<Date, TimeEvent>();
+
   /** the singleton */
   private static _instance: TimeLine = undefined;
   private constructor() {
@@ -38,8 +46,8 @@ export class TimeLine extends EventTarget {
   static get instance(): TimeLine {
     return this._instance || (this._instance = new TimeLine());
   }
-  
-  submitEvent(obj: Object) {
+
+  submitEvent(obj: TimeEvent) {
     let event = obj as TimeEvent;
     let old = this.history.get(event.time);
     this.history.set(event.time, event);
@@ -51,6 +59,7 @@ export class TimeLine extends EventTarget {
     }
     if (old === event || !areDeepEqual(old, event)) {
       console.log("updated...");
+      delete event.source;
       if (Object.keys(event).length == 1) {
         console.log("fired removed");
         this.dispatchEvent(new CustomEvent("removed", { detail: event }));

@@ -1,4 +1,4 @@
-import { ClockWork } from "./clockwork";
+import { Keeper } from "./keeper";
 import { SailwatchDatabase } from "./database";
 import { DomHook } from "./domhook";
 import { NoteView } from "./note";
@@ -38,12 +38,14 @@ export class SailWatch extends DomHook {
     tl.addEventListener("added", db.saveEvent.bind(db));
     tl.addEventListener("updated", db.saveEvent.bind(db));
     tl.addEventListener("removed", db.saveEvent.bind(db));
-    let cw = ClockWork.instance;
+    let cw = Keeper.instance;
     tl.addEventListener('added', cw.addEvent.bind(cw));
 
     await db.ready;
     setTimeout(() => {
-      this.retrieveOldEntries(new Date());
+      let tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      this.retrieveOldEntries(tomorrow);
       SailwatchDatabase.instance.getAllFleets().then((fleets) => {
         fleets.forEach((f) => this.fleets.add(f));
       })
@@ -55,6 +57,7 @@ export class SailWatch extends DomHook {
     let tl = TimeLine.instance;
     let db = SailwatchDatabase.instance;
     db.getEventsBefore(before).then((events) => {
+      console.log("retrieved", events.length, "events before", before);
       events.forEach((e) => tl.submitEvent(e));
     });
   }

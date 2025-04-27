@@ -34,8 +34,8 @@
           <span class="hook_notifications">nothing yet</span>
         </div>
         <div class="row">
-          <span class="right">Clockwork</span>
-          <span class="hook_clockwork">standing still</span>
+          <span class="right">Lifesign</span>
+          <span class="hook_lifesign">unknown</span>
         </div>
         <div class="row hook_approw">
           <span class="right">App</span>
@@ -81,27 +81,23 @@
     </div>
   </dialog>
   <div id="sounds">
-    <audio class="single" src="snd/single.wav" preload="auto"></audio>
-    <audio class="double" src="snd/double.wav" preload="auto"></audio>
-    <audio class="triple" src="snd/triple.wav" preload="auto"></audio>
-    <audio class="short" src="snd/short.wav" preload="auto"></audio>
-    <audio class="long" src="snd/long.wav" preload="auto"></audio>
     <audio class="prep" src="snd/prep.wav" preload="auto"></audio>
+    <audio class="triple" src="snd/high-triple.wav" preload="auto"></audio>
+    <audio class="double" src="snd/middle-double.wav" preload="auto"></audio>
+    <audio class="single" src="snd/low-single.wav" preload="auto"></audio>
+    <audio class="longer" src="snd/longer.wav" preload="auto"></audio>
+    <audio class="attention" src="snd/attention.wav" preload="auto"></audio>
+
   </div>
   <template id="NoteView">
-    <article class="note">      
-        <div class="hook_time">no time recorded</div>
-        <textarea class="hook_text" placeholder="take a note"></textarea>
+    <article class="note">
+      <div class="hook_time">no time recorded</div>
+      <textarea class="hook_text" placeholder="take a note"></textarea>
     </article>
   </template>
   <template id="StartView">
     <article class="start">
       <div class="start_table">
-        <div class="row hook_title">
-          <span></span>
-          <span class="bold">Time</span>
-          <span class="bold">Action</span>
-        </div>
         <div class="row">
           <span>Start at</span>
           <span class="hook_starttime"></span>
@@ -112,15 +108,15 @@
           <span class="hook_duration"></span>
           <span class="hook_nowStamp"></span>
         </div>
-        <div class="row hook_flagrow" >
+        <div class="row hook_flagrow">
           <span>flag in</span>
           <span class="hook_flagtime bold"></span>
-          <span class="hook_nextflag bold">class up</span>
+          <span class="hook_nextflag bold"></span>
         </div>
       </div>
       <div class="hook_imgrow">
         <span class="imgrow">
-          <img class="hook_flagap" src="img/flag_ap.png"  alt"="AP" />
+          <img class="hook_flagap" src="img/flag_ap.png" alt"="AP" />
           <img class="hook_flagx" src="img/flag_x.png" alt="X" />
           <img class="hook_flagrecall" src="img/flag_recall.png" alt="Recall" />
         </span>
