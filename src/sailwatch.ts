@@ -1,8 +1,9 @@
+import { ClockWork } from "./clockwork";
 import { SailwatchDatabase } from "./database";
 import { DomHook } from "./domhook";
 import { NoteView } from "./note";
 import { Settings } from "./settings";
-import { NewStart } from "./start";
+import { NewStart, StartView } from "./start";
 import { TimeEvent, TimeLine } from "./timeline";
 
 /**
@@ -17,7 +18,6 @@ export class SailWatch extends DomHook {
   footer: HTMLDivElement = undefined;
 
   mainDisplay: WeakMap<HTMLElement, Date> = new WeakMap();
-  gitVersion: string;
   fleets: Set<string> = new Set<string>();
 
   constructor() {
@@ -38,6 +38,9 @@ export class SailWatch extends DomHook {
     tl.addEventListener("added", db.saveEvent.bind(db));
     tl.addEventListener("updated", db.saveEvent.bind(db));
     tl.addEventListener("removed", db.saveEvent.bind(db));
+    let cw = ClockWork.instance;
+    tl.addEventListener('added', cw.addEvent.bind(cw));
+
     await db.ready;
     setTimeout(() => {
       this.retrieveOldEntries(new Date());
@@ -75,11 +78,12 @@ export class SailWatch extends DomHook {
       let nd = new NoteView(t, ce.detail);
       this.insert(ce.detail.time, t);
     } else if (ce.detail.start != undefined) {
-      let s=DomHook.fromTemplate("StartView");
+      let s = DomHook.fromTemplate("StartView");
+      let sv = new StartView(s, ce.detail);
       this.insert(ce.detail.time, s);
-    }else if (ce.detail.finish != undefined) {
-      let f=DomHook.fromTemplate("FinishView");
-      this.insert(ce.detail.time, f);    
+    } else if (ce.detail.finish != undefined) {
+      let f = DomHook.fromTemplate("FinishView");
+      this.insert(ce.detail.time, f);
     } else {
       console.log("not a recognized event");
     }

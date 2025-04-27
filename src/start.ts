@@ -131,9 +131,9 @@ export class NewStart extends DomHook {
 
   register_onclick(ev: MouseEvent) {
     let fleetNames = Array.from(this.fleets.children)
-        .filter((ch) => ch.classList.contains("selected"))
-        .map((ch) => (ch as HTMLElement).innerText);
-    let tl=TimeLine.instance;
+      .filter((ch) => ch.classList.contains("selected"))
+      .map((ch) => (ch as HTMLElement).innerText);
+    let tl = TimeLine.instance;
     tl.submitEvent({ time: this.currentStart, fleets: fleetNames, start: 'planned' });
     this.root.close();
     Sounds.instance.play('triple');
@@ -173,9 +173,10 @@ export class NewStart extends DomHook {
 }
 
 export class StartView extends DomHook {
-    
-  constructor(root: HTMLElement, data:Object) {
+
+  constructor(root: HTMLElement, data: Object) {
     super();
     this.hook(root);
   }
+
 }

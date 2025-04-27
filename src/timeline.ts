@@ -43,6 +43,7 @@ export class TimeLine extends EventTarget {
     let event = obj as TimeEvent;
     let old = this.history.get(event.time);
     this.history.set(event.time, event);
+    console.log(`history has ${this.history.size} entries`);
     if (old == undefined) {
       console.log("added new");
       this.dispatchEvent(new CustomEvent("added", { detail: event }));

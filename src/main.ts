@@ -1,4 +1,4 @@
-import { sailwatch } from "./sailwatch";
+import { ClockWork } from "./clockwork";
 import { Settings } from "./settings";
 
 
@@ -7,15 +7,7 @@ export let mainGitVersion = "currentGitVersion";
 
 
 (async () => {
-    window.addEventListener("beforeinstallprompt", Settings.setInstallPrompt);
-  // prompt
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("background.js");
-    console.log("background worker registered");
-    navigator.serviceWorker.ready.then((reg: ServiceWorkerRegistration) => {
-      console.log("background worker is ready");
-      reg.active.postMessage({ gitVersion: mainGitVersion });
-    });
-  }
-  sailwatch.gitVersion=mainGitVersion
+  window.addEventListener("beforeinstallprompt", Settings.setInstallPrompt);
+  ClockWork.instance.initialize(mainGitVersion);
+  import('./sailwatch');
 })();

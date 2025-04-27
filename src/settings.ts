@@ -45,6 +45,10 @@ export class Settings extends DomHook {
 
   app_onclick(ev: MouseEvent) {
     ev.stopPropagation();
+    if(Settings.installPrompt == undefined){
+       this.app.innerText='cannot install';
+       return;
+    }
     Settings.installPrompt.prompt().then((result) => {
       this.app.innerText = result.outcome;
     });
