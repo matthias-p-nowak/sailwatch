@@ -1,4 +1,5 @@
 import { Keeper } from "./keeper";
+import { sailwatch } from "./sailwatch";
 import { Settings } from "./settings";
 
 
@@ -9,5 +10,5 @@ export let mainGitVersion = "currentGitVersion";
 (async () => {
   window.addEventListener("beforeinstallprompt", Settings.setInstallPrompt);
   Keeper.instance.initialize(mainGitVersion);
-  import('./sailwatch');
+  sailwatch.start();
 })();

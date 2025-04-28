@@ -1,4 +1,5 @@
 import { sailwatch } from "./sailwatch";
+import { TimeEvent } from "./timeline";
 
 /**
  * database for SailWatch
@@ -103,8 +104,8 @@ export class SailwatchDatabase {
    */
   saveEvent(event: CustomEvent) {
     let detail = event.detail;
-    if (detail.source != undefined && detail.source == 'db') {
-      // console.log('got back my own event', detail);
+    if (detail.source != undefined && detail.source == "db") {
+      // console.log("got back my own event", detail);
       return;
     }
     console.log("saving event", detail);
@@ -151,8 +152,9 @@ export class SailwatchDatabase {
             resolve(events);
             return;
           }
-          // value.source = 'db';
-          events.push(value);
+          let nv = new Object(value) as TimeEvent;
+          nv.source = "db";
+          events.push(nv);
           cursor.continue();
         }
       };

@@ -15,10 +15,12 @@ export class NewStart extends DomHook {
   dialog: HTMLDialogElement = undefined;
   signal: HTMLSpanElement = undefined;
   times: HTMLDivElement = undefined;
+  cancel: HTMLButtonElement = undefined;
   // #endregion
 
   /** other */
   currentStart?: Date = undefined;
+  changingTime: boolean = false;
 
   // #region singleton
   private static _instance: NewStart = undefined;
@@ -60,6 +62,7 @@ export class NewStart extends DomHook {
       this.fleets.appendChild(span);
     });
     this.fleets.appendChild(this.newfleet);
+    this.cancel.focus();
   }
 
   show() {
@@ -94,6 +97,7 @@ export class NewStart extends DomHook {
     let curr = ev.target as HTMLSpanElement;
     curr.classList.add("selected");
     this.currentStart = new Date(curr.dataset.timeStamp);
+    this.changingTime = false;
     this.checkValidStart();
   }
 
@@ -111,10 +115,15 @@ export class NewStart extends DomHook {
     });
   }
 
+  othertime_oninput(ev: InputEvent) {
+    this.changingTime = true;
+  }
+
   othertime_onblur(ev: MouseEvent) {
     if (this.othertime.value.length < 5) {
       return;
     }
+    if (!this.changingTime) return;
     const [hours, minutes] = this.othertime.value.split(":");
     this.currentStart = new Date();
     this.currentStart.setHours(parseInt(hours));
@@ -136,9 +145,9 @@ export class NewStart extends DomHook {
       .filter((ch) => ch.classList.contains("selected"))
       .map((ch) => (ch as HTMLElement).innerText);
     let tl = TimeLine.instance;
-    tl.submitEvent({ time: this.currentStart, fleets: fleetNames, start: 'planned' });
+    tl.submitEvent({ time: this.currentStart, fleets: fleetNames, start: "planned" });
     this.dialog.close();
-    Sounds.instance.play('triple');
+    Sounds.instance.play("triple");
   }
 
   // #endregion
@@ -171,48 +180,128 @@ export class NewStart extends DomHook {
     this.signal.innerText = timeString;
     this.register.disabled = false;
   }
-
 }
 
 export class StartView extends DomHook {
-
+  // #region elements
   starttime: HTMLSpanElement = undefined;
   fleets: HTMLSpanElement = undefined;
+  duration: HTMLSpanElement = undefined;
+  nowStamp: HTMLSpanElement = undefined;
+  flagtime: HTMLSpanElement = undefined;
   nextflag: HTMLSpanElement = undefined;
+  untilrow: HTMLDivElement = undefined;
+  flagrow: HTMLDivElement = undefined;
+  imgrow: HTMLDivElement = undefined;
+  flagap: HTMLImageElement = undefined;
+  flagx: HTMLImageElement = undefined;
+  flagrecall: HTMLImageElement = undefined;
+  // #endregion
 
   data: TimeEvent;
-
+  static currentStart: Date = undefined;
 
   constructor(root: HTMLElement, data: TimeEvent) {
     super();
     this.data = data;
     this.hook(root);
     this.render();
+
     if (data.time.getTime() > Date.now()) {
       startSequence.forEach((step) => {
         let st = new Date(data.time);
         st.setSeconds(st.getSeconds() - step.time);
         if (st.getTime() > Date.now()) {
-          setTimeout(this.startStep.bind(this, step), st.getTime() - Date.now());
+          setTimeout(this.startStep.bind(this, step, true), st.getTime() - Date.now());
+        } else {
+          setTimeout(this.startStep.bind(this, step, false), 1000 - step.time);
         }
-
       });
+      for (let i = 0; i < 360; ++i) {
+        let t = new Date(data.time);
+        t.setSeconds(t.getSeconds() - i);
+        if (t.getTime() < Date.now()) break;
+        setTimeout(this.timeStep.bind(this, i), t.getTime() - Date.now());
+      }
+      for (let m = 7; ; ++m) {
+        let t = new Date(data.time);
+        t.setMinutes(t.getMinutes() - m);
+        if (t.getTime() < Date.now()) break;
+        setTimeout(this.timeStep.bind(this, m * 60), t.getTime() - Date.now());
+      }
     }
   }
 
-  startStep(step: any) {
-    console.log('start step', step);
-    if (step.sound) {
+  timeStep(before: number) {
+    if (before > 360) {
+      console.log("only minutes");
+      let m = Math.floor(before / 60);
+      this.duration.innerText = m.toString() + " min";
+      this.nowStamp.innerText = "";
+      this.untilrow.hidden = false;
+      return;
+    }
+    if (before > 0) {
+      this.flagrow.hidden = false;
+    }
+    // console.log("with seconds");
+    let dur = new Date();
+    this.nowStamp.innerText = dateFmt("%h:%i:%s", dur);
+    dur.setHours(0);
+    dur.setMinutes(0);
+    dur.setMilliseconds(0);
+    dur.setSeconds(before);
+    this.duration.innerText = dateFmt("%i:%s", dur);
+    let nextSignal = before;
+    if (nextSignal > 300) nextSignal -= 300;
+    else if (nextSignal > 240) nextSignal -= 240;
+    else if (nextSignal > 60) nextSignal -= 60;
+    dur.setMinutes(0);
+    dur.setSeconds(nextSignal);
+    this.flagtime.innerText = dateFmt("%i:%s", dur);
+    if (before < 315) {
+      if (StartView.currentStart != undefined && StartView.currentStart != this.data.time) {
+        if (StartView.currentStart.getTime() > Date.now()) {
+          Array.from(this.root.getElementsByTagName("span")).forEach((ch) => {
+            ch.style.color = "red";
+          });
+        }
+      }
+      StartView.currentStart = this.data.time;
+    }
+  }
+
+  startStep(step: any, play: boolean) {
+    console.log("start step", step);
+    if (step.sound != undefined && play) {
+      console.log("playing " + step.sound);
       Sounds.instance.play(step.sound);
     }
-    if (step.flag) {
+    if (step.flag != undefined) {
       this.nextflag.innerText = step.flag;
+    }
+    if (step.flagrow != undefined) this.flagrow.hidden = !step.flagrow;
+    if (step.ap != undefined) this.flagap.hidden = !step.ap;
+    if (step.xgt != undefined) this.flagx.hidden = this.flagrecall.hidden = !step.xgt;
+    if (step.imgrow != undefined) this.imgrow.hidden = !step.imgrow;
+    if (step.untilrow != undefined) this.untilrow.hidden = !step.untilrow;
+    if (step.attention != undefined) {
+      if (step.attention) {
+        this.root.classList.add("attention");
+      } else {
+        this.root.classList.remove("attention");
+      }
     }
   }
 
   render() {
     this.starttime.innerText = dateFmt("%h:%i:%s", this.data.time);
     this.fleets.innerText = this.data.fleets.join(", ");
+    this.flagap.hidden = true;
+    this.flagx.hidden = true;
+    this.flagrecall.hidden = true;
+    this.imgrow.hidden = true;
+    this.untilrow.hidden = true;
+    this.flagrow.hidden = true;
   }
-
 }

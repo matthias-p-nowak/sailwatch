@@ -61,6 +61,12 @@
       </div>
     </div>
   </footer>
+  <dialog class="hook_hello">
+    <div class="slideshow">
+      <img src="img/sailwatch-512.png" alt="big sailwatch icon" />
+      <img src="img/qr-code.png" alt="qr code" />
+    </div>
+  </dialog>
   <dialog id="NewStart">
     <h3>New start</h3>
     <fieldset>
@@ -87,6 +93,8 @@
     <audio class="single" src="snd/low-single.wav" preload="auto"></audio>
     <audio class="longer" src="snd/longer.wav" preload="auto"></audio>
     <audio class="attention" src="snd/attention.wav" preload="auto"></audio>
+    <audio class="start" src="snd/start.wav" preload="auto"></audio>
+    <audio class="ok" src="snd/ok.wav" preload="auto"></audio>
 
   </div>
   <template id="NoteView">
@@ -103,7 +111,7 @@
           <span class="hook_starttime"></span>
           <span class="hook_fleets"></span>
         </div>
-        <div class="row hook_durationrow">
+        <div class="row hook_untilrow">
           <span>start in</span>
           <span class="hook_duration"></span>
           <span class="hook_nowStamp"></span>

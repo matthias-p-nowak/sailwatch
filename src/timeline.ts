@@ -34,7 +34,6 @@ export type TimeEvent = {
  * the global timeline, a restricted history object
  */
 export class TimeLine extends EventTarget {
-
   /** the history */
   private history: Map<Date, TimeEvent> = new Map<Date, TimeEvent>();
 
@@ -51,9 +50,8 @@ export class TimeLine extends EventTarget {
     let event = obj as TimeEvent;
     let old = this.history.get(event.time);
     this.history.set(event.time, event);
-    console.log(`history has ${this.history.size} entries`);
+    // console.log(`history has ${this.history.size} entries`);
     if (old == undefined) {
-      console.log("added new");
       this.dispatchEvent(new CustomEvent("added", { detail: event }));
       return;
     }
@@ -79,5 +77,10 @@ export class TimeLine extends EventTarget {
     keys.push(dt);
     keys.sort((a, b) => b.getTime() - a.getTime());
     return keys[0];
+  }
+  getStarts(): TimeEvent[] {
+    return Array.from(this.history.keys())
+      .filter((t) => t.getTime() >= Date.now())
+      .map((t) => this.history.get(t));
   }
 }

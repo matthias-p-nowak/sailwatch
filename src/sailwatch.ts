@@ -5,6 +5,7 @@ import { NoteView } from "./note";
 import { Settings } from "./settings";
 import { NewStart, StartView } from "./start";
 import { TimeEvent, TimeLine } from "./timeline";
+import { Sounds } from "./sounds";
 
 /**
  * the global SailWatch instance
@@ -16,6 +17,7 @@ export class SailWatch extends DomHook {
   /** the summary at the top */
   main: HTMLDivElement = undefined;
   footer: HTMLDivElement = undefined;
+  hello: HTMLDialogElement = undefined;
 
   mainDisplay: WeakMap<HTMLElement, Date> = new WeakMap();
   fleets: Set<string> = new Set<string>();
@@ -39,7 +41,7 @@ export class SailWatch extends DomHook {
     tl.addEventListener("updated", db.saveEvent.bind(db));
     tl.addEventListener("removed", db.saveEvent.bind(db));
     let cw = Keeper.instance;
-    tl.addEventListener('added', cw.addEvent.bind(cw));
+    tl.addEventListener("added", cw.addEvent.bind(cw));
 
     await db.ready;
     setTimeout(() => {
@@ -48,7 +50,7 @@ export class SailWatch extends DomHook {
       this.retrieveOldEntries(tomorrow);
       SailwatchDatabase.instance.getAllFleets().then((fleets) => {
         fleets.forEach((f) => this.fleets.add(f));
-      })
+      });
     }, 1);
     this.footer.style.display = "block";
   }
@@ -64,7 +66,7 @@ export class SailWatch extends DomHook {
 
   timelineEvent(ce: CustomEvent) {
     let event = ce.detail as TimeEvent;
-    console.log(event);
+    // console.log(event);
     let found = false;
     Array.from(this.main.children)
       .filter((e: HTMLElement) => this.mainDisplay.get(e) == event.time)
@@ -117,6 +119,19 @@ export class SailWatch extends DomHook {
     }
   }
 
+  async start() {
+    try {
+      await Sounds.instance.play("prep");
+    } catch (e) {
+      this.hello.showModal();
+    }
+  }
+
+  hello_onclick() {
+    this.hello.close();
+    Sounds.instance.play("ok");
+  }
+
   infos_onclick(ev: MouseEvent) {
     let target = ev.target as HTMLElement;
     if (target.tagName == "LI") {
@@ -154,7 +169,7 @@ export class SailWatch extends DomHook {
 
   registerFinish_onclick(ev: MouseEvent) {
     console.log("register finish");
-    TimeLine.instance.submitEvent({ time: new Date(), finish: 'timed' });
+    TimeLine.instance.submitEvent({ time: new Date(), finish: "timed" });
   }
 
   makeTable_onclick(ev: MouseEvent) {

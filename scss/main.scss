@@ -75,7 +75,7 @@ header {
   display: grid;
   grid-template-columns: 1fr [middle-start] clamp(5rem, 80svw, 30rem) [middle-end] 1fr;
 
-  >* {
+  > * {
     grid-column: middle;
     margin-left: auto;
     margin-right: auto;
@@ -97,58 +97,56 @@ header {
       max-height: 20rem;
     }
 
-    .slideshow {
-      position: relative;
-      width: 20rem;
-      height: 20rem;
-
-      img {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        opacity: 0;
-        animation: slidefade 16s infinite;
-
-        &:nth-child(1) {
-          animation-delay: 0s;
-        }
-
-        &:nth-child(2) {
-          animation-delay: 8s;
-        }
-
-      }
-    }
-
     &[open] {
       border: thin solid darkblue;
       border-radius: 0.5rem;
       background-color: white;
       padding: 1rem;
 
-      >summary {
+      > summary {
         display: none;
       }
     }
 
-    >* {
+    > * {
       margin-left: auto;
       margin-right: auto;
     }
   }
 }
 
+.slideshow {
+  position: relative;
+  width: 20rem;
+  height: 20rem;
+
+  img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    animation: slidefade 16s infinite;
+    &:nth-child(1) {
+      animation-delay: 0s;
+    }
+    &:nth-child(2) {
+      animation-delay: 8s;
+    }
+  }
+}
 div:has(> div.row) {
   display: table;
   min-width: 50%;
-
   div.row {
     display: table-row;
+    &[hidden] {
+      display: none;
+    }
 
-    >* {
+    > * {
       display: table-cell;
       border: thin solid #ddd;
       padding: 0.2rem;
@@ -163,10 +161,9 @@ div:has(> div.row) {
 main {
   margin-top: 1rem;
   display: grid;
-  grid-template-columns:
-    1fr [bigger-start] 1fr [middle-start] clamp(5rem, 80svw, 30rem) [middle-end] 1fr [bigger-end] 1fr;
+  grid-template-columns: 1fr [bigger-start] 1fr [middle-start] clamp(5rem, 80svw, 30rem) [middle-end] 1fr [bigger-end] 1fr;
 
-  >article.note {
+  > article.note {
     grid-column: bigger;
 
     textarea {
@@ -185,9 +182,9 @@ main {
     }
   }
 
-  >article.start {
+  > article.start {
     grid-column: middle;
-
+    margin-top: 0.5rem;
     div.start_table {
       margin-left: auto;
       margin-right: auto;
@@ -201,7 +198,14 @@ main {
         font-weight: lighter;
         font-style: italic;
       }
-
+      span:nth-child(2) {
+        text-align: center;
+      }
+    }
+    &.attention {
+      border: 3px solid orange;
+      padding: 1rem;
+      border-radius: 0.5rem;
     }
 
     span.imgrow {
@@ -215,7 +219,7 @@ main {
     }
   }
 
-  >article.finish {
+  > article.finish {
     grid-column: middle;
     margin-left: auto;
     margin-right: auto;
