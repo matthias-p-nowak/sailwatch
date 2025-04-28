@@ -7,7 +7,7 @@ import { Sounds } from "./sounds";
 import { TimeEvent, TimeLine } from "./timeline";
 
 export class NewStart extends DomHook {
-  // #region html elements
+  // #region html
   fleets: HTMLDivElement = undefined;
   newfleet: HTMLInputElement = undefined;
   othertime: HTMLInputElement = undefined;
@@ -28,7 +28,7 @@ export class NewStart extends DomHook {
     super();
     this.dialog = document.getElementById("NewStart") as HTMLDialogElement;
     this.hook(this.dialog);
-    console.log("NewStart initialized", this);
+    // console.log("NewStart initialized", this);
   }
   static get instance(): NewStart {
     return this._instance || (this._instance = new NewStart());
@@ -145,8 +145,8 @@ export class NewStart extends DomHook {
       .filter((ch) => ch.classList.contains("selected"))
       .map((ch) => (ch as HTMLElement).innerText);
     let tl = TimeLine.instance;
-    tl.submitEvent({ time: this.currentStart, fleets: fleetNames, start: "planned" });
     this.dialog.close();
+    tl.submitEvent({ time: this.currentStart, fleets: fleetNames, start: "planned" });
     Sounds.instance.play("triple");
   }
 
@@ -243,6 +243,7 @@ export class StartView extends DomHook {
     }
     if (before > 0) {
       this.flagrow.hidden = false;
+      this.untilrow.hidden = false;
     }
     // console.log("with seconds");
     let dur = new Date();

@@ -6,6 +6,7 @@ import { Settings } from "./settings";
 import { NewStart, StartView } from "./start";
 import { TimeEvent, TimeLine } from "./timeline";
 import { Sounds } from "./sounds";
+import { dateFmt } from "./datefmt";
 
 /**
  * the global SailWatch instance
@@ -97,7 +98,8 @@ export class SailWatch extends DomHook {
   _sortingId: number = 0;
 
   insert(time: Date, elem: HTMLElement) {
-    this.mainDisplay.set(elem, time);
+    console.log("inserting", elem, time);
+    this.mainDisplay.set(elem, new Date(time));
     this.main.appendChild(elem);
     clearTimeout(this._sortingId);
     this._sortingId = setTimeout(this.sortMain.bind(this), 100);
@@ -110,10 +112,14 @@ export class SailWatch extends DomHook {
       return aTime.getTime() - bTime.getTime();
     });
     for (let i = 0; i < desiredOrder.length; i++) {
-      const current = this.main.children[i];
-      const target = desiredOrder[i];
+      const current = this.main.children[i] as HTMLElement;
+      const target = desiredOrder[i] as HTMLElement;
+      target.dataset.sortedTime = dateFmt("%h:%i:%s", this.mainDisplay.get(target));
 
       if (current !== target) {
+        const tt = this.mainDisplay.get(target);
+        const tc = this.mainDisplay.get(current);
+        console.log("sortMain, switching: ", tt, tc);
         this.main.insertBefore(target, current);
       }
     }

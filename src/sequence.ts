@@ -19,6 +19,7 @@ export let startSequence = [
   { time: 16, sound: "prep" },
   { time: 30, flag: "class down" },
   { time: 45, flag: "class down" },
+  { time: 55, flag: "class down" },
   { time: 60, sound: "longer", flag: "" },
   { time: 61, sound: "single", flag: "P down" },
   { time: 62, sound: "single" },
