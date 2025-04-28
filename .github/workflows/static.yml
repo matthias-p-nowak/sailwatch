@@ -41,7 +41,8 @@ jobs:
           npm install esbuild sass typescript
           npx sass scss/main.scss app/main.css --no-source-map
           npx esbuild --bundle src/main.ts src/background.ts --outdir=app
-          sed -i -e "s/currentGitVersion/$(git rev-parse --short HEAD)/" app/main.js app/background.js
+          # sed -i -e "s/currentGitVersion/$(git rev-parse --short HEAD)/" app/main.js app/background.js
+          git rev-parse --short HEAD >app/version
           date
           ls -l app
       - name: Setup Pages
