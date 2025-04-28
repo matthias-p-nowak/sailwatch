@@ -18,6 +18,8 @@ swgs.oninstall = function (event) {
   });
 };
 
+const cachedKeys = new Set<string>();
+
 /**
  * The activate event is triggered when the service worker is activated, which
  * is the moment when all old versions of the service worker have finished up.
@@ -35,6 +37,14 @@ swgs.onactivate = function (event) {
       });
     })
   );
+  swgs.caches.open("sailwatch").then((c) => {
+    c.keys().then((keys) => {
+      keys.forEach((key) => {
+        console.log("cache has url-key", key.url);
+        cachedKeys.add(key.url);
+      });
+    });
+  });
 };
 
 let pingTimes = [0, 1, 5, 16, 60, 66, 70, 240, 246, 250, 300, 306, 315, 336];
@@ -118,7 +128,8 @@ swgs.onmessage = function (event) {
   }
   if (d.gitVersion != undefined) {
     if (d.gitVersion != gitVersion) {
-      console.log(`background worker is updating got ${d.gitVersion} have ${gitVersion}`);
+      console.log(`background worker is updating, got ${d.gitVersion} have ${gitVersion}`);
+      swgs.caches.delete("sailwatch");
       swgs.registration.update().then(() => {
         console.log("background worker update initiated");
       });
@@ -128,12 +139,69 @@ swgs.onmessage = function (event) {
   }
 };
 
-/**
- * Handles requests from the page to fetch resources.
- * TODO: add caching
- * @param event - The event containing the request to be fetched.
- */
-swgs.onfetch = function (event) {
-  console.log("background worker is fetching", event.request.url);
-  event.respondWith(fetch(event.request));
-};
+// /**
+//  * Handles requests from the page to fetch resources.
+//  * @param event - The event containing the request to be fetched.
+//  */
+// swgs.onfetch = function (event) {
+//   //console.log("background worker is fetching", event.request.url);
+//   if (cachedKeys.has(event.request.url)) {
+//     console.log("could server from cache", event.request.url);
+//     // event.respondWith(swgs.caches.match(event.request));
+//     // return;
+//   }
+//   event.waitUntil(
+//     fetch(event.request)
+//       .then((r) => {
+//         if (r.status == 200 && r.type == "basic" && !cachedKeys.has(event.request.url)) {
+//           let clone = r.clone();
+//           swgs.caches.open("sailwatch").then((c) => {
+//             console.log("caching", event.request.url);
+//             c.put(event.request, clone);
+//             cachedKeys.add(event.request.url);
+//           });
+//         } else {
+//           console.log("not caching from request", event.request.url);
+//           swgs.caches.open("sailwatch").then((c) => {
+//             c.add(event.request.url).then(() => {
+//               console.log("caching separately", event.request.url);
+//               cachedKeys.add(event.request.url);
+//             });
+//           });
+//         }
+//         return r;
+//       })
+//       .catch(() => {
+//         return swgs.caches.match(event.request);
+//       })
+//       .catch((e) => {
+//         console.log("failed to serve from cache", e);
+//         throw e;
+//       })
+//   );
+// };
+
+swgs.addEventListener("fetch", (event: FetchEvent) => {
+  event.respondWith(
+    // Here you decide what to respond with
+    caches.match(event.request).then((cachedResponse) => {
+      if (cachedResponse) {
+        return cachedResponse; // Serve from cache if available
+      }
+      return fetch(event.request)
+        .then((networkResponse) => {
+          // Optionally cache the new file
+          return caches.open("sailwave").then((cache) => {
+            cache.put(event.request, networkResponse.clone());
+            return networkResponse;
+          });
+        })
+        .catch(() => {
+          // If offline or failed, you can serve a fallback response
+          return new Response("You are offline.", {
+            headers: { "Content-Type": "text/plain" },
+          });
+        });
+    })
+  );
+});

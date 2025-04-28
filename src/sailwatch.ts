@@ -98,7 +98,7 @@ export class SailWatch extends DomHook {
   _sortingId: number = 0;
 
   insert(time: Date, elem: HTMLElement) {
-    console.log("inserting", elem, time);
+    // console.log("inserting", elem, time);
     this.mainDisplay.set(elem, new Date(time));
     this.main.appendChild(elem);
     clearTimeout(this._sortingId);
@@ -119,7 +119,7 @@ export class SailWatch extends DomHook {
       if (current !== target) {
         const tt = this.mainDisplay.get(target);
         const tc = this.mainDisplay.get(current);
-        console.log("sortMain, switching: ", tt, tc);
+        // console.log("sortMain, switching: ", tt, tc);
         this.main.insertBefore(target, current);
       }
     }
