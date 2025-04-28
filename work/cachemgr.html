@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        navigator.serviceWorker.register('cachemgr.js');
+        fetch('version').then((r) => r.text()).then((t) => {
+            console.log('got version', t);
+            let lastversion = window.localStorage.getItem('version');
+            if (t == 'bypass') {
+                window.caches.delete('tmp');
+                navigator.serviceWorker.ready.then((reg) => {
+                    reg.active.postMessage({ bypass: true });
+                })
+            } else if (lastversion != t) {
+                console.log('new version', t);
+                window.localStorage.setItem('version', t);
+                window.caches.delete('tmp');
+                navigator.serviceWorker.ready.then((reg) => {
+                    reg.active.postMessage({ bypass: false });
+                })
+                window.location.reload();
+            }
+            
+        });
+        console.log('registered');
+    </script>
+</head>
+
+<body>
+    <H1>hello</H1>
+    <div>13</div>
+</body>
+
+</html>

@@ -15,8 +15,11 @@
       "type": "firefox",
       "request": "attach",
       "url": "https://127.0.0.1:5500/app/index.html",
-      //"webRoot": "${workspaceFolder}/app",
       "pathMappings": [
+        {
+          "url": "https://127.0.0.1:4443",
+          "path": "${workspaceFolder}/tmp"
+        },
         {
           "url": "https://127.0.0.1:5500",
           "path": "${workspaceFolder}"
