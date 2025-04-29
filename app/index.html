@@ -34,8 +34,8 @@
           <span class="hook_notifications">nothing yet</span>
         </div>
         <div class="row">
-          <span class="right">Clockwork</span>
-          <span class="hook_clockwork">standing still</span>
+          <span class="right">Lifesign</span>
+          <span class="hook_lifesign">unknown</span>
         </div>
         <div class="row hook_approw">
           <span class="right">App</span>
@@ -61,10 +61,86 @@
       </div>
     </div>
   </footer>
-  <template id="template_NoteDisplay">
-    <article class="note">      
-        <div class="hook_time">no time recorded</div>
-        <textarea class="hook_text" placeholder="take a note"></textarea>
+  <dialog class="hook_hello">
+    <div class="slideshow">
+      <img src="img/sailwatch-512.png" alt="big sailwatch icon" />
+      <img src="img/qr-code.png" alt="qr code" />
+    </div>
+  </dialog>
+  <dialog id="NewStart">
+    <h3>New start</h3>
+    <fieldset>
+      <legend>Start signal at <span class="hook_signal"></span></legend>
+      <div class="hook_times">
+        <input type="time" class="hook_othertime" />
+      </div>
+    </fieldset>
+    <fieldset>
+      <legend>Fleets</legend>
+      <div class="hook_fleets fleets">
+        <input class="hook_newfleet" type="text" placeholder="new fleet" />
+      </div>
+    </fieldset>
+    <div class="buttons">
+      <button class="hook_cancel">Cancel</button>
+      <button class="hook_register" disabled="true">Register start</button>
+    </div>
+  </dialog>
+  <div id="sounds">
+    <audio class="prep" src="snd/prep.wav" preload="auto"></audio>
+    <audio class="triple" src="snd/high-triple.wav" preload="auto"></audio>
+    <audio class="double" src="snd/middle-double.wav" preload="auto"></audio>
+    <audio class="single" src="snd/low-single.wav" preload="auto"></audio>
+    <audio class="longer" src="snd/longer.wav" preload="auto"></audio>
+    <audio class="attention" src="snd/attention.wav" preload="auto"></audio>
+    <audio class="start" src="snd/start.wav" preload="auto"></audio>
+    <audio class="ok" src="snd/ok.wav" preload="auto"></audio>
+
+  </div>
+  <template id="NoteView">
+    <article class="note">
+      <div class="hook_time">no time recorded</div>
+      <textarea class="hook_text" placeholder="take a note"></textarea>
+    </article>
+  </template>
+  <template id="StartView">
+    <article class="start">
+      <div class="start_table">
+        <div class="row">
+          <span>Start at</span>
+          <span class="hook_starttime"></span>
+          <span class="hook_fleets"></span>
+        </div>
+        <div class="row hook_untilrow">
+          <span>start in</span>
+          <span class="hook_duration"></span>
+          <span class="hook_nowStamp"></span>
+        </div>
+        <div class="row hook_flagrow">
+          <span>flag in</span>
+          <span class="hook_flagtime bold"></span>
+          <span class="hook_nextflag bold"></span>
+        </div>
+      </div>
+      <div class="hook_imgrow">
+        <span class="imgrow">
+          <img class="hook_flagap" src="img/flag_ap.png" alt"="AP" />
+          <img class="hook_flagx" src="img/flag_x.png" alt="X" />
+          <img class="hook_flagrecall" src="img/flag_recall.png" alt="Recall" />
+        </span>
+      </div>
+    </article>
+  </template>
+  <template id="FinishView">
+    <article class="finish">
+      <div class="finish_table hook_table">
+        <div class="row">
+          <span class="hook_finishTime"></span>
+          <span class="hook_sailNumber">-sail number-</span>
+          <span class="hook_fleet">-fleet-</span>
+          <span class="hook_sailed"></span>
+        </div>
+      </div>
     </article>
   </template>
 </body>

@@ -21,7 +21,7 @@ audioDataInt=[]
 baseFreq = 660.0
 phase=0.0
 
-volume=1
+volume=125
 
 def appSound(freq1: float, freq2: float,  duration: int):
     global phase
@@ -48,23 +48,20 @@ def appPhrase(s:int, n:int, duration:int):
     appSound(freq1,freq2,duration)
 
 
-# for i in range(5):
-#     appPhrase(2,6,75)
-#     appSilence(925)
-# # appPhrase(7,5,200)
+d=50
+appPhrase(5,5,3*d)
+appSilence(d);
+appPhrase(5,5,3*d)
+appSilence(d);
+appPhrase(5,5,3*d)
+appSilence(3*d);
+appPhrase(5,5,3*d)
+appSilence(d);
+appPhrase(5,5,1*d)
+appSilence(d);
+appPhrase(5,5,3*d)
 
-# for i in range(5):
-#     for j in range(2):
-#         appPhrase(3,6,75)
-#     appSilence(850)
 
-# for i in range(5):
-#     for j in range(3):
-#         appPhrase(4,6,75)
-#     appSilence(775)
-# appPhrase(5,5,300)
-
-appPhrase(1,1,10)
 
 audioData=bytes(audioDataInt)
 sf='sound.wav'

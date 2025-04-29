@@ -3,7 +3,7 @@ import { sailwatch } from "./sailwatch";
 export class SailwatchDatabase {
   static _instance: SailwatchDatabase;
   ready: Promise<any>;
-  db: IDBDatabase = undefined;
+  db: IDBDatabase = undefined!;
 
   private constructor() {
     let thisOne = this;
@@ -65,12 +65,13 @@ export class SailwatchDatabase {
           store = db.createObjectStore(name, value.options);
         } catch (e) {
           sailwatch.addError(e);
+          throw new Error(e);
         }
       } else {
         let updateTarget=ev.target as IDBRequest;
-        store = updateTarget.transaction.objectStore(name);
+        store = updateTarget.transaction!.objectStore(name);
       }
-      let indexes = value.indexes;
+      let indexes = value.indexes as {name:string,keyPath:string,options?:IDBIndexParameters}[];
       let indexNames = Array.from(store.indexNames);
       let removeIndexes = indexNames.filter((name) => !indexes.find((index) => index.name == name));
       removeIndexes.forEach((name) => store.deleteIndex(name));

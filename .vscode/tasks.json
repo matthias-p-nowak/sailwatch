@@ -1,68 +1,69 @@
 {
-	"version": "2.0.0",
-	"tasks": [
-		{
-			"label": "compile css",
-			"type": "shell",
-			"command": "sass",
-			"args": [
-				"-w",
-				"scss/main.scss",
-				"app/main.css"
-			],
-			"problemMatcher": [],
-			"presentation": {
-				"echo": true,
-				"reveal": "always",
-				"focus": false,
-				"panel": "shared",
-				"showReuseMessage": true,
-				"clear": false
-			},
-			"isBackground": true
-		},
-		{
-			"label": "compile js",
-			"type": "shell",
-			"command": "esbuild",
-			"args": [
-				"--bundle",
-				"src/main.ts",
-				"src/background.ts",
-				"--outdir=app",
-				"--sourcemap",
-				"--watch"
-			],
-			"problemMatcher": [
-				"$tsc-watch"
-			],
-			"isBackground": true
-		},
-		{
-			"label": "all tasks",
-			"dependsOn": [
-				"compile css",
-				"compile js",
-			],
-			"dependsOrder": "parallel",
-			"problemMatcher": [],
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			}
-		},
-		{
-			"label": "firefox-devel",
-			"type": "shell",
-			"command": "firefox",
-			"args": [
-				"-P",
-				"devel",
-				"https://127.0.0.1:5500/",
-				"--start-debugger-server"
-			],
-			"problemMatcher": [],
-			"isBackground": true,
-		},
-	]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "compile css",
+      "type": "shell",
+      "command": "sass",
+      "args": ["-w", "scss/main.scss", "app/main.css"],
+      "problemMatcher": [],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "isBackground": true
+    },
+    {
+      "label": "compile js",
+      "type": "shell",
+      "command": "esbuild",
+      "args": [
+        "--bundle",
+        "src/main.ts",
+        "src/background.ts",
+        "--outdir=app",
+        "--sourcemap",
+        "--watch"
+      ],
+      "problemMatcher": ["$tsc-watch"],
+      "isBackground": true
+    },
+    {
+      "label": "all tasks",
+      "dependsOn": ["compile css", "compile js"],
+      "dependsOrder": "parallel",
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "firefox-devel",
+      "type": "shell",
+      "command": "firefox",
+      "args": ["-P", "devel", "https://127.0.0.1:5500/", "--start-debugger-server"],
+      "problemMatcher": [],
+      "isBackground": true
+    },
+    {
+      "label": "bypass cache",
+      "type": "shell",
+      "command": "echo",
+      "args": ["bypass", ">", "app/version"],
+      "problemMatcher": [],
+      "presentation": {
+        "echo": true,
+        "reveal": "never",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "clear": false
+      }
+    }
+  ]
 }

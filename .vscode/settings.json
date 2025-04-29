@@ -4,5 +4,5 @@
     "path": "C:\\Windows\\System32\\cmd.exe"
   },
   "editor.formatOnSave": true,
-  "liveServer.settings.wait": 1000
+  "liveServer.settings.wait": 1000,
 }

@@ -2,3 +2,4 @@ tmp/
 app/*js
 app/*css
 app/**/*map
+app/version
