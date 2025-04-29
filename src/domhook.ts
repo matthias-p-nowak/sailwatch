@@ -2,7 +2,7 @@
  * DomHook is used to hook DOM elements to functions and members
  */
 export class DomHook {
-  root: HTMLDivElement;
+  root: HTMLElement;
   /**
    * provides a list of member functions that contain '_on'
    * @param obj class object
@@ -28,7 +28,7 @@ export class DomHook {
    * and assign any undefined values to their respective queried elements
    */
   hook(root: HTMLElement) {
-    this.root=root;
+    this.root = root;
     // hooking properties
     Object.entries(this).forEach(([key, value], idx) => {
       // console.log(`got ${idx}: key=${key} value=${value}`);

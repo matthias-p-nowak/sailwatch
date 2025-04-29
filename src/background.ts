@@ -15,8 +15,6 @@ swgs.oninstall = function (event) {
   });
 };
 
-const cachedKeys = new Set<string>();
-
 /**
  * The activate event is triggered when the service worker is activated, which
  * is the moment when all old versions of the service worker have finished up.
@@ -37,22 +35,22 @@ swgs.onactivate = function (event) {
 };
 
 let pingTimes = [0, 1, 5, 16, 60, 66, 70, 240, 246, 250, 300, 306, 315, 336];
-let starts: Set<Date> = new Set();
-let pinging: Map<Date, number> = new Map();
+let starts: Set<number> = new Set();
+let pinging: Map<number, number> = new Map();
 
 /**
  * send a ping to all clients and show a notification if no clients are present
- * @param start the start time to check for
+ * @param starttime the start time to check for
  */
-function sendPing(start: Date) {
-  if (!starts.has(start)) {
+function sendPing(starttime: number) {
+  if (!starts.has(starttime)) {
     return;
   }
   console.log("sending ping");
   swgs.clients.matchAll().then((clients) => {
     let numberOfClients = 0;
     clients.forEach((client) => {
-      client.postMessage({ ping: start });
+      client.postMessage({ ping: starttime });
       numberOfClients++;
     });
     if (numberOfClients == 0) {
@@ -93,21 +91,22 @@ swgs.onmessage = function (event) {
   let d = event.data;
   if (d.start != undefined) {
     console.log("got start event");
-    let start = d.time;
-    starts.add(start);
+    let start: Date = d.time;
+    starts.add(start.getTime());
     pingTimes.forEach((t) => {
-      let pt = new Date(start);
+      let pt = new Date(start.getTime());
       pt.setSeconds(pt.getSeconds() - t);
-      if (pinging.has(pt)) {
-        this.clearTimeout(pinging.get(pt));
+      const pingTime = pt.getTime();
+      if (pinging.has(pingTime)) {
+        this.clearTimeout(pinging.get(pingTime));
       }
       let delay = pt.getTime() - Date.now();
       if (delay > 0) {
         // console.log(`will send ping in ${delay} ms`);
-        pinging.set(pt, setTimeout(sendPing, delay, start));
+        pinging.set(pingTime, setTimeout(sendPing, delay, start));
       }
     });
-    let st2rem = Array.from(starts).filter((st) => st.getTime() < Date.now());
+    let st2rem = Array.from(starts).filter((st) => st < Date.now());
     st2rem.forEach((st) => starts.delete(st));
     return;
   }

@@ -19,7 +19,7 @@ function areDeepEqual(obj1, obj2) {
 
 /** type of an object with a time field */
 export type TimeEvent = {
-  time: Date;
+  time: number;
   source?: string;
   finish?: string;
   sailnumber?: string;
@@ -35,7 +35,7 @@ export type TimeEvent = {
  */
 export class TimeLine extends EventTarget {
   /** the history */
-  private history: Map<Date, TimeEvent> = new Map<Date, TimeEvent>();
+  private history: Map<number, TimeEvent> = new Map();
 
   /** the singleton */
   private static _instance: TimeLine = undefined;
@@ -72,15 +72,17 @@ export class TimeLine extends EventTarget {
       return;
     }
   }
-  getLatestEvent(dt: Date): Date {
+  getLatestEvent(dt: number): number {
     let keys = Array.from(this.history.keys());
     keys.push(dt);
-    keys.sort((a, b) => b.getTime() - a.getTime());
+    // keys.sort((a, b) => b.getTime() - a.getTime());
+    keys.sort();
     return keys[0];
   }
+
   getStarts(): TimeEvent[] {
     return Array.from(this.history.keys())
-      .filter((t) => t.getTime() >= Date.now())
+      .filter((t) => t >= Date.now())
       .map((t) => this.history.get(t));
   }
 }

@@ -20,7 +20,7 @@ export class SailWatch extends DomHook {
   footer: HTMLDivElement = undefined;
   hello: HTMLDialogElement = undefined;
 
-  mainDisplay: WeakMap<HTMLElement, Date> = new WeakMap();
+  mainDisplay: WeakMap<HTMLElement, number> = new WeakMap();
   fleets: Set<string> = new Set<string>();
 
   constructor() {
@@ -97,9 +97,9 @@ export class SailWatch extends DomHook {
 
   _sortingId: number = 0;
 
-  insert(time: Date, elem: HTMLElement) {
+  insert(time: number, elem: HTMLElement) {
     // console.log("inserting", elem, time);
-    this.mainDisplay.set(elem, new Date(time));
+    this.mainDisplay.set(elem, time);
     this.main.appendChild(elem);
     clearTimeout(this._sortingId);
     this._sortingId = setTimeout(this.sortMain.bind(this), 100);
@@ -109,12 +109,12 @@ export class SailWatch extends DomHook {
     const desiredOrder = Array.from(this.main.children).sort((a, b) => {
       const aTime = this.mainDisplay.get(a as HTMLElement);
       const bTime = this.mainDisplay.get(b as HTMLElement);
-      return aTime.getTime() - bTime.getTime();
+      return aTime - bTime;
     });
     for (let i = 0; i < desiredOrder.length; i++) {
       const current = this.main.children[i] as HTMLElement;
       const target = desiredOrder[i] as HTMLElement;
-      target.dataset.sortedTime = dateFmt("%h:%i:%s", this.mainDisplay.get(target));
+      target.dataset.sortedTime = dateFmt("%h:%i:%s", new Date(this.mainDisplay.get(target)));
 
       if (current !== target) {
         const tt = this.mainDisplay.get(target);
@@ -163,7 +163,7 @@ export class SailWatch extends DomHook {
 
   takeNote_onclick(ev: MouseEvent) {
     sailwatch.addInfo("taking a note");
-    TimeLine.instance.submitEvent({ time: new Date(), note: "", focus: true });
+    TimeLine.instance.submitEvent({ time: Date.now(), note: "", focus: true });
   }
 
   newStart_onclick(ev: MouseEvent) {
@@ -175,7 +175,7 @@ export class SailWatch extends DomHook {
 
   registerFinish_onclick(ev: MouseEvent) {
     console.log("register finish");
-    TimeLine.instance.submitEvent({ time: new Date(), finish: "timed" });
+    TimeLine.instance.submitEvent({ time: Date.now(), finish: "timed" });
   }
 
   makeTable_onclick(ev: MouseEvent) {

@@ -40,7 +40,7 @@ export class NewStart extends DomHook {
     this.times.replaceChildren();
     this.fleets.replaceChildren();
     let tl = TimeLine.instance;
-    let latest = tl.getLatestEvent(new Date());
+    let latest = new Date(tl.getLatestEvent(Date.now()));
     latest.setSeconds(latest.getSeconds() + 330);
     latest.setSeconds(latest.getSeconds() - (latest.getSeconds() % 15));
     latest.setMilliseconds(0);
@@ -146,7 +146,7 @@ export class NewStart extends DomHook {
       .map((ch) => (ch as HTMLElement).innerText);
     let tl = TimeLine.instance;
     this.dialog.close();
-    tl.submitEvent({ time: this.currentStart, fleets: fleetNames, start: "planned" });
+    tl.submitEvent({ time: this.currentStart.getTime(), fleets: fleetNames, start: "planned" });
     Sounds.instance.play("triple");
   }
 
@@ -207,7 +207,7 @@ export class StartView extends DomHook {
     this.hook(root);
     this.render();
 
-    if (data.time.getTime() > Date.now()) {
+    if (data.time > Date.now()) {
       startSequence.forEach((step) => {
         let st = new Date(data.time);
         st.setSeconds(st.getSeconds() - step.time);
@@ -261,14 +261,17 @@ export class StartView extends DomHook {
     dur.setSeconds(nextSignal);
     this.flagtime.innerText = dateFmt("%i:%s", dur);
     if (before < 315) {
-      if (StartView.currentStart != undefined && StartView.currentStart != this.data.time) {
+      if (
+        StartView.currentStart != undefined &&
+        StartView.currentStart.getTime() != this.data.time
+      ) {
         if (StartView.currentStart.getTime() > Date.now()) {
           Array.from(this.root.getElementsByTagName("span")).forEach((ch) => {
             ch.style.color = "red";
           });
         }
       }
-      StartView.currentStart = this.data.time;
+      StartView.currentStart = new Date(this.data.time);
     }
   }
 
@@ -296,7 +299,7 @@ export class StartView extends DomHook {
   }
 
   render() {
-    this.starttime.innerText = dateFmt("%h:%i:%s", this.data.time);
+    this.starttime.innerText = dateFmt("%h:%i:%s", new Date(this.data.time));
     this.fleets.innerText = this.data.fleets.join(", ");
     this.flagap.hidden = true;
     this.flagx.hidden = true;

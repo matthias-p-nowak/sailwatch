@@ -2,7 +2,7 @@ import { dateFmt } from "./datefmt";
 import { DomHook } from "./domhook";
 import { TimeLine } from "./timeline";
 
-type Note = { time: Date; note: string; focus: boolean };
+type Note = { time: number; note: string; focus: boolean };
 
 export class NoteView extends DomHook {
   data: Note;
@@ -21,20 +21,20 @@ export class NoteView extends DomHook {
   }
 
   update(ev: CustomEvent) {
-    let note=ev.detail as Note;
+    let note = ev.detail as Note;
     console.log("note update by event");
     this.data.time = note.time;
-    if(note.note != undefined){
+    if (note.note != undefined) {
       this.data.note = note.note;
       this.render();
-    }else{
+    } else {
       console.log("removing note from display");
       this.root.remove();
     }
   }
 
   render() {
-    this.time.innerText = dateFmt("%h:%i:%s", this.data.time);
+    this.time.innerText = dateFmt("%h:%i:%s", new Date(this.data.time));
     this.text.value = this.data.note;
     if (this.data.focus) {
       setTimeout(() => {
