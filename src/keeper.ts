@@ -10,15 +10,38 @@ export class Keeper {
     return Keeper._instance || (Keeper._instance = new Keeper());
   }
 
-  initialize(gitVersion) {
+  initialize() {
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("background.js");
       console.log("background worker registered");
+      navigator.serviceWorker.addEventListener("message", this.onMessage.bind(this));
+      fetch("version")
+        .then((r) => r.text())
+        .then((t) => {
+          t = t.trim();
+          console.log("got version", t);
+          let lastversion = window.localStorage.getItem("version");
+          if (t == "bypass") {
+            window.caches.delete("sailwatch");
+            navigator.serviceWorker.ready.then((reg) => {
+              console.log("informing background worker to bypass");
+              reg.active.postMessage({ bypass: true });
+            });
+          } else if (lastversion != t) {
+            console.log("new version", t);
+            window.localStorage.setItem("version", t);
+            window.caches.delete("sailwatch");
+            navigator.serviceWorker.ready.then((reg: ServiceWorkerRegistration) => {
+              console.log("informing background worker to reload and not bypass");
+              reg.active.postMessage({ bypass: false });
+            });
+            window.location.reload();
+          }
+        });
+
       navigator.serviceWorker.ready.then((reg: ServiceWorkerRegistration) => {
         console.log("background worker is ready");
-        reg.active.postMessage({ gitVersion: gitVersion });
       });
-      navigator.serviceWorker.addEventListener("message", this.onMessage.bind(this));
     }
   }
   onMessage(event: MessageEvent) {
