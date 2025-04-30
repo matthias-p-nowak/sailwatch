@@ -32,7 +32,7 @@ export class SailwatchDatabase {
         thisOne.dbUpgrade(ev, db);
       };
     });
-    sailwatch.addInfo("database instantiated");
+    // sailwatch.addInfo("database instantiated");
   }
 
   /**
@@ -103,9 +103,8 @@ export class SailwatchDatabase {
    * @param detail
    */
   saveEvent(event: CustomEvent) {
-    let detail = event.detail;
+    let detail = structuredClone(event.detail);
     if (detail.source != undefined && detail.source == "db") {
-      // console.log("got back my own event", detail);
       return;
     }
     console.log("saving event", detail);
@@ -129,7 +128,7 @@ export class SailwatchDatabase {
     return new Promise<any[]>((resolve, reject) => {
       let beforeDate = new Date(timeStamp);
       console.log("getting events before", beforeDate);
-      let events = [];
+      let events: TimeEvent[] = [];
       let store = this.db.transaction(["events"], "readonly").objectStore("events");
       let range = IDBKeyRange.upperBound(beforeDate, true);
       let request = store.openCursor(range, "prev");
@@ -141,17 +140,20 @@ export class SailwatchDatabase {
           return;
         } else {
           let value = cursor.value;
-          let timeStamp = value.time as Date;
+          let timeStamp = new Date(value.time);
           if (prevDate == undefined) {
             prevDate = timeStamp;
           } else if (
-            prevDate.getDay() != beforeDate.getDay() ||
-            prevDate.getMonth() != beforeDate.getMonth() ||
-            prevDate.getFullYear() != beforeDate.getFullYear()
+            prevDate.getDay() != timeStamp.getDay() ||
+            prevDate.getMonth() != timeStamp.getMonth() ||
+            prevDate.getFullYear() != timeStamp.getFullYear()
           ) {
             console.log("got another day");
             resolve(events);
             return;
+          }
+          if (value.time instanceof Date) {
+            value.time = timeStamp.getTime();
           }
           let nv = new Object(value) as TimeEvent;
           nv.source = "db";

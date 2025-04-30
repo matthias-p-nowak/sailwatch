@@ -7,6 +7,7 @@ import { NewStart, StartView } from "./start";
 import { TimeEvent, TimeLine } from "./timeline";
 import { Sounds } from "./sounds";
 import { dateFmt } from "./datefmt";
+import { FinishView } from "./finish";
 
 /**
  * the global SailWatch instance
@@ -89,6 +90,7 @@ export class SailWatch extends DomHook {
       this.insert(ce.detail.time, s);
     } else if (ce.detail.finish != undefined) {
       let f = DomHook.fromTemplate("FinishView");
+      let fv = new FinishView(f, ce.detail);
       this.insert(ce.detail.time, f);
     } else {
       console.log("not a recognized event");

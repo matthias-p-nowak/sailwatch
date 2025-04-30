@@ -75,8 +75,8 @@ export class TimeLine extends EventTarget {
   getLatestEvent(dt: number): number {
     let keys = Array.from(this.history.keys());
     keys.push(dt);
-    // keys.sort((a, b) => b.getTime() - a.getTime());
-    keys.sort();
+    // keys.sort();
+    keys.sort((a, b) => b - a);
     return keys[0];
   }
 
