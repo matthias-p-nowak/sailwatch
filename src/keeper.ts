@@ -59,7 +59,7 @@ export class Keeper {
   }
 
   addEvent(event: CustomEvent) {
-    if (event.detail.time.getTime() > Date.now()) {
+    if (event.detail.time > Date.now()) {
       navigator.serviceWorker.ready.then((reg: ServiceWorkerRegistration) => {
         console.log("posting event", event);
         reg.active.postMessage(event.detail);

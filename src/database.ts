@@ -125,12 +125,13 @@ export class SailwatchDatabase {
     }
   }
 
-  async getEventsBefore(timeStamp: Date) {
+  async getEventsBefore(timeStamp: number) {
     return new Promise<any[]>((resolve, reject) => {
-      console.log("getting events before", timeStamp);
+      let beforeDate = new Date(timeStamp);
+      console.log("getting events before", beforeDate);
       let events = [];
       let store = this.db.transaction(["events"], "readonly").objectStore("events");
-      let range = IDBKeyRange.upperBound(timeStamp, true);
+      let range = IDBKeyRange.upperBound(beforeDate, true);
       let request = store.openCursor(range, "prev");
       let prevDate: Date = undefined;
       request.onsuccess = function (ev) {
@@ -144,9 +145,9 @@ export class SailwatchDatabase {
           if (prevDate == undefined) {
             prevDate = timeStamp;
           } else if (
-            prevDate.getDay() != timeStamp.getDay() ||
-            prevDate.getMonth() != timeStamp.getMonth() ||
-            prevDate.getFullYear() != timeStamp.getFullYear()
+            prevDate.getDay() != beforeDate.getDay() ||
+            prevDate.getMonth() != beforeDate.getMonth() ||
+            prevDate.getFullYear() != beforeDate.getFullYear()
           ) {
             console.log("got another day");
             resolve(events);
