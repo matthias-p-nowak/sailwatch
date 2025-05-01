@@ -110,6 +110,9 @@ swgs.onmessage = function (event) {
     st2rem.forEach((st) => starts.delete(st));
     return;
   }
+  if (d.ping != undefined) {
+    event.source.postMessage({ pong: d.ping });
+  }
   if (event.data.bypass != undefined) {
     console.log("got bypass message", event.data.bypass);
     bypass = event.data.bypass;

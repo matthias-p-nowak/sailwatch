@@ -43,7 +43,10 @@ export class Settings extends DomHook {
       return;
     }
     this.details.open = false;
-    this.lifesign.innerText = dateFmt("%h:%i:%s", Keeper.instance.lifesign);
+    const lifesign = Keeper.instance.lifesign;
+    if (lifesign != undefined) {
+      this.lifesign.innerText = dateFmt("%h:%i:%s", lifesign);
+    }
   }
 
   app_onclick(ev: MouseEvent) {

@@ -13,7 +13,7 @@ export class SailwatchDatabase {
     let thisOne = this;
     this.ready = new Promise((resolve, reject) => {
       // ***** Name and version *****
-      const openRequest = window.indexedDB.open("sailwatch.db", 1);
+      const openRequest = window.indexedDB.open("sailwatch.db", 2);
       openRequest.onsuccess = function (ev) {
         thisOne.db = openRequest.result;
         resolve(openRequest.result);
@@ -53,6 +53,12 @@ export class SailwatchDatabase {
       indexes: [],
     },
     fleets: {
+      options: {
+        keyPath: "name",
+      },
+      indexes: [],
+    },
+    boats: {
       options: {
         keyPath: "name",
       },

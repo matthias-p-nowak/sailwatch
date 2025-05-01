@@ -4,7 +4,7 @@ import { TimeLine } from "./timeline";
 export class Keeper {
   private static _instance: Keeper = undefined;
   lifesign: Date;
-  private constructor() {}
+  private constructor() { }
 
   static get instance(): Keeper {
     return Keeper._instance || (Keeper._instance = new Keeper());
@@ -41,18 +41,13 @@ export class Keeper {
 
       navigator.serviceWorker.ready.then((reg: ServiceWorkerRegistration) => {
         console.log("background worker is ready");
+        reg.active.postMessage({ ping: true });
       });
     }
   }
   onMessage(event: MessageEvent) {
     console.log("got message from backend", event.data);
     this.lifesign = new Date();
-    if (event.data.starts != undefined) {
-      navigator.serviceWorker.ready.then((reg: ServiceWorkerRegistration) => {
-        let tl = TimeLine.instance;
-        tl.getStarts().forEach((e) => reg.active.postMessage(e));
-      });
-    }
     if (event.data.info != undefined) {
       sailwatch.addInfo(event.data.info);
     }

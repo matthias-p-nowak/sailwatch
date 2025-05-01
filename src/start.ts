@@ -143,6 +143,7 @@ export class NewStart extends DomHook {
   register_onclick(ev: MouseEvent) {
     let fleetNames = Array.from(this.fleets.children)
       .filter((ch) => ch.classList.contains("selected"))
+      .filter((ch) => (ch as HTMLSpanElement).innerText.trim().length > 0)
       .map((ch) => (ch as HTMLElement).innerText);
     let tl = TimeLine.instance;
     this.dialog.close();
@@ -196,6 +197,7 @@ export class StartView extends DomHook {
   flagap: HTMLImageElement = undefined;
   flagx: HTMLImageElement = undefined;
   flagrecall: HTMLImageElement = undefined;
+
   // #endregion
 
   data: TimeEvent;
@@ -230,6 +232,22 @@ export class StartView extends DomHook {
         setTimeout(this.timeStep.bind(this, m * 60), t.getTime() - Date.now());
       }
     }
+  }
+
+  table_onclick(ev: MouseEvent) {
+    sailwatch.addInfo("start table click");
+  }
+
+  flagap_onclick(ev: MouseEvent) {
+    console.log("flag ap clicked");
+  }
+
+  flagx_onclick(ev: MouseEvent) {
+    console.log("flag x clicked");
+  }
+
+  flagrecall_onclick(ev: MouseEvent) {
+    console.log("flag recall clicked");
   }
 
   timeStep(before: number) {
@@ -276,9 +294,9 @@ export class StartView extends DomHook {
   }
 
   startStep(step: any, play: boolean) {
-    console.log("start step", step);
+    // console.log("start step", step);
     if (step.sound != undefined && play) {
-      console.log("playing " + step.sound);
+      // console.log("playing " + step.sound);
       Sounds.instance.play(step.sound);
     }
     if (step.flag != undefined) {

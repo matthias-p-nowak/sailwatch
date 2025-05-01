@@ -34,6 +34,7 @@ export type TimeEvent = {
  * the global timeline, a restricted history object
  */
 export class TimeLine extends EventTarget {
+
   /** the history */
   private history: Map<number, TimeEvent> = new Map();
 
@@ -84,5 +85,15 @@ export class TimeLine extends EventTarget {
     return Array.from(this.history.keys())
       .filter((t) => t >= Date.now())
       .map((t) => this.history.get(t));
+  }
+
+  getNextFinish(got: TimeEvent): TimeEvent {
+    let nf: TimeEvent = undefined;
+    this.history.forEach((event) => {
+      if (event.time <= got.time) return;
+      if (event.finish == undefined) return;
+      if (nf == undefined || nf.time > event.time) nf = event;
+    });
+    return nf;
   }
 }

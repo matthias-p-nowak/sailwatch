@@ -86,6 +86,23 @@
       <button class="hook_register" disabled="true">Register start</button>
     </div>
   </dialog>
+  <dialog id="EditFinish">
+    <div>
+      <label for="sailnumber" class="hook_finished">Finished</label>
+      <input type="number" name="sailnumber" class="hook_sailnumber" placeholder="sailnumber" />
+    </div>
+    <div class="hook_fleet spanbuttons"></div>
+    <fieldset class="proposal">
+      <legend>found</legend>
+      <div class="hook_proposals">
+      </div>
+    </fieldset>
+    <div class="buttons">
+      <button class="hook_cancel">Cancel</button>
+      <button class="hook_save">Save</button>
+      <button class="hook_next">Save and next</button>
+    </div>
+  </dialog>
   <div id="sounds">
     <audio class="prep" src="snd/prep.wav" preload="auto"></audio>
     <audio class="triple" src="snd/high-triple.wav" preload="auto"></audio>
@@ -105,7 +122,7 @@
   </template>
   <template id="StartView">
     <article class="start">
-      <div class="start_table">
+      <div class="start_table hook_table">
         <div class="row">
           <span>Start at</span>
           <span class="hook_starttime"></span>

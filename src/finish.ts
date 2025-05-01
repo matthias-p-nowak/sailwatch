@@ -1,7 +1,7 @@
 import { dateFmt } from "./datefmt";
 import { DomHook } from "./domhook";
 import { sailwatch } from "./sailwatch";
-import { TimeEvent } from "./timeline";
+import { TimeEvent, TimeLine } from "./timeline";
 
 export class FinishView extends DomHook {
   data: TimeEvent;
@@ -19,10 +19,17 @@ export class FinishView extends DomHook {
     this.hook(root);
     this.data = event;
     this.render();
+    root.addEventListener('update', this.update.bind(this));
   }
 
   table_onclick(ev: MouseEvent) {
-    sailwatch.addInfo("editing finish time");
+
+    let efv = new EditFinishView(this.data);
+  }
+
+  update(ev: CustomEvent) {
+    this.data = ev.detail as TimeEvent;
+    this.render();
   }
 
   render() {
@@ -42,5 +49,73 @@ export class FinishView extends DomHook {
     } else {
       this.sailed.innerText = "sailed";
     }
+  }
+}
+
+class EditFinishView extends DomHook {
+  finished: HTMLLabelElement = undefined;
+  fleet: HTMLDivElement = undefined;
+  dialog: HTMLDialogElement = undefined;
+  cancel: HTMLButtonElement = undefined;
+  save: HTMLButtonElement = undefined;
+  next: HTMLButtonElement = undefined;
+  sailnumber: HTMLInputElement = undefined;
+
+  data: TimeEvent;
+  constructor(data: TimeEvent) {
+    super();
+    this.dialog = document.getElementById("EditFinish") as HTMLDialogElement;
+    this.data = data;
+    this.hook(this.dialog);
+    this.render();
+    this.dialog.showModal();
+  }
+
+  cancel_onclick(ev: MouseEvent) {
+    this.dialog.close();
+  }
+  save_onclick(ev: MouseEvent) {
+    this.saveData();
+    this.dialog.close();
+  }
+  next_onclick(ev: MouseEvent) {
+    this.saveData();
+    this.dialog.close();
+    let nf = TimeLine.instance.getNextFinish(this.data);
+    if (nf == undefined || nf == null) return;
+    new EditFinishView(nf);
+  }
+
+  fleet_onclick(ev: MouseEvent) {
+    let t = ev.target as HTMLSpanElement;
+    if (t.tagName == "SPAN") {
+      Array.from(this.fleet.children).forEach((ch) => {
+        ch.classList.remove("selected");
+      })
+      t.classList.toggle("selected");
+    }
+  }
+
+  render() {
+    this.finished.innerText = dateFmt("%h:%i:%s", new Date(this.data.time));
+    this.fleet.replaceChildren();
+    sailwatch.fleets.forEach((fl) => {
+      let flspan = document.createElement("span");
+      flspan.innerText = fl;
+      if (fl == this.data.fleet)
+        flspan.classList.add("selected");
+      this.fleet.appendChild(flspan);
+    });
+  }
+
+
+  saveData() {
+    let fleet = Array.from(this.fleet.children)
+      .filter((ch) => ch.classList.contains("selected"))
+      .map((ch) => (ch as HTMLElement).innerText);
+    if (fleet.length > 0)
+      this.data.fleet = fleet[0];
+    this.data.sailnumber = this.sailnumber.value;
+    TimeLine.instance.submitEvent(this.data);
   }
 }

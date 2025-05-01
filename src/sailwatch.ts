@@ -51,7 +51,7 @@ export class SailWatch extends DomHook {
       tomorrow.setDate(tomorrow.getDate() + 1);
       this.retrieveOldEntries(tomorrow.getTime());
       SailwatchDatabase.instance.getAllFleets().then((fleets) => {
-        fleets.forEach((f) => this.fleets.add(f));
+        fleets.filter((f) => f.length > 0).forEach((f) => this.fleets.add(f));
       });
     }, 1);
     this.footer.style.display = "block";
