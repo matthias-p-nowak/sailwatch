@@ -97,7 +97,12 @@ class EditFinishView extends DomHook {
   }
 
   render() {
+    console.log('editing finish', this.data);
     this.finished.innerText = dateFmt("%h:%i:%s", new Date(this.data.time));
+    if (this.data.sailnumber != undefined)
+      this.sailnumber.value = this.data.sailnumber;
+    else
+      this.sailnumber.value = "";
     this.fleet.replaceChildren();
     sailwatch.fleets.forEach((fl) => {
       let flspan = document.createElement("span");

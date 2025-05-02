@@ -28,12 +28,14 @@ export type TimeEvent = {
   start?: string;
   note?: string;
   focus?: boolean;
+  showDate?: boolean;
 };
 
 /**
  * the global timeline, a restricted history object
  */
 export class TimeLine extends EventTarget {
+
 
   /** the history */
   private history: Map<number, TimeEvent> = new Map();
@@ -78,6 +80,13 @@ export class TimeLine extends EventTarget {
     keys.push(dt);
     // keys.sort();
     keys.sort((a, b) => b - a);
+    return keys[0];
+  }
+
+  getFirstEvent() {
+    let keys = Array.from(this.history.keys());
+    keys.push(Date.now());
+    keys.sort((a, b) => a - b);
     return keys[0];
   }
 

@@ -140,6 +140,16 @@ header {
   }
 }
 
+.earlier {
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  border: thin solid green;
+  border-radius: 0.5rem;
+}
+
 div:has(> div.row) {
   display: table;
   min-width: 50%;
@@ -167,6 +177,14 @@ main {
   margin-top: 1rem;
   display: grid;
   grid-template-columns: 1fr [bigger-start] 1fr [middle-start] clamp(5rem, 80svw, 30rem) [middle-end] 1fr [bigger-end] 1fr;
+
+  >h2 {
+    grid-column: middle;
+    // margin-left: auto;
+    margin-right: auto;
+    margin-top: 1rem;
+
+  }
 
   >article.note {
     grid-column: bigger;

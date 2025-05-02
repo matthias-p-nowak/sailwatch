@@ -21,6 +21,8 @@ export class SailWatch extends DomHook {
   footer: HTMLDivElement = undefined;
   hello: HTMLDialogElement = undefined;
 
+
+  /** maps the children of main to the times */
   mainDisplay: WeakMap<HTMLElement, number> = new WeakMap();
   fleets: Set<string> = new Set<string>();
 
@@ -54,7 +56,23 @@ export class SailWatch extends DomHook {
         fleets.filter((f) => f.length > 0).forEach((f) => this.fleets.add(f));
       });
     }, 1);
+    setTimeout(this.addDates.bind(this), 200);
     this.footer.style.display = "block";
+  }
+
+  addDates() {
+    let haveTimes = Array.from(this.main.children)
+      .map((ch: HTMLElement) => this.mainDisplay.get(ch));
+    let needTimes = new Set(haveTimes.map((t) => {
+      let dt = new Date(t);
+      dt.setHours(0, 0, 0, 0);
+      return dt.getTime();
+    }));
+    let tl = TimeLine.instance;
+    needTimes.forEach((t) => {
+      if (haveTimes.includes(t)) return;
+      tl.submitEvent({ time: t, showDate: true });
+    });
   }
 
   retrieveOldEntries(before: number) {
@@ -62,6 +80,7 @@ export class SailWatch extends DomHook {
     let db = SailwatchDatabase.instance;
     db.getEventsBefore(before).then((events) => {
       console.log("retrieved", events.length, "events before", before);
+      console.log(events);
       events.forEach((e) => tl.submitEvent(e));
     });
   }
@@ -92,6 +111,10 @@ export class SailWatch extends DomHook {
       let f = DomHook.fromTemplate("FinishView");
       let fv = new FinishView(f, ce.detail);
       this.insert(ce.detail.time, f);
+    } else if (ce.detail.showDate != undefined) {
+      let dh = document.createElement('h2');
+      dh.innerText = dateFmt("%y-%m-%d", new Date(ce.detail.time));
+      this.insert(ce.detail.time, dh);
     } else {
       console.log("not a recognized event");
     }
@@ -173,6 +196,14 @@ export class SailWatch extends DomHook {
     let ns = NewStart.instance;
     ns.initializeNewStart();
     ns.show();
+  }
+
+  earlier_onclick(ev: MouseEvent) {
+    let fe = TimeLine.instance.getFirstEvent();
+    let dd = new Date(fe);
+    console.log("earlier", fe, dd);
+    this.retrieveOldEntries(fe);
+    setTimeout(this.addDates.bind(this), 200);
   }
 
   registerFinish_onclick(ev: MouseEvent) {

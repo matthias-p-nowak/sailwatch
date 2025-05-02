@@ -136,7 +136,7 @@ export class SailwatchDatabase {
       console.log("getting events before", beforeDate);
       let events: TimeEvent[] = [];
       let store = this.db.transaction(["events"], "readonly").objectStore("events");
-      let range = IDBKeyRange.upperBound(beforeDate, true);
+      let range = IDBKeyRange.upperBound(timeStamp, true);
       let request = store.openCursor(range, "prev");
       let prevDate: Date = undefined;
       request.onsuccess = function (ev) {
