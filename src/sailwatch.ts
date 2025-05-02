@@ -3,10 +3,11 @@ import { SailwatchDatabase } from "./database";
 import { DomHook } from "./domhook";
 import { NoteView } from "./note";
 import { Settings } from "./settings";
-import { NewStart, StartView } from "./start";
-import { TimeEvent, TimeLine } from "./timeline";
+import { NewStart, StartRow, StartTable, StartView } from "./start";
+import { TimeEvent, TimeLine, waitFor } from "./timeline";
 import { Sounds } from "./sounds";
 import { dateFmt } from "./datefmt";
+import { FinishRow, FinishTable, FinishView } from "./finish";
 
 /**
  * the global SailWatch instance
@@ -20,7 +21,8 @@ export class SailWatch extends DomHook {
   footer: HTMLDivElement = undefined;
   hello: HTMLDialogElement = undefined;
 
-  mainDisplay: WeakMap<HTMLElement, number> = new WeakMap();
+
+  /** maps the children of main to the times */
   fleets: Set<string> = new Set<string>();
 
   constructor() {
@@ -29,7 +31,7 @@ export class SailWatch extends DomHook {
     setTimeout(() => {
       this.initialize();
     }, 1);
-    console.log("SailWatch instantiated");
+    // console.log("SailWatch instantiated");
   }
 
   private async initialize() {
@@ -48,19 +50,36 @@ export class SailWatch extends DomHook {
     setTimeout(() => {
       let tomorrow = new Date();
       tomorrow.setDate(tomorrow.getDate() + 1);
-      this.retrieveOldEntries(tomorrow);
+      this.retrieveOldEntries(tomorrow.getTime());
       SailwatchDatabase.instance.getAllFleets().then((fleets) => {
-        fleets.forEach((f) => this.fleets.add(f));
+        fleets.filter((f) => f.length > 0).forEach((f) => this.fleets.add(f));
       });
     }, 1);
+    setTimeout(this.addDates.bind(this), 200);
     this.footer.style.display = "block";
   }
 
-  retrieveOldEntries(before: Date) {
+  addDates() {
+    let haveTimes = Array.from(this.main.children)
+      .map((ch: HTMLElement) => Number(ch.dataset.sortedTime));
+    let needTimes = new Set(haveTimes.map((t) => {
+      let dt = new Date(t);
+      dt.setHours(0, 0, 0, 0);
+      return dt.getTime();
+    }));
+    let tl = TimeLine.instance;
+    needTimes.forEach((t) => {
+      if (haveTimes.includes(t)) return;
+      tl.submitEvent({ time: t, showDate: true });
+    });
+  }
+
+  retrieveOldEntries(before: number) {
     let tl = TimeLine.instance;
     let db = SailwatchDatabase.instance;
     db.getEventsBefore(before).then((events) => {
-      console.log("retrieved", events.length, "events before", before);
+      // console.log("retrieved", events.length, "events before", before);
+      // console.log(events);
       events.forEach((e) => tl.submitEvent(e));
     });
   }
@@ -69,13 +88,14 @@ export class SailWatch extends DomHook {
     let event = ce.detail as TimeEvent;
     // console.log(event);
     let found = false;
-    Array.from(this.main.children)
-      .filter((e: HTMLElement) => this.mainDisplay.get(e) == event.time)
-      .forEach((e: HTMLElement) => {
-        console.log("updating a displayed main event");
-        e.dispatchEvent(new CustomEvent("update", { detail: event }));
-        found = true;
-      });
+    let foundEvents = Array.from(this.main.children)
+      .filter((e: HTMLElement) => { return Number(e.dataset.sortedTime) == event.time; });
+    // console.log('found events=', foundEvents);
+    foundEvents.forEach((e: HTMLElement) => {
+      console.log("updating a displayed main event");
+      e.dispatchEvent(new CustomEvent("update", { detail: event }));
+      found = true;
+    });
     if (found) {
       return;
     }
@@ -89,7 +109,12 @@ export class SailWatch extends DomHook {
       this.insert(ce.detail.time, s);
     } else if (ce.detail.finish != undefined) {
       let f = DomHook.fromTemplate("FinishView");
+      let fv = new FinishView(f, ce.detail);
       this.insert(ce.detail.time, f);
+    } else if (ce.detail.showDate != undefined) {
+      let dh = document.createElement('h2');
+      dh.innerText = dateFmt("%y-%m-%d", new Date(ce.detail.time));
+      this.insert(ce.detail.time, dh);
     } else {
       console.log("not a recognized event");
     }
@@ -99,7 +124,8 @@ export class SailWatch extends DomHook {
 
   insert(time: number, elem: HTMLElement) {
     // console.log("inserting", elem, time);
-    this.mainDisplay.set(elem, time);
+    elem.dataset.displayTime = dateFmt("%h:%i:%s", new Date(time));
+    elem.dataset.sortedTime = time.toString();
     this.main.appendChild(elem);
     clearTimeout(this._sortingId);
     this._sortingId = setTimeout(this.sortMain.bind(this), 100);
@@ -107,19 +133,14 @@ export class SailWatch extends DomHook {
 
   sortMain() {
     const desiredOrder = Array.from(this.main.children).sort((a, b) => {
-      const aTime = this.mainDisplay.get(a as HTMLElement);
-      const bTime = this.mainDisplay.get(b as HTMLElement);
+      const aTime = Number((a as HTMLElement).dataset.sortedTime);
+      const bTime = Number((b as HTMLElement).dataset.sortedTime);
       return aTime - bTime;
     });
     for (let i = 0; i < desiredOrder.length; i++) {
       const current = this.main.children[i] as HTMLElement;
       const target = desiredOrder[i] as HTMLElement;
-      target.dataset.sortedTime = dateFmt("%h:%i:%s", new Date(this.mainDisplay.get(target)));
-
       if (current !== target) {
-        const tt = this.mainDisplay.get(target);
-        const tc = this.mainDisplay.get(current);
-        // console.log("sortMain, switching: ", tt, tc);
         this.main.insertBefore(target, current);
       }
     }
@@ -169,8 +190,15 @@ export class SailWatch extends DomHook {
   newStart_onclick(ev: MouseEvent) {
     console.log("new start");
     let ns = NewStart.instance;
-    ns.initializeNewStart();
-    ns.show();
+    ns.show(null);
+  }
+
+  earlier_onclick(ev: MouseEvent) {
+    let fe = TimeLine.instance.getFirstEvent();
+    let dd = new Date(fe);
+    console.log("earlier", fe, dd);
+    this.retrieveOldEntries(fe);
+    setTimeout(this.addDates.bind(this), 200);
   }
 
   registerFinish_onclick(ev: MouseEvent) {
@@ -179,7 +207,49 @@ export class SailWatch extends DomHook {
   }
 
   makeTable_onclick(ev: MouseEvent) {
-    console.log("make table");
+    this.turnEventsIntoTables();
+
+  };
+
+  async turnEventsIntoTables() {
+    let kids = Array.from(this.main.children);
+    let tl = TimeLine.instance;
+    let lastTable = 'none';
+    let lastStarts: StartTable;
+    let lastFinishes: FinishTable;
+    for (let k of kids) {
+      let ch = k as HTMLElement;
+      // console.log('scrolling for', ch.dataset.displayTime);
+      ch.scrollIntoView({ behavior: "smooth", block: "center" });
+      let time = Number(ch.dataset.sortedTime);
+      let ev = tl.getEvent(time);
+      if (ev.start != undefined) {
+        if (lastTable != 'start') {
+          lastTable = 'start';
+          lastStarts = new StartTable();
+          lastStarts.root.dataset.displayTime = ch.dataset.displayTime;
+          lastStarts.root.dataset.sortedTime = ch.dataset.sortedTime;
+          this.main.insertBefore(lastStarts.root, ch);
+        }
+        let s = new StartRow(ev);
+        lastStarts.starts.appendChild(s.root);
+        ch.remove();
+      } else if (ev.finish != undefined) {
+        if (lastTable != 'finish') {
+          lastTable = 'finish';
+          lastFinishes = new FinishTable();
+          lastFinishes.root.dataset.displayTime = ch.dataset.displayTime;
+          lastFinishes.root.dataset.sortedTime = ch.dataset.sortedTime;
+          this.main.insertBefore(lastFinishes.root, ch);
+        }
+        let f = new FinishRow(ev);
+        lastFinishes.finishes.appendChild(f.root);
+        ch.remove();
+      } else {
+        lastTable = 'none';
+      }
+      await waitFor(5);
+    };
   }
 
   // #region notifications

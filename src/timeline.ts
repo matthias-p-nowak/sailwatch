@@ -28,12 +28,15 @@ export type TimeEvent = {
   start?: string;
   note?: string;
   focus?: boolean;
+  showDate?: boolean;
 };
 
 /**
  * the global timeline, a restricted history object
  */
 export class TimeLine extends EventTarget {
+
+
   /** the history */
   private history: Map<number, TimeEvent> = new Map();
 
@@ -52,21 +55,24 @@ export class TimeLine extends EventTarget {
     this.history.set(event.time, event);
     // console.log(`history has ${this.history.size} entries`);
     if (old == undefined) {
+      // console.log("fire added");
       this.dispatchEvent(new CustomEvent("added", { detail: event }));
       return;
     }
-    if (old === event || !areDeepEqual(old, event)) {
+
+    if (event.source == 'edit' || !areDeepEqual(old, event)) {
+      delete event.source;
       console.log("updated...");
       delete event.source;
       if (Object.keys(event).length == 1) {
-        console.log("fired removed");
+        console.log("fire removed");
         this.dispatchEvent(new CustomEvent("removed", { detail: event }));
         setTimeout(() => {
           console.log("deleting something from timeline");
           this.history.delete(event.time);
         }, 30_000);
       } else {
-        console.log("fired updated");
+        console.log("fire updated");
         this.dispatchEvent(new CustomEvent("updated", { detail: event }));
       }
       return;
@@ -75,8 +81,15 @@ export class TimeLine extends EventTarget {
   getLatestEvent(dt: number): number {
     let keys = Array.from(this.history.keys());
     keys.push(dt);
-    // keys.sort((a, b) => b.getTime() - a.getTime());
-    keys.sort();
+    // keys.sort();
+    keys.sort((a, b) => b - a);
+    return keys[0];
+  }
+
+  getFirstEvent() {
+    let keys = Array.from(this.history.keys());
+    keys.push(Date.now());
+    keys.sort((a, b) => a - b);
     return keys[0];
   }
 
@@ -85,4 +98,35 @@ export class TimeLine extends EventTarget {
       .filter((t) => t >= Date.now())
       .map((t) => this.history.get(t));
   }
+
+  getNextFinish(got: TimeEvent): TimeEvent {
+    let nf: TimeEvent = undefined;
+    this.history.forEach((event) => {
+      if (event.time <= got.time) return;
+      if (event.finish == undefined) return;
+      if (nf == undefined || nf.time > event.time) nf = event;
+    });
+    return nf;
+  }
+
+  getEvent(time: number) {
+    return this.history.get(time);
+  }
+
+  getRelatedStart(time: number, fleet: string): TimeEvent {
+    let lastStart: TimeEvent = undefined;
+    for(let ev of this.history.values()) {
+      if(ev.fleets == undefined) continue;
+      if(ev.start =='aborted') continue;
+      if(!ev.fleets.includes(fleet)) continue;
+      if(ev.time > time) continue;
+      if(lastStart == undefined || lastStart.time < ev.time) lastStart = ev;
+    }
+    return lastStart;
+  }
+
 }
+
+export async function waitFor(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+} 

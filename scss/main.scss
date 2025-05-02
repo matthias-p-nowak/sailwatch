@@ -4,20 +4,28 @@ html {
   font-size: 5mm;
 }
 
+.noheight {
+  background-color: aqua;
+  overflow: visible;
+  height: 0rem;
+  position: sticky;
+  top: 1rem;
+}
+
 .notifications {
   width: fit-content;
   margin-left: auto;
   margin-right: auto;
   // border: thin solid orange;
-  top: 0.5rem;
+  top: 1rem;
   border-radius: 0.5rem;
+  position: sticky;
   display: none;
 
   &:has(li) {
-    box-shadow: 0 0 5rem 5rem rgba(255, 198, 134, 0.268);
+    box-shadow: 0 0 1rem 1rem rgba(255, 198, 134, 0.268);
     padding-left: 1rem;
     padding-right: 1rem;
-    position: sticky;
     top: 1rem;
     display: block;
     background-color: white;
@@ -28,7 +36,7 @@ html {
     color: blue;
 
     li {
-      animation: shrinkDown 3s ease 10s 1 forwards;
+      animation: shrinkDown 3s linear 10s 1 forwards;
     }
   }
 
@@ -75,7 +83,7 @@ header {
   display: grid;
   grid-template-columns: 1fr [middle-start] clamp(5rem, 80svw, 30rem) [middle-end] 1fr;
 
-  > * {
+  >* {
     grid-column: middle;
     margin-left: auto;
     margin-right: auto;
@@ -103,12 +111,12 @@ header {
       background-color: white;
       padding: 1rem;
 
-      > summary {
+      >summary {
         display: none;
       }
     }
 
-    > * {
+    >* {
       margin-left: auto;
       margin-right: auto;
     }
@@ -129,24 +137,39 @@ header {
     object-fit: cover;
     opacity: 0;
     animation: slidefade 16s infinite;
+
     &:nth-child(1) {
       animation-delay: 0s;
     }
+
     &:nth-child(2) {
       animation-delay: 8s;
     }
   }
 }
+
+.earlier {
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  border: thin solid green;
+  border-radius: 0.5rem;
+}
+
 div:has(> div.row) {
   display: table;
   min-width: 50%;
+
   div.row {
     display: table-row;
+
     &[hidden] {
       display: none;
     }
 
-    > * {
+    >* {
       display: table-cell;
       border: thin solid #ddd;
       padding: 0.2rem;
@@ -163,7 +186,15 @@ main {
   display: grid;
   grid-template-columns: 1fr [bigger-start] 1fr [middle-start] clamp(5rem, 80svw, 30rem) [middle-end] 1fr [bigger-end] 1fr;
 
-  > article.note {
+  >h2 {
+    grid-column: middle;
+    // margin-left: auto;
+    margin-right: auto;
+    margin-top: 1rem;
+
+  }
+
+  >article.note {
     grid-column: bigger;
 
     textarea {
@@ -174,7 +205,7 @@ main {
       padding: 0.5rem;
       border-radius: 0.5rem;
       outline: none;
-      border: thin solid rgb(232, 232, 232);
+      border: thin solid rgba(104, 255, 116, 0.212);
     }
 
     .saving {
@@ -182,12 +213,15 @@ main {
     }
   }
 
-  > article.start {
+  >article.start {
     grid-column: middle;
     margin-top: 0.5rem;
+
     div.start_table {
       margin-left: auto;
       margin-right: auto;
+      border: thin solid orange;
+      border-radius: 0.2rem;
 
       .bold {
         font-weight: bolder;
@@ -198,10 +232,12 @@ main {
         font-weight: lighter;
         font-style: italic;
       }
+
       span:nth-child(2) {
         text-align: center;
       }
     }
+
     &.attention {
       border: 3px solid orange;
       padding: 1rem;
@@ -219,11 +255,78 @@ main {
     }
   }
 
-  > article.finish {
+  >article.finish {
     grid-column: middle;
     margin-left: auto;
     margin-right: auto;
+
+    .finish_table {
+      margin: 0.2rem;
+      border: thin solid blue;
+      border-radius: 0.2rem;
+    }
   }
+
+  >article.SumStarts {
+    grid-column: middle;
+    margin-left: auto;
+    margin-right: auto;
+
+    fieldset {
+      border: thin solid orange;
+      border-radius: 0.2rem;
+      padding: 0.5rem;
+
+      legend {
+        margin-left: 1rem;
+      }
+
+      .bold {
+        font-weight: bolder;
+      }
+
+      .row {
+        :nth-child(1) {
+          text-align: right;
+        }
+
+        :nth-child(2) {
+          text-align: center;
+        }
+      }
+    }
+  }
+
+  >article.SumFinish {
+    grid-column: middle;
+    margin-left: auto;
+    margin-right: auto;
+
+    fieldset {
+      border: thin solid blue;
+      border-radius: 0.2rem;
+      padding: 0.5rem;
+
+      legend {
+        margin-left: 1rem;
+      }
+
+      .bold {
+        font-weight: bolder;
+      }
+
+      .row {
+        span {
+          text-align: center;
+        }
+
+        :nth-child(1) {
+          text-align: right;
+        }
+      }
+    }
+  }
+
 }
 
 footer {
@@ -260,24 +363,78 @@ dialog {
   margin: auto;
   border-radius: 1rem;
   padding: 1rem;
-  $color: lightblue;
-  $border: thin solid $color;
 
   &#NewStart {
-    $border: thin solid rgb(250, 225, 178);
     $color: rgb(250, 225, 178);
+    $border: thin solid $color;
+    border: $border;
 
     .fleets {
       input {
         width: 5rem;
       }
     }
+
+    fieldset,
+    span,
+    button {
+      border: $border;
+    }
+
+    span.selected {
+      background-color: $color;
+    }
   }
 
-  border: $border;
+  &#EditFinish {
+    $color: rgb(94, 65, 255);
+    $border: thin solid $color;
+    border: $border;
+
+    label {
+      margin-right: 0.5rem;
+    }
+
+    fieldset,
+    span,
+    button {
+      border: $border;
+    }
+
+    span.selected {
+      background-color: $color;
+    }
+
+    fieldset {
+      display: none;
+
+      &:has(span) {
+        display: block;
+      }
+    }
+  }
+
+
+
+  div.spanbuttons {
+    margin: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.2rem;
+
+    span {
+      // border: $border;
+      border-radius: 0.2rem;
+      padding: 0.2rem;
+
+      &.selected {
+        background-color: green;
+      }
+    }
+  }
 
   fieldset {
-    border: $border;
+    border-radius: 0.2rem;
 
     legend {
       margin-left: 1rem;
@@ -290,12 +447,11 @@ dialog {
       gap: 0.2rem;
 
       span {
-        border: $border;
         border-radius: 0.2rem;
         padding: 0.2rem;
 
         &.selected {
-          background-color: $color;
+          background-color: green;
         }
       }
     }
@@ -309,7 +465,7 @@ dialog {
 
     button {
       padding: 0.2rem;
-      border: $border;
+      // border: $border;
       border-radius: 0.2rem;
     }
   }

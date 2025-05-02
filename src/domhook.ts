@@ -62,6 +62,12 @@ export class DomHook {
     }
     let cloned =
       template.content.firstElementChild?.cloneNode(true) || template.content.cloneNode(true);
-    return cloned as HTMLElement;
+    let content = cloned as HTMLElement;
+    // Array.from(content.childNodes).forEach((node) => {
+    //   if (node.nodeType === Node.TEXT_NODE && !node.nodeValue.trim()) {
+    //     node.remove();
+    //   }
+    // });
+    return content as HTMLElement;
   }
 }

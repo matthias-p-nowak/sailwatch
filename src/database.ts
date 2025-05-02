@@ -13,7 +13,7 @@ export class SailwatchDatabase {
     let thisOne = this;
     this.ready = new Promise((resolve, reject) => {
       // ***** Name and version *****
-      const openRequest = window.indexedDB.open("sailwatch.db", 1);
+      const openRequest = window.indexedDB.open("sailwatch.db", 2);
       openRequest.onsuccess = function (ev) {
         thisOne.db = openRequest.result;
         resolve(openRequest.result);
@@ -32,7 +32,7 @@ export class SailwatchDatabase {
         thisOne.dbUpgrade(ev, db);
       };
     });
-    sailwatch.addInfo("database instantiated");
+    // sailwatch.addInfo("database instantiated");
   }
 
   /**
@@ -53,6 +53,12 @@ export class SailwatchDatabase {
       indexes: [],
     },
     fleets: {
+      options: {
+        keyPath: "name",
+      },
+      indexes: [],
+    },
+    boats: {
       options: {
         keyPath: "name",
       },
@@ -103,12 +109,11 @@ export class SailwatchDatabase {
    * @param detail
    */
   saveEvent(event: CustomEvent) {
-    let detail = event.detail;
+    let detail = structuredClone(event.detail);
     if (detail.source != undefined && detail.source == "db") {
-      // console.log("got back my own event", detail);
       return;
     }
-    console.log("saving event", detail);
+    // console.log("saving event", detail);
     delete detail.source;
     let tx = this.db.transaction(["events"], "readwrite");
     tx.oncomplete = function (ev) {
@@ -119,16 +124,18 @@ export class SailwatchDatabase {
     };
     let store = tx.objectStore("events");
     if (event.type == "removed") {
+      console.log("deleting from database");
       store.delete(detail.time);
     } else {
       store.put(detail);
     }
   }
 
-  async getEventsBefore(timeStamp: Date) {
+  async getEventsBefore(timeStamp: number) {
     return new Promise<any[]>((resolve, reject) => {
-      console.log("getting events before", timeStamp);
-      let events = [];
+      let beforeDate = new Date(timeStamp);
+      console.log("getting events before", beforeDate);
+      let events: TimeEvent[] = [];
       let store = this.db.transaction(["events"], "readonly").objectStore("events");
       let range = IDBKeyRange.upperBound(timeStamp, true);
       let request = store.openCursor(range, "prev");
@@ -140,7 +147,7 @@ export class SailwatchDatabase {
           return;
         } else {
           let value = cursor.value;
-          let timeStamp = value.time as Date;
+          let timeStamp = new Date(value.time);
           if (prevDate == undefined) {
             prevDate = timeStamp;
           } else if (
@@ -148,9 +155,12 @@ export class SailwatchDatabase {
             prevDate.getMonth() != timeStamp.getMonth() ||
             prevDate.getFullYear() != timeStamp.getFullYear()
           ) {
-            console.log("got another day");
+            // console.log("got another day");
             resolve(events);
             return;
+          }
+          if (value.time instanceof Date) {
+            value.time = timeStamp.getTime();
           }
           let nv = new Object(value) as TimeEvent;
           nv.source = "db";

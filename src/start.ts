@@ -28,7 +28,6 @@ export class NewStart extends DomHook {
     super();
     this.dialog = document.getElementById("NewStart") as HTMLDialogElement;
     this.hook(this.dialog);
-    // console.log("NewStart initialized", this);
   }
   static get instance(): NewStart {
     return this._instance || (this._instance = new NewStart());
@@ -65,7 +64,31 @@ export class NewStart extends DomHook {
     this.cancel.focus();
   }
 
-  show() {
+  show(te: TimeEvent | null) {
+    this.initializeNewStart();
+    if (te) {
+      let startTimeStamp = new Date(te.time).toISOString();
+      let found = false;
+      Array.from(this.times.children).forEach((ch) => {
+        if ((ch as HTMLElement).dataset.timeStamp == startTimeStamp) {
+          ch.classList.add("selected");
+          found = true;
+        }
+      });
+      if (!found) {
+        let span = document.createElement("span");
+        span.innerText = dateFmt("%h:%i:%s", new Date(te.time));
+        span.dataset.timeStamp = startTimeStamp;
+        span.classList.add("selected");
+        this.times.appendChild(span);
+      }
+      Array.from(this.fleets.children).forEach((ch) => {
+        let st = (ch as HTMLElement).innerText;
+        if (te.fleets.includes(st)) {
+          ch.classList.add("selected");
+        }
+      })
+    }
     this.dialog.showModal();
   }
   // #endregion
@@ -143,9 +166,10 @@ export class NewStart extends DomHook {
   register_onclick(ev: MouseEvent) {
     let fleetNames = Array.from(this.fleets.children)
       .filter((ch) => ch.classList.contains("selected"))
+      .filter((ch) => (ch as HTMLSpanElement).innerText.trim().length > 0)
       .map((ch) => (ch as HTMLElement).innerText);
-    let tl = TimeLine.instance;
     this.dialog.close();
+    let tl = TimeLine.instance;
     tl.submitEvent({ time: this.currentStart.getTime(), fleets: fleetNames, start: "planned" });
     Sounds.instance.play("triple");
   }
@@ -196,6 +220,7 @@ export class StartView extends DomHook {
   flagap: HTMLImageElement = undefined;
   flagx: HTMLImageElement = undefined;
   flagrecall: HTMLImageElement = undefined;
+
   // #endregion
 
   data: TimeEvent;
@@ -206,8 +231,8 @@ export class StartView extends DomHook {
     this.data = data;
     this.hook(root);
     this.render();
-
-    if (data.time > Date.now()) {
+    this.root.addEventListener("update", this.update.bind(this));
+    if (data.time > Date.now() && data.start == "planned") {
       startSequence.forEach((step) => {
         let st = new Date(data.time);
         st.setSeconds(st.getSeconds() - step.time);
@@ -230,9 +255,60 @@ export class StartView extends DomHook {
         setTimeout(this.timeStep.bind(this, m * 60), t.getTime() - Date.now());
       }
     }
+
+  }
+
+  update(ce: CustomEvent) {
+    console.log("start update by event", ce.detail);
+    this.data = ce.detail as TimeEvent;
+    if (this.data.start == "aborted") {
+      this.root.remove();
+      return;
+    }
+    this.render();
+  }
+
+  table_onclick(ev: MouseEvent) {
+    if (this.data.time <= Date.now())
+      return;
+    NewStart.instance.show(this.data);
+    let tl = TimeLine.instance;
+    tl.submitEvent({ time: this.data.time });
+    this.root.remove();
+  }
+
+  flagap_onclick(ev: MouseEvent) {
+    let tl = TimeLine.instance;
+    this.data.start = "aborted";
+    this.data.source = 'edit';
+    tl.submitEvent(this.data);
+    let msg = 'aborted start: ' + dateFmt("%h:%i:%s", new Date(this.data.time)) + ', fleet ' + this.data.fleets.join(", ");
+    tl.submitEvent({ time: Date.now(), note: 'flag "Answering Pennant" was raised. ' + msg });
+    this.root.remove();
+  }
+
+  flagx_onclick(ev: MouseEvent) {
+    let tl = TimeLine.instance;
+    tl.submitEvent({ time: this.data.time });
+    let msg = 'Start: ' + dateFmt("%h:%i:%s", new Date(this.data.time)) + ', fleet ' + this.data.fleets.join(", ");
+    tl.submitEvent({ time: Date.now(), note: 'flag "X" was raised. ' + msg });
+  }
+
+  flagrecall_onclick(ev: MouseEvent) {
+    let tl = TimeLine.instance;
+    this.data.start = "aborted";
+    this.data.source = 'edit';
+    tl.submitEvent(this.data);
+    let msg = 'recalled start: ' + dateFmt("%h:%i:%s", new Date(this.data.time)) + ', fleet ' + this.data.fleets.join(", ");
+    tl.submitEvent({ time: Date.now(), note: 'flag "First Repeater" was raised. ' + msg });
+    this.root.remove();
   }
 
   timeStep(before: number) {
+    if (this.data.start == 'aborted') {
+      console.log("no start", this.data);
+      return;
+    }
     if (before > 360) {
       console.log("only minutes");
       let m = Math.floor(before / 60);
@@ -276,9 +352,12 @@ export class StartView extends DomHook {
   }
 
   startStep(step: any, play: boolean) {
-    console.log("start step", step);
+    if (this.data.start == 'aborted') {
+      return;
+    }
+    // console.log("start step", step);
     if (step.sound != undefined && play) {
-      console.log("playing " + step.sound);
+      // console.log("playing " + step.sound);
       Sounds.instance.play(step.sound);
     }
     if (step.flag != undefined) {
@@ -300,7 +379,9 @@ export class StartView extends DomHook {
 
   render() {
     this.starttime.innerText = dateFmt("%h:%i:%s", new Date(this.data.time));
-    this.fleets.innerText = this.data.fleets.join(", ");
+    if (this.data.fleets != undefined) {
+      this.fleets.innerText = this.data.fleets.join(", ");
+    }
     this.flagap.hidden = true;
     this.flagx.hidden = true;
     this.flagrecall.hidden = true;
@@ -309,3 +390,23 @@ export class StartView extends DomHook {
     this.flagrow.hidden = true;
   }
 }
+
+export class StartTable extends DomHook {
+  starts: HTMLDivElement = undefined;
+  constructor() {
+    super();
+    let t = DomHook.fromTemplate('StartTable');
+    this.hook(t);
+  }
+}
+export class StartRow extends DomHook {
+  starttime: HTMLSpanElement = undefined;
+  fleets: HTMLSpanElement = undefined;
+  constructor(ev: TimeEvent) {
+    super();
+    let t = DomHook.fromTemplate('StartRow');
+    this.hook(t);
+    this.starttime.innerText = dateFmt("%h:%i:%s", new Date(ev.time));
+    this.fleets.innerText = ev.fleets.join(", ");
+  }
+} 

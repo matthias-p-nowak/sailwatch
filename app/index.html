@@ -13,9 +13,11 @@
 </head>
 
 <body>
-  <div class="notifications">
-    <ul class="hook_infos infos"></ul>
-    <ul class="hook_errors errors"></ul>
+  <div class="noheight">
+    <div class="notifications">
+      <ul class="hook_infos infos"></ul>
+      <ul class="hook_errors errors"></ul>
+    </div>
   </div>
   </div>
   <header>
@@ -34,16 +36,23 @@
           <span class="hook_notifications">nothing yet</span>
         </div>
         <div class="row">
-          <span class="right">Lifesign</span>
+          <span class="right">Latest ping</span>
           <span class="hook_lifesign">unknown</span>
         </div>
         <div class="row hook_approw">
           <span class="right">App</span>
           <span class="hook_app">not installed</span>
         </div>
+        <div class="row">
+          <span class="right">Version</span>
+          <span class="hook_version">unknown</span>
+        </div>
       </div>
     </details>
   </header>
+  <div class="hook_earlier earlier">
+    Earlier
+  </div>
   <main class="hook_main"></main>
   <footer class="hook_footer">
     <div class="hook_registerFinish registerFinish">
@@ -86,6 +95,23 @@
       <button class="hook_register" disabled="true">Register start</button>
     </div>
   </dialog>
+  <dialog id="EditFinish">
+    <div>
+      <label for="sailnumber" class="hook_finished">Finished</label>
+      <input type="number" name="sailnumber" class="hook_sailnumber" placeholder="sailnumber" />
+    </div>
+    <div class="hook_fleet spanbuttons"></div>
+    <fieldset class="proposal">
+      <legend>found</legend>
+      <div class="hook_proposals">
+      </div>
+    </fieldset>
+    <div class="buttons">
+      <button class="hook_cancel">Cancel</button>
+      <button class="hook_save">Save</button>
+      <button class="hook_next">Save and next</button>
+    </div>
+  </dialog>
   <div id="sounds">
     <audio class="prep" src="snd/prep.wav" preload="auto"></audio>
     <audio class="triple" src="snd/high-triple.wav" preload="auto"></audio>
@@ -105,7 +131,7 @@
   </template>
   <template id="StartView">
     <article class="start">
-      <div class="start_table">
+      <div class="start_table hook_table">
         <div class="row">
           <span>Start at</span>
           <span class="hook_starttime"></span>
@@ -138,10 +164,48 @@
           <span class="hook_finishTime"></span>
           <span class="hook_sailNumber">-sail number-</span>
           <span class="hook_fleet">-fleet-</span>
-          <span class="hook_sailed"></span>
         </div>
       </div>
     </article>
+  </template>
+  <template id="StartTable">
+    <article class="SumStarts">
+      <fieldset>
+        <legend>Starts</legend>
+        <div class="hook_starts">
+          <div class="row bold"><span>Start time</span><span>Fleets</span></div>
+        </div>
+      </fieldset>
+    </article>
+  </template>
+  <template id="StartRow">
+    <div class="row">
+      <span class="hook_starttime"></span>
+      <span class="hook_fleets"></span>
+    </div>
+  </template>
+  <template id="FinishTable">
+    <article class="SumFinish">
+      <fieldset>
+        <legend>Finishes</legend>
+        <div class="hook_finishes">
+          <div class="row bold">
+            <span>Finish time</span>
+            <span>Sail number</span>
+            <span>Fleet</span>
+            <span>Sailed</span>
+          </div>
+        </div>
+      </fieldset>
+    </article>
+  </template>
+  <template id="FinishRow">
+    <div class="row">
+      <span class="hook_finishTime"></span>
+      <span class="hook_sailNumber"></span>
+      <span class="hook_fleet"></span>
+      <span class="hook_sailed"></span>
+    </div>
   </template>
 </body>
 

@@ -10,6 +10,7 @@ export class Settings extends DomHook {
   lifesign: HTMLSpanElement = undefined;
   details: HTMLDetailsElement = undefined;
   notifications: HTMLSpanElement = undefined;
+  version: HTMLSpanElement = undefined;
 
   /**
    * constructor
@@ -19,6 +20,7 @@ export class Settings extends DomHook {
     console.log("settings constructor");
     this.details = document.getElementById("settings") as HTMLDetailsElement;
     this.hook(this.details);
+    this.refresh();
   }
 
   private static _instance: Settings = undefined;
@@ -43,7 +45,6 @@ export class Settings extends DomHook {
       return;
     }
     this.details.open = false;
-    this.lifesign.innerText = dateFmt("%h:%i:%s", Keeper.instance.lifesign);
   }
 
   app_onclick(ev: MouseEvent) {
@@ -88,6 +89,14 @@ export class Settings extends DomHook {
     } else {
       this.notifications.innerText = "not available";
       this.notifications.onclick = null;
+    }
+    const lifesign = Keeper.instance.lifesign;
+    if (lifesign != undefined) {
+      this.lifesign.innerText = dateFmt("%h:%i:%s", lifesign);
+    }
+    let lastversion = window.localStorage.getItem("version");
+    if (lastversion != undefined) {
+      this.version.innerText = lastversion;
     }
   }
 }

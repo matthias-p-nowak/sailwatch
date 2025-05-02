@@ -5,7 +5,11 @@
       "label": "compile css",
       "type": "shell",
       "command": "sass",
-      "args": ["-w", "scss/main.scss", "app/main.css"],
+      "args": [
+        "-w",
+        "scss/main.scss",
+        "app/main.css"
+      ],
       "problemMatcher": [],
       "presentation": {
         "echo": true,
@@ -29,12 +33,17 @@
         "--sourcemap",
         "--watch"
       ],
-      "problemMatcher": ["$tsc-watch"],
+      "problemMatcher": [
+        "$tsc-watch"
+      ],
       "isBackground": true
     },
     {
       "label": "all tasks",
-      "dependsOn": ["compile css", "compile js"],
+      "dependsOn": [
+        "compile css",
+        "compile js"
+      ],
       "dependsOrder": "parallel",
       "problemMatcher": [],
       "group": {
@@ -46,7 +55,12 @@
       "label": "firefox-devel",
       "type": "shell",
       "command": "firefox",
-      "args": ["-P", "devel", "https://127.0.0.1:5500/", "--start-debugger-server"],
+      "args": [
+        "-P",
+        "devel",
+        "https://127.0.0.1:5500/",
+        "--start-debugger-server"
+      ],
       "problemMatcher": [],
       "isBackground": true
     },
@@ -54,7 +68,11 @@
       "label": "bypass cache",
       "type": "shell",
       "command": "echo",
-      "args": ["bypass", ">", "app/version"],
+      "args": [
+        "bypass",
+        ">",
+        "app/version"
+      ],
       "problemMatcher": [],
       "presentation": {
         "echo": true,

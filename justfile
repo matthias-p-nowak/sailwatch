@@ -1,10 +1,16 @@
 all:
 
 firefox-devel:
-    firefox -P devel  https://127.0.0.1:5500/ --start-debugger-server &
+    firefox -P devel  https://127.0.0.1:5500/ --start-debugger-server
 
-version:
-    sed -i -e "s/currentGitVersion/$(git rev-parse --short HEAD)/" app/main.js app/background.js
+bypass:
+    echo bypass > app/version
+
+css:
+    sass -w scss/main.scss app/main.css 
+
+js: 
+    esbuild --bundle src/main.ts src/background.ts --outdir=app --sourcemap --watch 
 
 clean:
     rm -fr app/*{js,js.map,css,css.map}
