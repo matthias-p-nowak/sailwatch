@@ -1,6 +1,6 @@
 export let startSequence = [
   { time: -30, imgrow: false, attention: false },
-  { time: 0, sound: "start", ap: false, xgt: true, untilrow: false, flag: "", flagrow: false },
+  { time: 0, sound: "start", ap: false, xgt: true, untilrow: false, flag: "", flagrow: false, start:'signaled'},
   { time: 1, sound: "triple" },
   { time: 2, sound: "triple" },
   { time: 3, sound: "triple" },

@@ -44,11 +44,6 @@ export class FinishView extends DomHook {
     } else {
       this.fleet.innerText = this.data.fleet;
     }
-    if (this.data.fleets?.length > 0) {
-      this.sailed.innerText = "to be calculated";
-    } else {
-      this.sailed.innerText = "sailed";
-    }
   }
 }
 
@@ -131,5 +126,46 @@ class EditFinishView extends DomHook {
       this.data.fleet = fleet[0];
     this.data.sailnumber = this.sailnumber.value;
     TimeLine.instance.submitEvent(this.data);
+  }
+}
+
+export class FinishTable extends DomHook {
+  finishes: HTMLDivElement = undefined;
+  constructor() {
+    super();
+    let t = DomHook.fromTemplate('FinishTable');
+    this.hook(t);
+  }
+}
+
+export class FinishRow extends DomHook {
+  finishTime: HTMLSpanElement = undefined;
+  sailNumber: HTMLSpanElement = undefined;
+  fleet: HTMLSpanElement = undefined;
+  sailed: HTMLSpanElement = undefined;
+
+  constructor(ev: TimeEvent) {
+    super();
+    let t = DomHook.fromTemplate('FinishRow');
+    this.hook(t);
+    this.finishTime.innerText = dateFmt("%h:%i:%s", new Date(ev.time));
+    if (ev.sailnumber == undefined) {
+      this.sailNumber.innerText = "- sn -";
+    } else {
+      this.sailNumber.innerText = ev.sailnumber;
+    }
+    if (ev.fleet == undefined) {
+      this.fleet.innerText = "- fleet -";
+    } else {
+      this.fleet.innerText = ev.fleet;
+      let st = TimeLine.instance.getRelatedStart(ev.time, ev.fleet);
+      if (st != undefined) {
+        let hasSailed = new Date();
+        hasSailed.setHours(0, 0, 0, 0);
+        hasSailed.setDate(1);
+        hasSailed.setMilliseconds(ev.time - st.time);
+        this.sailed.innerText = dateFmt("%H:%i:%s", hasSailed);
+      }
+    }
   }
 }

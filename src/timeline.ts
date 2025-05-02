@@ -55,7 +55,7 @@ export class TimeLine extends EventTarget {
     this.history.set(event.time, event);
     // console.log(`history has ${this.history.size} entries`);
     if (old == undefined) {
-      console.log("fire added");
+      // console.log("fire added");
       this.dispatchEvent(new CustomEvent("added", { detail: event }));
       return;
     }
@@ -108,4 +108,25 @@ export class TimeLine extends EventTarget {
     });
     return nf;
   }
+
+  getEvent(time: number) {
+    return this.history.get(time);
+  }
+
+  getRelatedStart(time: number, fleet: string): TimeEvent {
+    let lastStart: TimeEvent = undefined;
+    for(let ev of this.history.values()) {
+      if(ev.fleets == undefined) continue;
+      if(ev.start =='aborted') continue;
+      if(!ev.fleets.includes(fleet)) continue;
+      if(ev.time > time) continue;
+      if(lastStart == undefined || lastStart.time < ev.time) lastStart = ev;
+    }
+    return lastStart;
+  }
+
 }
+
+export async function waitFor(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+} 

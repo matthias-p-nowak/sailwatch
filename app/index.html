@@ -13,9 +13,11 @@
 </head>
 
 <body>
-  <div class="notifications">
-    <ul class="hook_infos infos"></ul>
-    <ul class="hook_errors errors"></ul>
+  <div class="noheight">
+    <div class="notifications">
+      <ul class="hook_infos infos"></ul>
+      <ul class="hook_errors errors"></ul>
+    </div>
   </div>
   </div>
   <header>
@@ -162,10 +164,48 @@
           <span class="hook_finishTime"></span>
           <span class="hook_sailNumber">-sail number-</span>
           <span class="hook_fleet">-fleet-</span>
-          <span class="hook_sailed"></span>
         </div>
       </div>
     </article>
+  </template>
+  <template id="StartTable">
+    <article class="SumStarts">
+      <fieldset>
+        <legend>Starts</legend>
+        <div class="hook_starts">
+          <div class="row bold"><span>Start time</span><span>Fleets</span></div>
+        </div>
+      </fieldset>
+    </article>
+  </template>
+  <template id="StartRow">
+    <div class="row">
+      <span class="hook_starttime"></span>
+      <span class="hook_fleets"></span>
+    </div>
+  </template>
+  <template id="FinishTable">
+    <article class="SumFinish">
+      <fieldset>
+        <legend>Finishes</legend>
+        <div class="hook_finishes">
+          <div class="row bold">
+            <span>Finish time</span>
+            <span>Sail number</span>
+            <span>Fleet</span>
+            <span>Sailed</span>
+          </div>
+        </div>
+      </fieldset>
+    </article>
+  </template>
+  <template id="FinishRow">
+    <div class="row">
+      <span class="hook_finishTime"></span>
+      <span class="hook_sailNumber"></span>
+      <span class="hook_fleet"></span>
+      <span class="hook_sailed"></span>
+    </div>
   </template>
 </body>
 

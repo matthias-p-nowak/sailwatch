@@ -113,7 +113,7 @@ export class SailwatchDatabase {
     if (detail.source != undefined && detail.source == "db") {
       return;
     }
-    console.log("saving event", detail);
+    // console.log("saving event", detail);
     delete detail.source;
     let tx = this.db.transaction(["events"], "readwrite");
     tx.oncomplete = function (ev) {
@@ -124,6 +124,7 @@ export class SailwatchDatabase {
     };
     let store = tx.objectStore("events");
     if (event.type == "removed") {
+      console.log("deleting from database");
       store.delete(detail.time);
     } else {
       store.put(detail);
@@ -154,7 +155,7 @@ export class SailwatchDatabase {
             prevDate.getMonth() != timeStamp.getMonth() ||
             prevDate.getFullYear() != timeStamp.getFullYear()
           ) {
-            console.log("got another day");
+            // console.log("got another day");
             resolve(events);
             return;
           }

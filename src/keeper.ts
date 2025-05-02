@@ -1,5 +1,4 @@
 import { sailwatch } from "./sailwatch";
-import { TimeLine } from "./timeline";
 
 export class Keeper {
   private static _instance: Keeper = undefined;

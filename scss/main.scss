@@ -4,20 +4,28 @@ html {
   font-size: 5mm;
 }
 
+.noheight {
+  background-color: aqua;
+  overflow: visible;
+  height: 0rem;
+  position: sticky;
+  top: 1rem;
+}
+
 .notifications {
   width: fit-content;
   margin-left: auto;
   margin-right: auto;
   // border: thin solid orange;
-  top: 0.5rem;
+  top: 1rem;
   border-radius: 0.5rem;
+  position: sticky;
   display: none;
 
   &:has(li) {
-    box-shadow: 0 0 5rem 5rem rgba(255, 198, 134, 0.268);
+    box-shadow: 0 0 1rem 1rem rgba(255, 198, 134, 0.268);
     padding-left: 1rem;
     padding-right: 1rem;
-    position: sticky;
     top: 1rem;
     display: block;
     background-color: white;
@@ -28,7 +36,7 @@ html {
     color: blue;
 
     li {
-      animation: shrinkDown 3s ease 10s 1 forwards;
+      animation: shrinkDown 3s linear 10s 1 forwards;
     }
   }
 
@@ -197,7 +205,7 @@ main {
       padding: 0.5rem;
       border-radius: 0.5rem;
       outline: none;
-      border: thin solid rgb(232, 232, 232);
+      border: thin solid rgba(104, 255, 116, 0.212);
     }
 
     .saving {
@@ -212,6 +220,8 @@ main {
     div.start_table {
       margin-left: auto;
       margin-right: auto;
+      border: thin solid orange;
+      border-radius: 0.2rem;
 
       .bold {
         font-weight: bolder;
@@ -249,7 +259,74 @@ main {
     grid-column: middle;
     margin-left: auto;
     margin-right: auto;
+
+    .finish_table {
+      margin: 0.2rem;
+      border: thin solid blue;
+      border-radius: 0.2rem;
+    }
   }
+
+  >article.SumStarts {
+    grid-column: middle;
+    margin-left: auto;
+    margin-right: auto;
+
+    fieldset {
+      border: thin solid orange;
+      border-radius: 0.2rem;
+      padding: 0.5rem;
+
+      legend {
+        margin-left: 1rem;
+      }
+
+      .bold {
+        font-weight: bolder;
+      }
+
+      .row {
+        :nth-child(1) {
+          text-align: right;
+        }
+
+        :nth-child(2) {
+          text-align: center;
+        }
+      }
+    }
+  }
+
+  >article.SumFinish {
+    grid-column: middle;
+    margin-left: auto;
+    margin-right: auto;
+
+    fieldset {
+      border: thin solid blue;
+      border-radius: 0.2rem;
+      padding: 0.5rem;
+
+      legend {
+        margin-left: 1rem;
+      }
+
+      .bold {
+        font-weight: bolder;
+      }
+
+      .row {
+        span {
+          text-align: center;
+        }
+
+        :nth-child(1) {
+          text-align: right;
+        }
+      }
+    }
+  }
+
 }
 
 footer {
@@ -313,6 +390,7 @@ dialog {
     $color: rgb(94, 65, 255);
     $border: thin solid $color;
     border: $border;
+
     label {
       margin-right: 0.5rem;
     }
