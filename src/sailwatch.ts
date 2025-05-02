@@ -89,13 +89,17 @@ export class SailWatch extends DomHook {
     let event = ce.detail as TimeEvent;
     // console.log(event);
     let found = false;
-    Array.from(this.main.children)
-      .filter((e: HTMLElement) => this.mainDisplay.get(e) == event.time)
-      .forEach((e: HTMLElement) => {
-        console.log("updating a displayed main event");
-        e.dispatchEvent(new CustomEvent("update", { detail: event }));
-        found = true;
+    let foundEvents = Array.from(this.main.children)
+      .filter((e: HTMLElement) => {
+        console.log('comparing ', this.mainDisplay.get(e), event.time);
+        return this.mainDisplay.get(e) == event.time
       });
+    console.log('found events=', foundEvents);
+    foundEvents.forEach((e: HTMLElement) => {
+      console.log("updating a displayed main event");
+      e.dispatchEvent(new CustomEvent("update", { detail: event }));
+      found = true;
+    });
     if (found) {
       return;
     }

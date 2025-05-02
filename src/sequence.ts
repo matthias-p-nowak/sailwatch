@@ -35,7 +35,7 @@ export let startSequence = [
   { time: 244, sound: "single" },
   { time: 245, sound: "single", flag: "P up" },
   { time: 246, sound: "prep" },
-  { time: 299, flag: "P up" },
+  { time: 290, flag: "P up" },
   { time: 300, sound: "longer", flag: "", imgrow: true, ap: true },
   { time: 301, sound: "single", flag: "class up" },
   { time: 302, sound: "single" },

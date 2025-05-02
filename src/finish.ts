@@ -23,11 +23,11 @@ export class FinishView extends DomHook {
   }
 
   table_onclick(ev: MouseEvent) {
-
-    let efv = new EditFinishView(this.data);
+    let efv = EditFinishView.instance.show(this.data);
   }
 
   update(ev: CustomEvent) {
+    console.log("finish update by event", ev.detail);
     this.data = ev.detail as TimeEvent;
     this.render();
   }
@@ -62,11 +62,18 @@ class EditFinishView extends DomHook {
   sailnumber: HTMLInputElement = undefined;
 
   data: TimeEvent;
-  constructor(data: TimeEvent) {
+  private constructor(data: TimeEvent) {
     super();
     this.dialog = document.getElementById("EditFinish") as HTMLDialogElement;
-    this.data = data;
     this.hook(this.dialog);
+  }
+  private static _instance: EditFinishView;
+  static get instance(): EditFinishView {
+    return this._instance || (this._instance = new EditFinishView(null));
+  }
+
+  show(data: TimeEvent) {
+    this.data = data;
     this.render();
     this.dialog.showModal();
   }
@@ -83,7 +90,7 @@ class EditFinishView extends DomHook {
     this.dialog.close();
     let nf = TimeLine.instance.getNextFinish(this.data);
     if (nf == undefined || nf == null) return;
-    new EditFinishView(nf);
+    this.show(nf);
   }
 
   fleet_onclick(ev: MouseEvent) {
@@ -115,6 +122,8 @@ class EditFinishView extends DomHook {
 
 
   saveData() {
+    console.log("saving finish data", this.data);
+    this.data.source = "edit";
     let fleet = Array.from(this.fleet.children)
       .filter((ch) => ch.classList.contains("selected"))
       .map((ch) => (ch as HTMLElement).innerText);

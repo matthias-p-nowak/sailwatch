@@ -55,21 +55,24 @@ export class TimeLine extends EventTarget {
     this.history.set(event.time, event);
     // console.log(`history has ${this.history.size} entries`);
     if (old == undefined) {
+      console.log("fire added");
       this.dispatchEvent(new CustomEvent("added", { detail: event }));
       return;
     }
-    if (old === event || !areDeepEqual(old, event)) {
+
+    if (event.source == 'edit' || !areDeepEqual(old, event)) {
+      delete event.source;
       console.log("updated...");
       delete event.source;
       if (Object.keys(event).length == 1) {
-        console.log("fired removed");
+        console.log("fire removed");
         this.dispatchEvent(new CustomEvent("removed", { detail: event }));
         setTimeout(() => {
           console.log("deleting something from timeline");
           this.history.delete(event.time);
         }, 30_000);
       } else {
-        console.log("fired updated");
+        console.log("fire updated");
         this.dispatchEvent(new CustomEvent("updated", { detail: event }));
       }
       return;

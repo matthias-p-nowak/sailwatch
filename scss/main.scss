@@ -286,26 +286,45 @@ dialog {
   margin: auto;
   border-radius: 1rem;
   padding: 1rem;
-  $color: lightblue;
-  $border: thin solid $color;
 
   &#NewStart {
-    $border: thin solid rgb(250, 225, 178);
     $color: rgb(250, 225, 178);
+    $border: thin solid $color;
+    border: $border;
 
     .fleets {
       input {
         width: 5rem;
       }
     }
+
+    fieldset,
+    span,
+    button {
+      border: $border;
+    }
+
+    span.selected {
+      background-color: $color;
+    }
   }
 
   &#EditFinish {
-    $border: thin solid rgb(3, 8, 255);
-    $color: rgb(250, 225, 178);
-
+    $color: rgb(94, 65, 255);
+    $border: thin solid $color;
+    border: $border;
     label {
       margin-right: 0.5rem;
+    }
+
+    fieldset,
+    span,
+    button {
+      border: $border;
+    }
+
+    span.selected {
+      background-color: $color;
     }
 
     fieldset {
@@ -317,7 +336,7 @@ dialog {
     }
   }
 
-  border: $border;
+
 
   div.spanbuttons {
     margin: 0.5rem;
@@ -326,18 +345,17 @@ dialog {
     gap: 0.2rem;
 
     span {
-      border: $border;
+      // border: $border;
       border-radius: 0.2rem;
       padding: 0.2rem;
 
       &.selected {
-        background-color: $color;
+        background-color: green;
       }
     }
   }
 
   fieldset {
-    border: $border;
     border-radius: 0.2rem;
 
     legend {
@@ -351,12 +369,11 @@ dialog {
       gap: 0.2rem;
 
       span {
-        border: $border;
         border-radius: 0.2rem;
         padding: 0.2rem;
 
         &.selected {
-          background-color: $color;
+          background-color: green;
         }
       }
     }
@@ -370,7 +387,7 @@ dialog {
 
     button {
       padding: 0.2rem;
-      border: $border;
+      // border: $border;
       border-radius: 0.2rem;
     }
   }
