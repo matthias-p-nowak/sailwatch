@@ -13,7 +13,7 @@ export class SailwatchDatabase {
     let thisOne = this;
     this.ready = new Promise((resolve, reject) => {
       // ***** Name and version *****
-      const openRequest = window.indexedDB.open("sailwatch.db", 2);
+      const openRequest = window.indexedDB.open("sailwatch.db", 3);
       openRequest.onsuccess = function (ev) {
         thisOne.db = openRequest.result;
         resolve(openRequest.result);
@@ -56,13 +56,21 @@ export class SailwatchDatabase {
       options: {
         keyPath: "name",
       },
-      indexes: [],
+      indexes: [{
+        name: "lastUsed", // index name
+        keyPath: "lastUsed",
+        options: { unique: false },
+      }],
     },
     boats: {
       options: {
         keyPath: "name",
       },
-      indexes: [],
+      indexes: [{
+        name: "lastUsed", // index name
+        keyPath: "lastUsed",
+        options: { unique: false },
+      }],
     },
   };
 
@@ -171,6 +179,63 @@ export class SailwatchDatabase {
     });
   }
 
+  async deleteEventsBefore(timeStamp: number) {
+    await new Promise<void>((resolve, reject) => {
+      let store = this.db.transaction(["events"], "readwrite").objectStore("events");
+      let range = IDBKeyRange.upperBound(timeStamp, true);
+      let request = store.openCursor(range);
+      request.onsuccess = function (ev) {
+        const cursor = request.result;
+        if (cursor == null) {
+          resolve();
+          return;
+        } else {
+          console.log("deleting ", cursor.value);
+          cursor.delete();
+          cursor.continue();
+        }
+      };
+    });
+    console.log("deleted events before", new Date(timeStamp));
+    await new Promise<void>((resolve, reject) => {
+      let store = this.db.transaction(["fleets"], "readwrite").objectStore("fleets");
+      let lu = store.index("lastUsed");
+      let range = IDBKeyRange.upperBound(timeStamp, true);
+      let request = lu.openCursor(range);
+      request.onsuccess = function (ev) {
+        const cursor = request.result;
+        if (cursor == null) {
+          resolve();
+          return;
+        } else {
+          console.log("deleting ", cursor.value);
+          cursor.delete();
+          cursor.continue();
+        }
+      };
+    });
+    console.log("deleted fleets before", new Date(timeStamp));
+    await new Promise<void>((resolve, reject) => {
+      let store = this.db.transaction(["boats"], "readwrite").objectStore("boats");
+      let lu = store.index("lastUsed");
+      let range = IDBKeyRange.upperBound(timeStamp, true);
+      let request = lu.openCursor(range);
+      request.onsuccess = function (ev) {
+        const cursor = request.result;
+        if (cursor == null) {
+          resolve();
+          return;
+        } else {
+          console.log("deleting ", cursor.value);
+          cursor.delete();
+          cursor.continue();
+        }
+      };
+    });
+    console.log("deleted boats before", new Date(timeStamp));
+  }
+
+
   async getAllFleets(): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
       let store = this.db.transaction(["fleets"], "readonly").objectStore("fleets");
@@ -185,7 +250,7 @@ export class SailwatchDatabase {
     });
   }
 
-  saveFleet(data: { name: string; lastUsed: Date }) {
+  saveFleet(data: { name: string; lastUsed: number }) {
     let store = this.db.transaction(["fleets"], "readwrite").objectStore("fleets");
     store.put(data);
   }

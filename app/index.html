@@ -26,7 +26,7 @@
         <img src="img/sailwatch-64.png" alt="Sailwatch" />
         <span> Sailing Watch <br /> Start &amp; Finish</span>
       </summary>
-      <div class="headerpic slideshow">
+      <div class="headerpic slideshow hook_picture">
         <img src="img/sailwatch-512.png" alt="big sailwatch icon" />
         <img src="img/qr-code.png" alt="qr code" />
       </div>
@@ -47,26 +47,38 @@
           <span class="right">Version</span>
           <span class="hook_version">unknown</span>
         </div>
+        <div class="row">
+          <span class="center hook_share">Share data</span>
+          <span class="center">
+            <label for="importFile">Import data</label>
+            <input type="file" id="importFile" hidden="hidden" class="hook_importFile" accept=".json" />
+          </span>
+        </div>
+        <div class="row"><span class="center" style="color: red; font-weight: bolder;">Danger zone</span></div>
+        <div class="row">
+          <span><input type="date" class="hook_deldate fit"></span>
+          <span class="hook_dodelete">delete before this date</span>
+        </div>
       </div>
     </details>
   </header>
-  <div class="hook_earlier earlier">
+  <div class="hook_earlier earlier ">
     Earlier
   </div>
   <main class="hook_main"></main>
   <footer class="hook_footer">
     <div class="hook_registerFinish registerFinish">
-      <img src="img/finish.png" alt="register a finish" />
+      <img src="img/finish.png" alt="register a finish" class="" />
     </div>
     <div class="bottomRight">
       <div class="hook_makeTable">
-        <img src="img/table.png" alt="make a table" />
+        <img src="img/table.png" alt="make a table" class="" />
       </div>
       <div class="hook_takeNote">
-        <img src="img/note.png" alt="take a note" />
+        <img src="img/note.png" alt="take a note" class="" />
       </div>
       <div class="hook_newStart">
-        <img src="img/start.png" alt="register new start" />
+        <img src="img/start.png" alt="register new start" class="" />
       </div>
     </div>
   </footer>

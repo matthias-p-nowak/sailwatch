@@ -18,6 +18,11 @@ export class NoteView extends DomHook {
     root.addEventListener("update", this.update.bind(this));
     // just in case nothing was noted down, delete after 5 minutes
     this.delayId = setTimeout(this.doSave.bind(this), 300_000);
+    setTimeout(() => {
+      this.text.style.height = "auto";
+      this.text.style.height = this.text.scrollHeight + 2 + "px";
+      this.text.focus();
+    }, 100);
   }
 
   update(ev: CustomEvent) {
