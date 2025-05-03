@@ -113,14 +113,18 @@ export class TimeLine extends EventTarget {
     return this.history.get(time);
   }
 
+  getEvents() {
+    return Array.from(this.history.values());
+  }
+
   getRelatedStart(time: number, fleet: string): TimeEvent {
     let lastStart: TimeEvent = undefined;
-    for(let ev of this.history.values()) {
-      if(ev.fleets == undefined) continue;
-      if(ev.start =='aborted') continue;
-      if(!ev.fleets.includes(fleet)) continue;
-      if(ev.time > time) continue;
-      if(lastStart == undefined || lastStart.time < ev.time) lastStart = ev;
+    for (let ev of this.history.values()) {
+      if (ev.fleets == undefined) continue;
+      if (ev.start == 'aborted') continue;
+      if (!ev.fleets.includes(fleet)) continue;
+      if (ev.time > time) continue;
+      if (lastStart == undefined || lastStart.time < ev.time) lastStart = ev;
     }
     return lastStart;
   }

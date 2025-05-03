@@ -54,6 +54,7 @@ export class NewStart extends DomHook {
     let dateStr = dateFmt("%h:%i:%s", latest);
     this.othertime.value = dateStr;
     this.times.appendChild(this.othertime);
+    console.log(sailwatch.fleets);
     let fleets = Array.from(sailwatch.fleets).sort();
     fleets.forEach((fleet) => {
       let span = document.createElement("span");
@@ -99,12 +100,11 @@ export class NewStart extends DomHook {
   }
 
   newfleet_onblur(ev: MouseEvent) {
-    let fleet = this.newfleet.value;
+    let fleet = this.newfleet.value.trim();
     this.newfleet.value = "";
     if (fleet.length < 1) return;
-    if (sailwatch.fleets.has(fleet)) return;
-    sailwatch.fleets.add(this.newfleet.value);
-    SailwatchDatabase.instance.saveFleet({ name: fleet, lastUsed: new Date() });
+    sailwatch.fleets.add(fleet);
+    SailwatchDatabase.instance.saveFleet({ name: fleet, lastUsed: Date.now() });
     let span = document.createElement("span");
     span.innerText = fleet;
     span.classList.add("selected");
@@ -309,6 +309,7 @@ export class StartView extends DomHook {
       console.log("no start", this.data);
       return;
     }
+    this.root.scrollIntoView({ behavior: "smooth", block: "center" });
     if (before > 360) {
       console.log("only minutes");
       let m = Math.floor(before / 60);
@@ -356,10 +357,6 @@ export class StartView extends DomHook {
       return;
     }
     // console.log("start step", step);
-    if (step.sound != undefined && play) {
-      // console.log("playing " + step.sound);
-      Sounds.instance.play(step.sound);
-    }
     if (step.flag != undefined) {
       this.nextflag.innerText = step.flag;
     }
@@ -373,6 +370,19 @@ export class StartView extends DomHook {
         this.root.classList.add("attention");
       } else {
         this.root.classList.remove("attention");
+      }
+    }
+    if (step.sound != undefined && play) {
+      // console.log("playing " + step.sound);
+      Sounds.instance.play(step.sound);
+    }
+    if (step.lock != undefined) {
+      try {
+        navigator.wakeLock.request('screen').then((wls) => {
+          setTimeout(() => wls.release(), this.data.time - Date.now());
+        });
+      } catch (e) {
+        sailwatch.addError('wakelock error: ' + e);
       }
     }
   }

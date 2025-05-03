@@ -78,8 +78,6 @@ export class SailWatch extends DomHook {
     let tl = TimeLine.instance;
     let db = SailwatchDatabase.instance;
     db.getEventsBefore(before).then((events) => {
-      // console.log("retrieved", events.length, "events before", before);
-      // console.log(events);
       events.forEach((e) => tl.submitEvent(e));
     });
   }
@@ -222,6 +220,10 @@ export class SailWatch extends DomHook {
       // console.log('scrolling for', ch.dataset.displayTime);
       ch.scrollIntoView({ behavior: "smooth", block: "center" });
       let time = Number(ch.dataset.sortedTime);
+      if(time > Date.now()) {
+        console.log('skipping', ch.dataset.displayTime);
+        break;
+      };
       let ev = tl.getEvent(time);
       if (ev.start != undefined) {
         if (lastTable != 'start') {
@@ -251,6 +253,7 @@ export class SailWatch extends DomHook {
       await waitFor(5);
     };
   }
+
 
   // #region notifications
   addInfo(msg: string) {

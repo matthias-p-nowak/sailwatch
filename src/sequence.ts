@@ -43,6 +43,6 @@ export let startSequence = [
   { time: 304, sound: "single" },
   { time: 305, sound: "single", flag: "class up" },
   { time: 306, sound: "prep" },
-  { time: 320, sound: "attention", flagrow: true },
+  { time: 320, sound: "attention", flagrow: true, lock: true },
   { time: 330, flag: "class up", flagrow: true, attention: true },
 ];

@@ -10,6 +10,7 @@ html {
   height: 0rem;
   position: sticky;
   top: 1rem;
+  z-index: 2;
 }
 
 .notifications {
@@ -81,7 +82,7 @@ html {
 
 header {
   display: grid;
-  grid-template-columns: 1fr [middle-start] clamp(5rem, 80svw, 30rem) [middle-end] 1fr;
+  grid-template-columns: 1fr [middle-start] clamp(5rem, 90svw, 40rem) [middle-end] 1fr;
 
   >* {
     grid-column: middle;
@@ -125,8 +126,8 @@ header {
 
 .slideshow {
   position: relative;
-  width: 20rem;
-  height: 20rem;
+  width: clamp(5rem, 80svw, 20rem);
+  height: clamp(5rem, 80svw, 20rem);
 
   img {
     position: absolute;
@@ -177,6 +178,9 @@ div:has(> div.row) {
 
     .right {
       text-align: right;
+    }
+    .center {
+      text-align: center;
     }
   }
 }
@@ -271,6 +275,7 @@ main {
     grid-column: middle;
     margin-left: auto;
     margin-right: auto;
+    margin-top: 0.5rem;
 
     fieldset {
       border: thin solid orange;
@@ -301,6 +306,7 @@ main {
     grid-column: middle;
     margin-left: auto;
     margin-right: auto;
+    margin-top: 0.5rem;
 
     fieldset {
       border: thin solid blue;
@@ -331,7 +337,7 @@ main {
 
 footer {
   display: none;
-
+  z-index: 3;
   .registerFinish {
     position: fixed;
     width: fit-content;
@@ -356,6 +362,7 @@ footer {
     height: 4rem;
     padding: 0.3rem;
     box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+    // background-color: white;
   }
 }
 
@@ -469,4 +476,8 @@ dialog {
       border-radius: 0.2rem;
     }
   }
+}
+
+input.fit {
+  width: fit-content;
 }
