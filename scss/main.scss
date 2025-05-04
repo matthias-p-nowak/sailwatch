@@ -179,10 +179,15 @@ div:has(> div.row) {
     .right {
       text-align: right;
     }
+
     .center {
       text-align: center;
     }
   }
+}
+
+div.fitwidth {
+  width: fit-content;
 }
 
 main {
@@ -332,12 +337,12 @@ main {
       }
     }
   }
-
 }
 
 footer {
   display: none;
   z-index: 3;
+
   .registerFinish {
     position: fixed;
     width: fit-content;
