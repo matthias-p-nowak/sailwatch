@@ -309,7 +309,6 @@ export class StartView extends DomHook {
       console.log("no start", this.data);
       return;
     }
-    this.root.scrollIntoView({ behavior: "smooth", block: "center" });
     if (before > 360) {
       console.log("only minutes");
       let m = Math.floor(before / 60);
@@ -384,6 +383,9 @@ export class StartView extends DomHook {
       } catch (e) {
         sailwatch.addError('wakelock error: ' + e);
       }
+    }
+    if (step.scroll != undefined) {
+      this.root.scrollIntoView({ behavior: "smooth", block: "center" });
     }
   }
 
