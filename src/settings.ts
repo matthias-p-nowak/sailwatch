@@ -157,7 +157,7 @@ export class Settings extends DomHook {
     let d = new Date();
     d.setMonth(d.getMonth() - 1);
     this.deldate.value = dateFmt("%y-%m-%d", d);
-    this.origin.innerText = window.location.origin;
+    this.origin.innerText = window.location.toString();
     let agent = window.navigator.userAgent;
     agent=agent.replaceAll(/\(.*\)/g,'');
     this.agent.innerText = agent;

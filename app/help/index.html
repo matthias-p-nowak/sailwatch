@@ -8,35 +8,171 @@
         html {
             font-size: 5mm;
         }
+
+        header img {
+            height: 1.5rem;
+        }
+
         article img {
-            height: 2rem;
+            height: 1.5rem;
+        }
+
+        body {
+            margin: 1rem;
+            padding: 1rem;
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+        }
+
+        table {
+            border-collapse: collapse;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid lightgray;
+            border-collapse: collapse;
+            padding: 0.2rem;
+        }
+        footer {
+            margin-top: 2rem;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+            background-color: rgba(255, 166, 0, 0.205);
         }
     </style>
-    <title>Document</title>
+    <title>SailWatch help</title>
 </head>
 
 <body>
     <header>
-        Sailwatch is a simple tool for executing starts using rule 28 with 5-4-1-0 intervals and taking finish times.
+        <h1>Sailwatch</h1>
+        Sailwatch <img src="../img/sailwatch-64.png" alt=""> is a simple tool for executing starts using rule 26 with
+        5-4-1-0 intervals and taking finish times.
+        It takes the wall clock time as references.
+        Moreover, it might not respond as fast as a hardware clock, since it is a web-app - but good enough for club
+        races.
+        <br>
+        Jump to the topics:
         <ul>
-            <li><a href="#helpStart">Start</a></li>
-            <li><a href="#helpFinish">Finish</a></li>
-            <li><a href="#helpNote">Note</a></li>
+            <li><a href="#start">Start</a></li>
+            <li><a href="#finish">Finish</a></li>
+            <li><a href="#note">Note</a></li>
+            <li><a href="#settings">Settings</a></li>
+            <li><a href="#app">about the App</a></li>
         </ul>
+        <h2>Usage</h2>
+        Per default, it displays the registered events from today.
+        The "earlier" button at the top allows the loading of previous events.
+        All events are stored locally on the mobile device. They can be shared using "share" in the settings.
+        The button <img src="../img/table.png" alt="table icon"> turns the separate entries into tables with headers.
     </header>
+    <hr>
     <main>
-        <article id="helpStart">
+        <article id="start">
             <h1>Start</h1>
-            The icon <img src="../img/start.png" alt="start icon" > opens a dialog for registering a start.
+            <h2>Registering a start</h2>
+            The icon <img src="../img/start.png" alt="start icon"> opens a dialog for registering a start.
             A few Suggestions for start times are shown, starting 330 seconds after now or the latest registered event.
-            Similarly, fleets to start can be selected. New fleets can be added using the input field. 
+            Similarly, fleets to start can be selected. New fleets can be added using the input field.
+            It is possible to schedule starts many hours in advance.
+            <h2>Start procedure</h2>
+            About 30 seconds before the first signal (rule 26 warning signal), the current starts gets an orange frame
+            and displays more information:
+            <table>
+                <tr>
+                    <td>Start at</td>
+                    <td><em>wall time of planned start</em></td>
+                    <td>fleets</td>
+                </tr>
+                <tr>
+                    <td>start in</td>
+                    <td><em>time left to start</em></td>
+                    <td>current time</td>
+                </tr>
+                <tr>
+                    <td>flag in</td>
+                    <td><b><em>time left to next signal</em></b></td>
+                    <td><b><em>which signal</em></b></td>
+                </tr>
+            </table>
+
+            The following signals are displayed:
+
+            <table>
+                <tr>
+                    <td>5 min before start</td>
+                    <td>Warning signal</td>
+                    <td>Class flag up</td>
+                    <td>beeps last 5 seconds</td>
+                </tr>
+                <tr>
+                    <td>4 min before start</td>
+                    <td>Preparatory signal</td>
+                    <td>Flag P up</td>
+                    <td>beeps last 5 seconds</td>
+                </tr>
+                <tr>
+                    <td>1 min before start</td>
+                    <td>one-minute signal</td>
+                    <td>Flag P down</td>
+                    <td>beeps last 5 seconds</td>
+                </tr>
+                <tr>
+                    <td>at start</td>
+                    <td>Start signal</td>
+                    <td>Class flag down</td>
+                    <td>beeps last 15 seconds</td>
+                </tr>
+            </table>
+
+            During the start, the icon <img src="../img/flag_ap.png" alt="flag ap"> is shown below the table.
+            Pressing the icon aborts the start and adds a note about it to the content.
+            For 30 seconds after the start, the flags <img src="../img/flag_x.png" alt="flag X"> and
+            <img src="../img/flag_recall.png" alt="recall flag"> are shown.
+            Pressing the flag X adds a note, while pressing the recall flag recalls the start, i.e. adds a note and
+            removes the start.
+
         </article>
-        <article id="helpFinish">
+        <hr>
+        <article id="finish">
             <h1>Finish</h1>
             The icon <img src="../img/finish.png" alt="finish icon"> always hovers at the lower left corner.
+            It can be pressed at any time and adds an entry for that finish, showing a table row:
+            <table>
+                <tr>
+                    <td>clock time</td>
+                    <td>- sn -</td>
+                    <td>-fleet-</td>
+                </tr>
+            </table>
+            Clicking anywhere on that row opens a dialog, where one can enter the sailnumber and also add the fleet.
+            That information is used at the end to display the sailed time.
         </article>
-        <article id="helpNote">
+        <hr>
+        <article id="note">
             <h1>Note</h1>
+            Pressing the note icon <img src="../img/note.png" alt="note icon"> adds an empty note.
+            One can edit any note and it will be saved after a few seconds of inactivity.
+            Moreover, removing the text will remove the note.
+        </article>
+        <hr>
+        <article id="settings">
+            <h1>Settings</h1>
+        </article>
+        <article id="app">
+            <h1>About the App</h1>
+            I programmed the app as an exercise in Web frontend development.
+            It is a progressive web application, which can be installed as an app and caches files to be served when
+            offline. Moreover, all registered events like start, notes, finishes are stored locally on the mobile device using IndexedDB.
+            It does not work with the DuckDuckGo browser, since it has limited support for the functions I am using.
+            <br>
+            <a href="https://github.com/matthias-p-nowak/sailwatch">Source code on github</a>
         </article>
     </main>
     <footer>
