@@ -164,6 +164,47 @@
         <hr>
         <article id="settings">
             <h1>Settings</h1>
+            Pressing the icon <img src="../img/sailwatch-64.png" alt="sailwatch icon"> opens the setting dialog.
+            On top is the link to this help page.
+
+            <h2>Share and import</h2>
+            The 2 fields are buttons and initiate the share/export of the displayed events or the import from file.
+            Share creates a datafile from the content and opens the share dialog. 
+            Here, the user can send the content to others via bluetooth, email, social apps or similar.
+            Import loads the content of a datafile into the app.
+
+            <h2>Notifications</h2>
+            Notifications should have the value "granted". 
+            If it says "requesting", but no request is shown, then one needs to go into system settings, apps and permission and then allow notifications.
+            Notifications are used to get the app into foreground - a few seconds before each signal.
+
+            <h2>Latest ping</h2>
+            This app makes use of a service worker to cache files and also ensures that starts are carried out.
+            The value indicates the time when the last message of the service worker was received. It should be quite recent.
+
+            <h2>Version</h2>
+            It presents the version of the app - the github commit hash as a hex string. Then the app can work in offline mode.
+            Or it shows the text "bypass". 
+            In the latter case, all files are retrieved from the network - hence delays might occure.
+
+            <h2>Danger zone</h2>
+            <h3>Delete events</h3>
+            One can select a date and by tapping the right field, all events before that date are deleted.
+
+            <h2>Other information</h2>
+            At the lower end, the origin of the app and user agent are shown.
+        </article>
+        <article>
+            <h1>Browser limitations</h1>
+            <ul>
+                <li>
+                    <b>DuckDuckGo</b> focuses on privacy and disallows certain features. 
+                </li>
+                <li>
+                    <b>Firefox</b> has no share functionality, instead the content is downloaded as a json file. 
+                    Installing the page as an app is not possible.
+                </li>
+            </ul>
         </article>
         <article id="app">
             <h1>About the App</h1>
