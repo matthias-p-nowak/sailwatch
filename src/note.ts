@@ -1,19 +1,17 @@
 import { dateFmt } from "./datefmt";
 import { DomHook } from "./domhook";
-import { TimeLine } from "./timeline";
-
-type Note = { time: number; note: string; focus: boolean };
+import { TimeEvent, TimeLine } from "./timeline";
 
 export class NoteView extends DomHook {
-  data: Note;
+  data: TimeEvent = undefined;
   time: HTMLDivElement = undefined;
   text: HTMLTextAreaElement = undefined;
   delayId: number = 0;
 
-  constructor(root: HTMLElement, data: Object) {
+  constructor(root: HTMLElement, data: TimeEvent) {
     super();
     this.hook(root);
-    this.data = data as Note;
+    this.data = data as TimeEvent;
     this.render();
     root.addEventListener("update", this.update.bind(this));
     // just in case nothing was noted down, delete after 5 minutes
@@ -26,7 +24,7 @@ export class NoteView extends DomHook {
   }
 
   update(ev: CustomEvent) {
-    let note = ev.detail as Note;
+    let note = ev.detail as TimeEvent;
     console.log("note update by event");
     this.data.time = note.time;
     if (note.note != undefined) {
@@ -67,6 +65,7 @@ export class NoteView extends DomHook {
     let length = this.text.value.length;
     this.data.note = this.text.value;
     if (length > 0) {
+      this.data.source = "edit";
       console.log("saving updated note", this.data);
       TimeLine.instance.submitEvent(this.data);
     } else {
