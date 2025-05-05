@@ -9,7 +9,7 @@
       "webRoot": "${workspaceFolder}",
       "url": "https://192.168.137.1:5500",
       "windows": {},
-      "preLaunchTask": "bypass cache"
+      // "preLaunchTask": "bypass cache"
     },
     {
       "name": "debug app firefox",

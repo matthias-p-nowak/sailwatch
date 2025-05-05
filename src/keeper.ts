@@ -18,23 +18,27 @@ export class Keeper {
         .then((r) => r.text())
         .then((t) => {
           t = t.trim();
-          console.log("got version", t);
           let lastversion = window.localStorage.getItem("version");
           window.localStorage.setItem("version", t);
           if (t == "bypass") {
-            window.caches.delete("sailwatch");
-            navigator.serviceWorker.ready.then((reg) => {
-              console.log("informing background worker to bypass");
-              reg.active.postMessage({ bypass: true });
+            window.caches.delete("sailwatch").then(() => {              
+              navigator.serviceWorker.ready.then((reg) => {
+                console.log("informing background worker to bypass");
+                reg.active.postMessage({ bypass: true });
+              });
             });
           } else if (lastversion != t) {
             console.log("new version", t);
-            window.caches.delete("sailwatch");
-            navigator.serviceWorker.ready.then((reg: ServiceWorkerRegistration) => {
-              console.log("informing background worker to reload and not bypass");
-              reg.active.postMessage({ bypass: false });
+            window.caches.delete("sailwatch").then(() => {    
+              console.log("deleted cache");          
+              navigator.serviceWorker.ready.then((reg: ServiceWorkerRegistration) => {
+                console.log("informing background worker to reload and not bypass");
+                reg.active.postMessage({ bypass: false });
+              });
+              window.location.reload();
             });
-            window.location.reload();
+          }else{
+            console.log("got same old version", t);            
           }
         });
       navigator.serviceWorker.ready.then((reg: ServiceWorkerRegistration) => {
@@ -48,6 +52,13 @@ export class Keeper {
     this.lifesign = new Date();
     if (event.data.info != undefined) {
       sailwatch.addInfo(event.data.info);
+    }
+    if(event.data.ping !=undefined){
+      console.log("got ping, sending pong");
+      navigator.serviceWorker.ready.then((reg: ServiceWorkerRegistration) => {
+        reg.active.postMessage({ pong: true });
+        console.log("sent pong");
+      });
     }
   }
 
