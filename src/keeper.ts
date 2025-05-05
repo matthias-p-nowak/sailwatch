@@ -54,10 +54,10 @@ export class Keeper {
       sailwatch.addInfo(event.data.info);
     }
     if(event.data.ping !=undefined){
-      console.log("got ping, sending pong");
+      // console.log("got ping, sending pong");
       navigator.serviceWorker.ready.then((reg: ServiceWorkerRegistration) => {
         reg.active.postMessage({ pong: true });
-        console.log("sent pong");
+        // console.log("sent pong");
       });
     }
   }

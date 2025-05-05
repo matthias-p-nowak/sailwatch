@@ -378,6 +378,7 @@ export class StartView extends DomHook {
     if (step.lock != undefined) {
       try {
         navigator.wakeLock.request('screen').then((wls) => {
+          // sailwatch.addInfo('wakelock requested');
           setTimeout(() => wls.release(), this.data.time - Date.now());
         });
       } catch (e) {
