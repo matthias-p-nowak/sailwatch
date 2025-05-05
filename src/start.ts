@@ -232,22 +232,29 @@ export class StartView extends DomHook {
     this.hook(root);
     this.render();
     this.root.addEventListener("update", this.update.bind(this));
+    // adding the steps with the different actions, all of them
     if (data.time > Date.now() && data.start == "planned") {
       startSequence.forEach((step) => {
         let st = new Date(data.time);
         st.setSeconds(st.getSeconds() - step.time);
-        if (st.getTime() > Date.now()) {
+        console.log("step", step, dateFmt("%h:%i:%s", st));
+        if (st.getTime() > Date.now()+1000) {
+          // more than a second into the future
           setTimeout(this.startStep.bind(this, step, true), st.getTime() - Date.now());
         } else {
+          // less than a second into the future, carrying them out in order
           setTimeout(this.startStep.bind(this, step, false), 1000 - step.time);
         }
       });
+      // count down the seconds for the last 6 minutes
       for (let i = 0; i < 360; ++i) {
         let t = new Date(data.time);
         t.setSeconds(t.getSeconds() - i);
-        if (t.getTime() < Date.now()) break;
+        if (t.getTime() < Date.now()+1000) break;
+        // still in the future
         setTimeout(this.timeStep.bind(this, i), t.getTime() - Date.now());
       }
+      // count down the minutes
       for (let m = 7; ; ++m) {
         let t = new Date(data.time);
         t.setMinutes(t.getMinutes() - m);
@@ -255,7 +262,6 @@ export class StartView extends DomHook {
         setTimeout(this.timeStep.bind(this, m * 60), t.getTime() - Date.now());
       }
     }
-
   }
 
   update(ce: CustomEvent) {
