@@ -62,7 +62,7 @@ function sendPing(starttime: number) {
   swgs.clients.matchAll().then((clients) => {
     console.log("got clients", clients.length);
     clients.forEach((client) => {
-      console.log("sending ping to client",client);
+      // console.log("sending ping to client",client);
       client.postMessage({ ping: starttime });
     });
   }).catch((error) => {
@@ -109,7 +109,7 @@ swgs.onmessage = function (event) {
       }
       let delay = pt.getTime() - Date.now();
       if (delay > 0) {
-        console.log(`will send ping in ${delay} ms at ${dateFmt("%h:%i:%s", pt)}`);
+        // console.log(`will send ping in ${delay} ms at ${dateFmt("%h:%i:%s", pt)}`);
         pinging.set(pingTime, setTimeout(sendPing, delay, start));
       }
     });
@@ -125,7 +125,7 @@ swgs.onmessage = function (event) {
     bypass = event.data.bypass;
   }
   if(d.pong != undefined){
-    console.log("got pong");
+    // console.log("got pong");
     waiting4pong=false;
   }
 };
