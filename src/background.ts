@@ -1,5 +1,7 @@
 /// <reference lib="webworker" />
 
+import { dateFmt } from "./datefmt";
+
 let swgs = self as unknown as ServiceWorkerGlobalScope;
 let bypass = false;
 /**
@@ -34,10 +36,10 @@ swgs.onactivate = function (event) {
   );
 };
 
-let pingTimes = [0, 1, 5, 16, 60, 66, 70, 240, 246, 250, 300, 306, 315, 336];
+let pingTimes = [0, 1, 5, 16, 60, 66, 70, 240, 246, 250, 300, 306, 315, 330];
 let starts: Set<number> = new Set();
 let pinging: Map<number, number> = new Map();
-
+let waiting4pong=true;
 /**
  * send a ping to all clients and show a notification if no clients are present
  * @param starttime the start time to check for
@@ -47,20 +49,24 @@ function sendPing(starttime: number) {
     return;
   }
   console.log("sending ping");
-  swgs.clients.matchAll().then((clients) => {
-    let numberOfClients = 0;
-    clients.forEach((client) => {
-      client.postMessage({ ping: starttime });
-      numberOfClients++;
-    });
-    if (numberOfClients == 0) {
-      console.log("no clients");
+  waiting4pong=true;
+  setTimeout(() => {
+    if(waiting4pong){
       swgs.registration.showNotification("Start imminent", {
         body: "need to open the app/page",
         icon: "img/sailwatch-64.png",
         badge: "img/sailwatch-192.png",
       });
     }
+  },1000);
+  swgs.clients.matchAll().then((clients) => {
+    console.log("got clients", clients.length);
+    clients.forEach((client) => {
+      console.log("sending ping to client",client);
+      client.postMessage({ ping: starttime });
+    });
+  }).catch((error) => {
+    console.log("pinging error", error);
   });
 }
 
@@ -73,6 +79,7 @@ function sendPing(starttime: number) {
  */
 
 swgs.onnotificationclick = function (event) {
+  waiting4pong=false;
   console.log("notification clicked");
   event.notification.close();
   event.waitUntil(swgs.clients.openWindow("."));
@@ -91,10 +98,10 @@ swgs.onmessage = function (event) {
   let d = event.data;
   if (d.start != undefined) {
     console.log("got start event");
-    let start: Date = d.time;
-    starts.add(start.getTime());
+    let start: number = d.time;
+    starts.add(start);
     pingTimes.forEach((t) => {
-      let pt = new Date(start.getTime());
+      let pt = new Date(start);
       pt.setSeconds(pt.getSeconds() - t);
       const pingTime = pt.getTime();
       if (pinging.has(pingTime)) {
@@ -102,7 +109,7 @@ swgs.onmessage = function (event) {
       }
       let delay = pt.getTime() - Date.now();
       if (delay > 0) {
-        // console.log(`will send ping in ${delay} ms`);
+        console.log(`will send ping in ${delay} ms at ${dateFmt("%h:%i:%s", pt)}`);
         pinging.set(pingTime, setTimeout(sendPing, delay, start));
       }
     });
@@ -113,9 +120,13 @@ swgs.onmessage = function (event) {
   if (d.ping != undefined) {
     event.source.postMessage({ pong: d.ping });
   }
-  if (event.data.bypass != undefined) {
+  if (d.bypass != undefined) {
     console.log("got bypass message", event.data.bypass);
     bypass = event.data.bypass;
+  }
+  if(d.pong != undefined){
+    console.log("got pong");
+    waiting4pong=false;
   }
 };
 
@@ -126,7 +137,8 @@ swgs.onfetch = function (event) {
     return;
   }
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
+     caches.open('sailwatch').then(async (cache) => {
+    return cache.match(event.request).then((cachedResponse) => {
       if (cachedResponse) {
         console.log("could serve from cache", event.request.url);
         return cachedResponse; // Serve from cache if available
@@ -141,7 +153,7 @@ swgs.onfetch = function (event) {
             });
           } else {
             return this.caches.open("sailwatch").then((cache) => {
-              console.log("couldn't cache", event.request.url);
+              console.log("adding to cache by request", event.request.url);
               cache.add(event.request.url);
               return networkResponse;
             });
@@ -152,7 +164,6 @@ swgs.onfetch = function (event) {
           return new Response("You are offline.", {
             headers: { "Content-Type": "text/plain" },
           });
-        });
-    })
-  );
+        })
+    })}));
 };

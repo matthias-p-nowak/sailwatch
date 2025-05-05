@@ -19,7 +19,7 @@ export class NoteView extends DomHook {
     setTimeout(() => {
       this.text.style.height = "auto";
       this.text.style.height = this.text.scrollHeight + 2 + "px";
-      this.text.focus();
+      if (data.focus != undefined && data.focus) this.text.focus();
     }, 100);
   }
 
@@ -66,6 +66,7 @@ export class NoteView extends DomHook {
     this.data.note = this.text.value;
     if (length > 0) {
       this.data.source = "edit";
+      delete this.data.focus;
       console.log("saving updated note", this.data);
       TimeLine.instance.submitEvent(this.data);
     } else {
