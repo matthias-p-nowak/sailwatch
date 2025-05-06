@@ -28,6 +28,8 @@ export class WakeWaki{
         if(this.keepAlive){
             this.run();
         }else{
+            sailwatch.addInfo('wakelock released');
+            console.log('wakelock released');
             this.sentinel.release();
         }
     }
