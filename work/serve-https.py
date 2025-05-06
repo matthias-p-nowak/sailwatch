@@ -11,6 +11,5 @@ context.load_cert_chain( certfile='C:\Jobb\Root-CA\web.crt', keyfile='C:\Jobb\Ro
 
 # Wrap the server's socket
 httpd.socket = context.wrap_socket(httpd.socket, server_side=True)
-
-print("Serving on https://localhost:5500")
+print("Serving")
 httpd.serve_forever()

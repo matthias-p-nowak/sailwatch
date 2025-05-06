@@ -5,6 +5,7 @@ import { sailwatch } from "./sailwatch";
 import { startSequence } from "./sequence";
 import { Sounds } from "./sounds";
 import { TimeEvent, TimeLine } from "./timeline";
+import { WakeWaki } from "./wakelock";
 
 export class NewStart extends DomHook {
   // #region html
@@ -232,22 +233,29 @@ export class StartView extends DomHook {
     this.hook(root);
     this.render();
     this.root.addEventListener("update", this.update.bind(this));
+    // adding the steps with the different actions, all of them
     if (data.time > Date.now() && data.start == "planned") {
       startSequence.forEach((step) => {
         let st = new Date(data.time);
         st.setSeconds(st.getSeconds() - step.time);
-        if (st.getTime() > Date.now()) {
+        console.log("step", step, dateFmt("%h:%i:%s", st));
+        if (st.getTime() > Date.now()+1000) {
+          // more than a second into the future
           setTimeout(this.startStep.bind(this, step, true), st.getTime() - Date.now());
         } else {
+          // less than a second into the future, carrying them out in order
           setTimeout(this.startStep.bind(this, step, false), 1000 - step.time);
         }
       });
+      // count down the seconds for the last 6 minutes
       for (let i = 0; i < 360; ++i) {
         let t = new Date(data.time);
         t.setSeconds(t.getSeconds() - i);
-        if (t.getTime() < Date.now()) break;
+        if (t.getTime() < Date.now()+1000) break;
+        // still in the future
         setTimeout(this.timeStep.bind(this, i), t.getTime() - Date.now());
       }
+      // count down the minutes
       for (let m = 7; ; ++m) {
         let t = new Date(data.time);
         t.setMinutes(t.getMinutes() - m);
@@ -255,7 +263,6 @@ export class StartView extends DomHook {
         setTimeout(this.timeStep.bind(this, m * 60), t.getTime() - Date.now());
       }
     }
-
   }
 
   update(ce: CustomEvent) {
@@ -308,6 +315,17 @@ export class StartView extends DomHook {
     if (this.data.start == 'aborted') {
       console.log("no start", this.data);
       return;
+    }
+    // check if clock has gone right
+    {
+      let expected=Date.now()+before*1000;
+      let diff=expected-this.data.time;
+      if(diff>1000 || diff<-1000) {
+        sailwatch.addError(`clock went wrong ${diff}`);
+        setTimeout(() => {
+          window.location.reload();
+        }, 3000);
+      }
     }
     if (before > 360) {
       console.log("only minutes");
@@ -376,14 +394,7 @@ export class StartView extends DomHook {
       Sounds.instance.play(step.sound);
     }
     if (step.lock != undefined) {
-      try {
-        navigator.wakeLock.request('screen').then((wls) => {
-          // sailwatch.addInfo('wakelock requested');
-          setTimeout(() => wls.release(), this.data.time - Date.now());
-        });
-      } catch (e) {
-        sailwatch.addError('wakelock error: ' + e);
-      }
+      WakeWaki.instance.run();
     }
     if (step.scroll != undefined) {
       this.root.scrollIntoView({ behavior: "smooth", block: "center" });

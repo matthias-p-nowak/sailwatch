@@ -8,6 +8,7 @@ import { TimeEvent, TimeLine, waitFor } from "./timeline";
 import { Sounds } from "./sounds";
 import { dateFmt } from "./datefmt";
 import { FinishRow, FinishTable, FinishView } from "./finish";
+import { WakeWaki } from "./wakelock";
 
 /**
  * the global SailWatch instance
@@ -20,7 +21,6 @@ export class SailWatch extends DomHook {
   main: HTMLDivElement = undefined;
   footer: HTMLDivElement = undefined;
   hello: HTMLDialogElement = undefined;
-
 
   /** maps the children of main to the times */
   fleets: Set<string> = new Set<string>();
@@ -45,6 +45,8 @@ export class SailWatch extends DomHook {
     tl.addEventListener("removed", db.saveEvent.bind(db));
     let cw = Keeper.instance;
     tl.addEventListener("added", cw.addEvent.bind(cw));
+    let wl = WakeWaki.instance;
+    tl.addEventListener("added", wl.checkStart.bind(wl));
 
     await db.ready;
     setTimeout(() => {
@@ -60,13 +62,16 @@ export class SailWatch extends DomHook {
   }
 
   addDates() {
-    let haveTimes = Array.from(this.main.children)
-      .map((ch: HTMLElement) => Number(ch.dataset.sortedTime));
-    let needTimes = new Set(haveTimes.map((t) => {
-      let dt = new Date(t);
-      dt.setHours(0, 0, 0, 0);
-      return dt.getTime();
-    }));
+    let haveTimes = Array.from(this.main.children).map((ch: HTMLElement) =>
+      Number(ch.dataset.sortedTime)
+    );
+    let needTimes = new Set(
+      haveTimes.map((t) => {
+        let dt = new Date(t);
+        dt.setHours(0, 0, 0, 0);
+        return dt.getTime();
+      })
+    );
     let tl = TimeLine.instance;
     needTimes.forEach((t) => {
       if (haveTimes.includes(t)) return;
@@ -86,8 +91,9 @@ export class SailWatch extends DomHook {
     let event = ce.detail as TimeEvent;
     // console.log(event);
     let found = false;
-    let foundEvents = Array.from(this.main.children)
-      .filter((e: HTMLElement) => { return Number(e.dataset.sortedTime) == event.time; });
+    let foundEvents = Array.from(this.main.children).filter((e: HTMLElement) => {
+      return Number(e.dataset.sortedTime) == event.time;
+    });
     // console.log('found events=', foundEvents);
     foundEvents.forEach((e: HTMLElement) => {
       console.log("updating a displayed main event");
@@ -101,7 +107,7 @@ export class SailWatch extends DomHook {
       let t = DomHook.fromTemplate("NoteView");
       let nd = new NoteView(t, ce.detail);
       this.insert(ce.detail.time, t);
-    } else if (ce.detail.start != undefined) {
+    } else if (ce.detail.start != undefined && ce.detail.start != 'aborted') {
       let s = DomHook.fromTemplate("StartView");
       let sv = new StartView(s, ce.detail);
       this.insert(ce.detail.time, s);
@@ -110,7 +116,7 @@ export class SailWatch extends DomHook {
       let fv = new FinishView(f, ce.detail);
       this.insert(ce.detail.time, f);
     } else if (ce.detail.showDate != undefined) {
-      let dh = document.createElement('h2');
+      let dh = document.createElement("h2");
       dh.innerText = dateFmt("%y-%m-%d", new Date(ce.detail.time));
       this.insert(ce.detail.time, dh);
     } else {
@@ -206,13 +212,12 @@ export class SailWatch extends DomHook {
 
   makeTable_onclick(ev: MouseEvent) {
     this.turnEventsIntoTables();
-
-  };
+  }
 
   async turnEventsIntoTables() {
     let kids = Array.from(this.main.children);
     let tl = TimeLine.instance;
-    let lastTable = 'none';
+    let lastTable = "none";
     let lastStarts: StartTable;
     let lastFinishes: FinishTable;
     for (let k of kids) {
@@ -220,14 +225,14 @@ export class SailWatch extends DomHook {
       // console.log('scrolling for', ch.dataset.displayTime);
       ch.scrollIntoView({ behavior: "smooth", block: "center" });
       let time = Number(ch.dataset.sortedTime);
-      if(time > Date.now()) {
-        console.log('skipping', ch.dataset.displayTime);
+      if (time > Date.now()) {
+        console.log("skipping", ch.dataset.displayTime);
         break;
-      };
+      }
       let ev = tl.getEvent(time);
       if (ev.start != undefined) {
-        if (lastTable != 'start') {
-          lastTable = 'start';
+        if (lastTable != "start") {
+          lastTable = "start";
           lastStarts = new StartTable();
           lastStarts.root.dataset.displayTime = ch.dataset.displayTime;
           lastStarts.root.dataset.sortedTime = ch.dataset.sortedTime;
@@ -237,8 +242,8 @@ export class SailWatch extends DomHook {
         lastStarts.starts.appendChild(s.root);
         ch.remove();
       } else if (ev.finish != undefined) {
-        if (lastTable != 'finish') {
-          lastTable = 'finish';
+        if (lastTable != "finish") {
+          lastTable = "finish";
           lastFinishes = new FinishTable();
           lastFinishes.root.dataset.displayTime = ch.dataset.displayTime;
           lastFinishes.root.dataset.sortedTime = ch.dataset.sortedTime;
@@ -248,12 +253,11 @@ export class SailWatch extends DomHook {
         lastFinishes.finishes.appendChild(f.root);
         ch.remove();
       } else {
-        lastTable = 'none';
+        lastTable = "none";
       }
       await waitFor(5);
-    };
+    }
   }
-
 
   // #region notifications
   addInfo(msg: string) {
