@@ -48,19 +48,20 @@ def appPhrase(s:int, n:int, duration:int):
     appSound(freq1,freq2,duration)
 
 
-d=50
-appPhrase(5,5,3*d)
-appSilence(d);
-appPhrase(5,5,3*d)
-appSilence(d);
-appPhrase(5,5,3*d)
-appSilence(3*d);
-appPhrase(5,5,3*d)
-appSilence(d);
-appPhrase(5,5,1*d)
-appSilence(d);
-appPhrase(5,5,3*d)
+# d=50
+# appPhrase(5,5,3*d)
+# appSilence(d);
+# appPhrase(5,5,3*d)
+# appSilence(d);
+# appPhrase(5,5,3*d)
+# appSilence(3*d);
+# appPhrase(5,5,3*d)
+# appSilence(d);
+# appPhrase(5,5,1*d)
+# appSilence(d);
+# appPhrase(5,5,3*d)
 
+appPhrase(9,1,500);
 
 
 audioData=bytes(audioDataInt)

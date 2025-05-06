@@ -5,6 +5,7 @@ import { sailwatch } from "./sailwatch";
 import { startSequence } from "./sequence";
 import { Sounds } from "./sounds";
 import { TimeEvent, TimeLine } from "./timeline";
+import { WakeWaki } from "./wakelock";
 
 export class NewStart extends DomHook {
   // #region html
@@ -315,6 +316,17 @@ export class StartView extends DomHook {
       console.log("no start", this.data);
       return;
     }
+    // check if clock has gone right
+    {
+      let expected=Date.now()+before*1000;
+      let diff=expected-this.data.time;
+      if(diff>1000 || diff<-1000) {
+        sailwatch.addError(`clock went wrong ${diff}`);
+        setTimeout(() => {
+          window.location.reload();
+        }, 3000);
+      }
+    }
     if (before > 360) {
       console.log("only minutes");
       let m = Math.floor(before / 60);
@@ -382,14 +394,7 @@ export class StartView extends DomHook {
       Sounds.instance.play(step.sound);
     }
     if (step.lock != undefined) {
-      try {
-        navigator.wakeLock.request('screen').then((wls) => {
-          // sailwatch.addInfo('wakelock requested');
-          setTimeout(() => wls.release(), this.data.time - Date.now());
-        });
-      } catch (e) {
-        sailwatch.addError('wakelock error: ' + e);
-      }
+      WakeWaki.instance.run();
     }
     if (step.scroll != undefined) {
       this.root.scrollIntoView({ behavior: "smooth", block: "center" });

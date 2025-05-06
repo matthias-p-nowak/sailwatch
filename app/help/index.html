@@ -45,6 +45,12 @@
             padding: 0.5rem;
             background-color: rgba(255, 166, 0, 0.205);
         }
+        .danger{ 
+            color: red;
+        }
+        .important {
+            color: green;
+        }
     </style>
     <title>SailWatch help</title>
 </head>
@@ -71,6 +77,11 @@
         The "earlier" button at the top allows the loading of previous events.
         All events are stored locally on the mobile device. They can be shared using "share" in the settings.
         The button <img src="../img/table.png" alt="table icon"> turns the separate entries into tables with headers.
+        <h2 class="important">Important note</h2>
+        This app is not intended to be used in an important race situation! The timing might be off by a few seconds. This is due to the app being a web application.
+        Web browsers do not support alarms at fixed times. When the browser goes into the background, the correct timing is lost.
+        This web application tries to keep the app awake until all future starts are signaled.
+
     </header>
     <hr>
     <main>
@@ -187,7 +198,7 @@
             Or it shows the text "bypass". 
             In the latter case, all files are retrieved from the network - hence delays might occure.
 
-            <h2>Danger zone</h2>
+            <h2 class="danger">Danger zone</h2>
             <h3>Delete events</h3>
             One can select a date and by tapping the right field, all events before that date are deleted.
 
